@@ -10,7 +10,6 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiConsumes, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
 // swagger 적는 곳
 
