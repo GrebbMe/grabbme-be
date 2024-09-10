@@ -1,25 +1,30 @@
 import { Module } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import {
+  ClientProxyFactory,
+  ClientsModule,
+  Transport,
+} from '@nestjs/microservices';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Board } from './entities/board.entity';
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([Board]),
+    ClientsModule.register([
+      {
+        name: 'BOARD_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: 'localhost',
+          port: Number(process.env.BOARD_PORT),
+        },
+      },
+    ]),
+  ],
   exports: [BoardService],
   controllers: [BoardController],
-  providers: [
-    BoardService,
-    {
-      provide: 'BOARD_SERVICE',
-      useFactory: () => {
-        return ClientProxyFactory.create({
-          transport: Transport.TCP,
-          options: {
-            host: 'localhost', // 'board-service
-            port: process.env.BOARD_PORT ? +process.env.BOARD_PORT : 3002,
-          },
-        });
-      },
-    },
-  ],
+  providers: [BoardService],
 })
 export class BoardModule {}
