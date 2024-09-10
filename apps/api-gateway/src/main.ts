@@ -15,16 +15,16 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document); // localhost:3000/docs -> 스웨거 문서 보는곳
+  SwaggerModule.setup('docs', app, document);
 
   // root Endpoint 설정
-  app.setGlobalPrefix('api'); // localhost:3000/api/~
+  app.setGlobalPrefix('api');
 
   // API 통신을 위한 validator
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true, // DTO정해진 형식으로
-      whitelist: true, // dto 정의 데이터 타입 외에 다른 데이터가 추가로 들어오는 것을 허용할지
+      transform: true,
+      whitelist: true,
     }),
   );
 
