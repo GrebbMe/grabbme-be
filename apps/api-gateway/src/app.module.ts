@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { UserModule } from './users/user.module';
+import { UserModule } from './user/user.module';
 import { BoardModule } from './board/board.module';
 import mysqlConfig from './config/mysql.config';
 import mongoConfig from './config/mongo.config';
