@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Post, ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  const configService = app.get(ConfigService);
   // Swagger Setting
   const config = new DocumentBuilder()
     .setTitle('GrabbMe API Docs')
@@ -28,7 +29,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.GATEWAY_PORT || 3000);
+  await app.listen(configService.get<number>('GATEWAY_PORT'));
 }
 
 bootstrap();

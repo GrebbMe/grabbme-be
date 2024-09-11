@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 @Module({
-  exports: [UsersService],
-  controllers: [UsersController],
+  exports: [UserService],
+  controllers: [UserController],
   providers: [
-    UsersService,
+    UserService,
     {
       provide: 'USER_SERVICE',
       useFactory: () => {
@@ -22,4 +22,4 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
     },
   ],
 })
-export class UsersModule {}
+export class UserModule {}

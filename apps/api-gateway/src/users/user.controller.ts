@@ -7,15 +7,15 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 // swagger 적는 곳
 
-@Controller('users') // api/users
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+@Controller('user') // api/users
+export class UserController {
+  constructor(private readonly usersService: UserService) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {

@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
   ) {}
