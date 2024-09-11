@@ -13,7 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 // swagger 적는 곳
 
-@Controller('user') // api/users
+@Controller('user')
 export class UserController {
   constructor(private readonly usersService: UserService) {}
 
