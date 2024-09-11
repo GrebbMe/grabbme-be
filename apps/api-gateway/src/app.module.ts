@@ -24,10 +24,7 @@ import mongoConfig from './config/mongo.config';
           database: configService.get('mysql.database'),
           username: configService.get('mysql.username'),
           password: configService.get('mysql.password'),
-          synchronize:
-            configService.get<string>('NODE_ENV') === 'development'
-              ? true
-              : false,
+          synchronize: process.env.NODE_ENV === 'development',
           autoLoadEntities: true,
           entities: [`${__dirname}/**/*.entity.{js,ts}`],
           logging: true,
