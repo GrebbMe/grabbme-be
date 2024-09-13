@@ -13,7 +13,7 @@ import { BoardController } from './board.controller';
         return ClientProxyFactory.create({
           transport: Transport.TCP,
           options: {
-            host: 'localhost', // 'board-serice'
+            host: 'localhost', // 'board-service'
             port: Number(process.env.BOARD_PORT),
           },
         });
