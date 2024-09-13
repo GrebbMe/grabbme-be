@@ -26,7 +26,6 @@ import mongoConfig from './config/mongo.config';
           password: configService.get('mysql.password'),
           synchronize: process.env.NODE_ENV === 'development',
           autoLoadEntities: true,
-          entities: [`${__dirname}/**/*.entity.{js,ts}`],
           logging: true,
         };
         return gatewayOrmOptions;
