@@ -1,3 +1,5 @@
+require('@rushstack/eslint-patch/modern-module-resolution');
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -5,9 +7,8 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
-    'plugin:@typescript-eslint/recommended',
+    '@rushstack/eslint-config/profile/node',
     'plugin:prettier/recommended',
   ],
   root: true,
@@ -17,11 +18,12 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/explicit-member-accessibility': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'on',
-    '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/ban-types': 'on',
+    '@typescript-eslint/naming-convention': 'off',
+    '@typescript-eslint/parameter-properties': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
   },
 };
