@@ -1,12 +1,12 @@
 import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import mysqlConfig from './config/mysql.config';
-import mongoConfig from './config/mongo.config';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { UsersModule } from './users/users.module';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { BoardModule } from './board/board.module';
+import { UserModule } from './user/user.module';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import mongoConfig from './config/mongo.config';
+import mysqlConfig from './config/mysql.config';
 
 @Module({
   imports: [
@@ -17,38 +17,34 @@ import { BoardModule } from './board/board.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        let obj: TypeOrmModuleOptions = {
+        const gatewayOrmOptions: TypeOrmModuleOptions = {
           type: 'mysql',
           host: configService.get('mysql.host'),
           port: configService.get('mysql.port'),
           database: configService.get('mysql.database'),
           username: configService.get('mysql.username'),
           password: configService.get('mysql.password'),
-          synchronize: false,
+          synchronize: process.env.NODE_ENV === 'development',
           autoLoadEntities: true,
           logging: true,
         };
-
-        return obj;
+        return gatewayOrmOptions;
       },
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        let obj: MongooseModuleOptions = {
-          uri:
-            configService.get('mongo.host') +
-            ':' +
-            configService.get('mongo.port'),
+        const gatewayMongooseOptions: MongooseModuleOptions = {
+          uri: `${configService.get('mongo.host')}:${configService.get('mongo.port')}`,
           auth: {
             username: configService.get('mongo.username'),
             password: configService.get('mongo.password'),
           },
         };
-        return obj;
+        return gatewayMongooseOptions;
       },
     }),
-    UsersModule,
+    UserModule,
     BoardModule,
   ],
   providers: [Logger],
@@ -56,7 +52,7 @@ import { BoardModule } from './board/board.module';
 
 // Setting For Logs
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  public configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

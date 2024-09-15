@@ -1,13 +1,15 @@
+require('@rushstack/eslint-patch/modern-module-resolution');
+
 module.exports = {
   parser: '@typescript-eslint/parser',
+  plugins: ['import'],
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
-    'plugin:@typescript-eslint/recommended',
+    '@rushstack/eslint-config/profile/node',
     'plugin:prettier/recommended',
   ],
   root: true,
@@ -17,9 +19,62 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/explicit-member-accessibility': 'error',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'variable',
+        format: ['camelCase', 'UPPER_CASE'],
+      },
+      {
+        selector: 'function',
+        format: ['camelCase'],
+      },
+      {
+        selector: 'class',
+        format: ['PascalCase'],
+      },
+    ],
+    '@typescript-eslint/parameter-properties': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+
+    '@typescript-eslint/no-floating-promises': 'off',
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'type',
+        ],
+        pathGroups: [
+          {
+            pattern: 'nestjs*',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: './*.{service,controller,module}',
+            group: 'internal',
+            position: 'before',
+          },
+          {
+            pattern: './*/*.{service,controller,module}',
+            group: 'internal',
+            position: 'after',
+          },
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
 };

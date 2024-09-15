@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import mysqlConfig from './config/mysql.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { BoardModule } from './board/board.module';
+import mysqlConfig from './config/mysql.config';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { BoardModule } from './board/board.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        let obj: TypeOrmModuleOptions = {
+        const boardTypeOrmModuleOptions: TypeOrmModuleOptions = {
           type: 'mysql',
           host: configService.get('mysql.host'),
           port: configService.get('mysql.port'),
@@ -21,10 +21,11 @@ import { BoardModule } from './board/board.module';
           username: configService.get('mysql.username'),
           password: configService.get('mysql.password'),
           autoLoadEntities: true,
+          entities: [`${__dirname}/**/*.entity.{ts,js}`],
           logging: true,
-          synchronize: true,
+          synchronize: process.env.NODE_ENV === 'development',
         };
-        return obj;
+        return boardTypeOrmModuleOptions;
       },
     }),
     BoardModule,
