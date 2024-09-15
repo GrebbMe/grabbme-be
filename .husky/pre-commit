@@ -1,4 +1,22 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.ts$' | sed 's/\\/\//g')
+
+echo "변경된 파일 목록: $FILES"
+
+if [ -z "$FILES" ]; then
+  echo "변경된 TypeScript 파일이 없습니다."
+  exit 0
+fi
+
+RESULT=$(npx eslint $FILES --fix)
+
+echo "ESLint 결과: $RESULT"
+
+if echo "$RESULT" | grep -q 'error'; then
+  echo "Lint 에러가 발견되었습니다. 커밋을 중단합니다."
+  exit 1
+else
+  echo "Lint에 적합합니다."
+  exit 0
+fi
