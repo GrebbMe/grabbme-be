@@ -1,9 +1,5 @@
 import { Module } from '@nestjs/common';
-import {
-  ClientProxyFactory,
-  ClientsModule,
-  Transport,
-} from '@nestjs/microservices';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardController } from './board.controller';
 import { BoardService } from './board.service';

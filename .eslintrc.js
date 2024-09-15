@@ -19,12 +19,26 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    '@typescript-eslint/explicit-member-accessibility': 'off',
+    '@typescript-eslint/explicit-member-accessibility': 'error',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/naming-convention': 'off',
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'variable',
+        format: ['camelCase', 'UPPER_CASE'],
+      },
+      {
+        selector: 'function',
+        format: ['camelCase'],
+      },
+      {
+        selector: 'class',
+        format: ['PascalCase'],
+      },
+    ],
     '@typescript-eslint/parameter-properties': 'off',
-    '@typescript-eslint/no-unused-vars': 'warn',
-    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+
     '@typescript-eslint/no-floating-promises': 'off',
     'import/order': [
       'error',
