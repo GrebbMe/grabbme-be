@@ -5,8 +5,8 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
+import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
 
 @Module({

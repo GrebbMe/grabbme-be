@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
-import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
+import { BoardService } from './board.service';
 
 @Module({
   controllers: [BoardController],
