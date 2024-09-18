@@ -8,10 +8,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  extends: [
-    '@rushstack/eslint-config/profile/node',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['@rushstack/eslint-config/profile/node', 'plugin:prettier/recommended'],
   root: true,
   env: {
     node: true,
@@ -19,6 +16,12 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        useTabs: false,
+      },
+    ],
     '@typescript-eslint/explicit-member-accessibility': 'error',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/naming-convention': [
@@ -43,16 +46,7 @@ module.exports = {
     'import/order': [
       'error',
       {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-          'object',
-          'type',
-        ],
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
         pathGroups: [
           {
             pattern: 'nestjs*',

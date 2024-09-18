@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  LoggerService,
-  NestMiddleware,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger, LoggerService, NestMiddleware } from '@nestjs/common';
 
 import { NextFunction, Request, Response } from 'express';
 
@@ -20,9 +14,7 @@ export class LoggerMiddleware implements NestMiddleware {
       const { statusCode } = response;
       const contentLength = response.get('content-length');
 
-      this.logger.log(
-        `${method} ${url} ${statusCode} ${contentLength} - ${userAgent} ${ip}`,
-      );
+      this.logger.log(`${method} ${url} ${statusCode} ${contentLength} - ${userAgent} ${ip}`);
     });
 
     next();
