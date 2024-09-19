@@ -1,18 +1,48 @@
+import { ClientProxy } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
+import { of, firstValueFrom, lastValueFrom } from 'rxjs';
 import { PublicDataService } from './public-data.service';
 
 describe('PublicDataService', () => {
   let service: PublicDataService;
+  let clientProxy: ClientProxy;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PublicDataService],
+      providers: [
+        PublicDataService,
+        {
+          provide: 'PUBLIC_DATA_SERVICE',
+          useValue: {
+            send: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<PublicDataService>(PublicDataService);
+    clientProxy = module.get<ClientProxy>('PUBLIC_DATA_SERVICE');
   });
 
-  it('should be defined', () => {
+  it('모듈 정의', () => {
     expect(service).toBeDefined();
+  });
+
+  it('전체 post_category 데이터 조회', async () => {
+    const mockPostData = [{ id: 1, post_category_name: '팀원 모집' }];
+    jest.spyOn(clientProxy, 'send').mockImplementation(() => of(mockPostData));
+
+    const result = await firstValueFrom(service.getPostData());
+    expect(result).toEqual(mockPostData);
+    expect(clientProxy.send).toHaveBeenCalledWith({ cmd: 'get-post-data' }, {});
+  });
+
+  it('특정 post_category 데이터 조회', async () => {
+    const mockPostData = { id: 1, post_category_name: '팀원 모집' };
+    jest.spyOn(clientProxy, 'send').mockImplementation(() => of(mockPostData));
+
+    const result = await lastValueFrom(service.getOnePostData(1));
+    expect(result).toEqual(mockPostData);
+    expect(clientProxy.send).toHaveBeenCalledWith({ cmd: 'get-one-post-data' }, { id: 1 });
   });
 });

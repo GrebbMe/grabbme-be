@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { PostCategoryMessagePattern } from 'shared/contants/message-pattern';
+import { PostCategoryMessagePattern } from '@shared/constants/message-pattern';
 import { PublicDataService } from './public-data.service';
 import { GetOnePostCategoryDataDto } from './dto/get-one-post-category.dto';
 

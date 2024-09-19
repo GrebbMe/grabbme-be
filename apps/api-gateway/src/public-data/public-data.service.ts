@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { PostCategoryMessagePattern } from 'shared/contants/message-pattern';
+import { PostCategoryMessagePattern } from '@shared/constants/message-pattern';
 
 @Injectable()
 export class PublicDataService {
