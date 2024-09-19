@@ -3,11 +3,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PublicDataController } from './public-data.controller';
 import { PublicDataService } from './public-data.service';
-import { PublicData } from './entities/public-data.entity';
+import { PostCategory } from './entities/post-category.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PublicData]),
+    TypeOrmModule.forFeature([PostCategory]),
     ClientsModule.register([
       {
         name: 'PUBLIC_DATA_SERVICE',

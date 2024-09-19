@@ -1,20 +1,21 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { PostCategoryMessagePattern } from 'shared/contants/message-pattern';
 import { PublicDataService } from './public-data.service';
-import { CreatePublicDatumDto } from './dto/create-public-datum.dto';
-import { UpdatePublicDatumDto } from './dto/update-public-datum.dto';
+import { GetOnePostCategoryDataDto } from './dto/get-one-post-category.dto';
 
 @Controller()
 export class PublicDataController {
   public constructor(private readonly publicDataService: PublicDataService) {}
 
-  @MessagePattern('createPublicDatum')
-  private create(@Payload() createPublicDatumDto: CreatePublicDatumDto) {
-    return this.publicDataService.create(createPublicDatumDto);
+  @MessagePattern(PostCategoryMessagePattern.GET_POST_DATA)
+  private async getPostData() {
+    return await this.publicDataService.getPostData();
   }
 
-  @MessagePattern('updatePublicDatum')
-  private update(@Payload() updatePublicDatumDto: UpdatePublicDatumDto) {
-    return this.publicDataService.update(updatePublicDatumDto.id, updatePublicDatumDto);
+  @MessagePattern(PostCategoryMessagePattern.GET_ONE_POST_DATA)
+  private async getOnePostData(@Payload() getOnePostCategoryDataDto: GetOnePostCategoryDataDto) {
+    const { id } = getOnePostCategoryDataDto;
+    return await this.publicDataService.getOnePostData(id);
   }
 }

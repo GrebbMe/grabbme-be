@@ -1,19 +1,29 @@
-import { Controller, Post, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PublicDataService } from './public-data.service';
-import { CreatePublicDatumDto } from './dto/create-public-datum.dto';
-import { UpdatePublicDatumDto } from './dto/update-public-datum.dto';
 
-@Controller('public-data')
+@Controller('pub-data')
+@ApiTags('Public Data API')
 export class PublicDataController {
   public constructor(private readonly publicDataService: PublicDataService) {}
 
-  @Post()
-  private create(@Body() createPublicDatumDto: CreatePublicDatumDto) {
-    return this.publicDataService.create(createPublicDatumDto);
+  @Get('post')
+  @ApiOperation({ summary: '전체 post category 데이터 조회' })
+  @ApiCreatedResponse({
+    description: '전체 post category 데이터 조회',
+  })
+  public async getPostData() {
+    const postDatas = await this.publicDataService.getPostData();
+    return postDatas;
   }
 
-  @Patch(':id')
-  private update(@Param('id') id: string, @Body() updatePublicDatumDto: UpdatePublicDatumDto) {
-    return this.publicDataService.update(+id, updatePublicDatumDto);
+  @Get('post/:id')
+  @ApiOperation({ summary: '특정 post category 데이터 조회' })
+  @ApiCreatedResponse({
+    description: '특정 post category 데이터 조회',
+  })
+  public async getOnePostData(@Param('id') id: number) {
+    const postDatas = await this.publicDataService.getOnePostData(id);
+    return postDatas;
   }
 }

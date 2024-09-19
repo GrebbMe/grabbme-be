@@ -1,14 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePublicDatumDto } from './dto/create-public-datum.dto';
-import { UpdatePublicDatumDto } from './dto/update-public-datum.dto';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { PostCategoryMessagePattern } from 'shared/contants/message-pattern';
 
 @Injectable()
 export class PublicDataService {
-  public create(createPublicDatumDto: CreatePublicDatumDto) {
-    return 'This action adds a new publicDatum';
+  public constructor(
+    @Inject('PUBLIC_DATA_SERVICE') private readonly publicDataClient: ClientProxy,
+  ) {}
+
+  public getPostData() {
+    const pattern = PostCategoryMessagePattern.GET_POST_DATA;
+    return this.publicDataClient.send(pattern, {});
   }
 
-  public update(id: number, updatePublicDatumDto: UpdatePublicDatumDto) {
-    return `This action updates a #${id} publicDatum`;
+  public getOnePostData(id: number) {
+    const pattern = PostCategoryMessagePattern.GET_ONE_POST_DATA;
+    const payload = { id };
+    return this.publicDataClient.send(pattern, payload);
   }
 }

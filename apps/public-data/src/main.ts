@@ -12,6 +12,6 @@ async function bootstrap() {
     },
   });
   await app.listen();
-  console.info('public-data-service Running On ${PORT} for TCP');
+  console.info(`public-data-service Running On ${PORT} for TCP`);
 }
 bootstrap();
