@@ -27,7 +27,6 @@ export class PublicDataService {
   }
 
   public async getOnePostData(id: number): Promise<PostCategory> {
-    console.log(typeof id);
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
