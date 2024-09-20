@@ -13,7 +13,7 @@ import mysqlConfig from './config/mysql.config';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const boardTypeOrmModuleOptions: TypeOrmModuleOptions = {
+        const publicDataTypeOrmModuleOptions: TypeOrmModuleOptions = {
           type: 'mysql',
           host: configService.get('mysql.host'),
           port: configService.get('mysql.port'),
@@ -25,7 +25,7 @@ import mysqlConfig from './config/mysql.config';
           logging: true,
           synchronize: process.env.NODE_ENV === 'development',
         };
-        return boardTypeOrmModuleOptions;
+        return publicDataTypeOrmModuleOptions;
       },
     }),
     PublicDataModule,
