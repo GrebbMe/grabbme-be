@@ -1,6 +1,7 @@
+import { NotFoundException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
-import { of, firstValueFrom, lastValueFrom } from 'rxjs';
+import { of, firstValueFrom, lastValueFrom, throwError } from 'rxjs';
 import { PublicDataService } from './public-data.service';
 
 describe('PublicDataService', () => {
@@ -44,5 +45,31 @@ describe('PublicDataService', () => {
     const result = await lastValueFrom(service.getOnePostData(1));
     expect(result).toEqual(mockPostData);
     expect(clientProxy.send).toHaveBeenCalledWith({ cmd: 'get-one-post-data' }, { id: 1 });
+  });
+
+  it('전체 post_category 데이터 조회 에러', async () => {
+    const mockError = new Error(NotFoundException.name);
+    jest.spyOn(clientProxy, 'send').mockImplementation(() => throwError(() => mockError));
+
+    try {
+      await firstValueFrom(service.getPostData());
+    } catch (error) {
+      expect(error).toBe(mockError);
+    }
+
+    expect(clientProxy.send).toHaveBeenCalledWith({ cmd: 'get-post-data' }, {});
+  });
+
+  it('특정 post_category 데이터 조회 에러', async () => {
+    const mockError = new Error(NotFoundException.name);
+    jest.spyOn(clientProxy, 'send').mockImplementation(() => throwError(() => mockError));
+
+    try {
+      await firstValueFrom(service.getOnePostData(999));
+    } catch (error) {
+      expect(error).toBe(mockError);
+    }
+
+    expect(clientProxy.send).toHaveBeenCalledWith({ cmd: 'get-one-post-data' }, { id: 999 });
   });
 });
