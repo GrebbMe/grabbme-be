@@ -17,8 +17,8 @@ describe('PublicDataController', () => {
         {
           provide: PublicDataService,
           useValue: {
-            getPostData: jest.fn(),
-            getOnePostData: jest.fn(),
+            getPostCategories: jest.fn(),
+            getPostCategoryById: jest.fn(),
           },
         },
       ],
@@ -34,31 +34,35 @@ describe('PublicDataController', () => {
 
   describe('postData', () => {
     it('전체 post-category Data 조회', async () => {
-      const mockPostCategories = [{ id: 1, post_category_name: '팀원 모집' }];
-      jest.spyOn(service, 'getPostData').mockImplementation(() => of(mockPostCategories));
+      const mockPostCategories: PostCategory[] = [{ id: 1, post_category_name: '팀원 모집' }];
+      jest
+        .spyOn(service, 'getPostCategories')
+        .mockImplementation(async () => await of(mockPostCategories));
 
-      const result = await firstValueFrom(await controller.getPostData());
+      const result = await firstValueFrom(await controller.getPostCategories());
       expect(result).toEqual(mockPostCategories);
       expect(service.getPostCategories).toHaveBeenCalled();
     });
 
     it('특정 post-category data 조회', async () => {
       const mockPostCategory: PostCategory = { id: 1, post_category_name: '팀원 모집' };
-      jest.spyOn(service, 'getOnePostData').mockImplementation(() => of(mockPostCategory));
+      jest
+        .spyOn(service, 'getPostCategoryById')
+        .mockImplementation(async () => await of(mockPostCategory));
 
-      const result = await firstValueFrom(await controller.getOnePostData(1));
+      const result = await firstValueFrom(await controller.getPostCategoryById(1));
       expect(result).toEqual(mockPostCategory);
       expect(service.getPostCategoryById).toHaveBeenCalledWith(1);
     });
 
     it('전체 post-category data 조회 에러', async () => {
       const mockError = new Error(NotFoundException.name);
-      jest.spyOn(service, 'getPostData').mockImplementation(() => {
+      jest.spyOn(service, 'getPostCategories').mockImplementation(() => {
         throw mockError;
       });
 
       try {
-        await firstValueFrom(await controller.getPostData());
+        await firstValueFrom(await controller.getPostCategories());
       } catch (error) {
         expect(error).toBe(mockError);
       }
@@ -67,12 +71,12 @@ describe('PublicDataController', () => {
 
     it('특정 post-category data 조회 에러', async () => {
       const mockError = new Error(NotFoundException.name);
-      jest.spyOn(service, 'getOnePostData').mockImplementation(() => {
+      jest.spyOn(service, 'getPostCategoryById').mockImplementation(() => {
         throw mockError;
       });
 
       try {
-        await firstValueFrom(await controller.getOnePostData(999));
+        await firstValueFrom(await controller.getPostCategoryById(999));
       } catch (error) {
         expect(error).toBe(mockError);
       }

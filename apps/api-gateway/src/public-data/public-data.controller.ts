@@ -12,7 +12,7 @@ export class PublicDataController {
   @ApiCreatedResponse({
     description: '전체 post category 데이터 조회',
   })
-  public async getPostData() {
+  public async getPostCategories() {
     const postDatas = await this.publicDataService.getPostCategories();
     return postDatas;
   }
@@ -22,7 +22,7 @@ export class PublicDataController {
   @ApiCreatedResponse({
     description: '특정 post category 데이터 조회',
   })
-  public async getOnePostData(@Param('id') id: number) {
+  public async getPostCategoryById(@Param('id') id: number) {
     const postDatas = await this.publicDataService.getPostCategoryById(id);
     return postDatas;
   }

@@ -12,7 +12,7 @@ export class PublicDataService {
     return await this.publicDataClient.send(PostCategoryMessagePattern.GET_POST_DATA, {});
   }
 
-  public getPostCategoryById(id: number) {
+  public async getPostCategoryById(id: number) {
     const pattern = PostCategoryMessagePattern.GET_ONE_POST_DATA;
     const payload = { id };
     return this.publicDataClient.send(pattern, payload);
