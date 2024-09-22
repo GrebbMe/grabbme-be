@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { PostCategoryMessagePattern } from '@shared/constants/message-pattern';
+import { publicDataMessages } from '@shared/constants/message-pattern';
 
 @Injectable()
 export class PublicDataService {
@@ -9,12 +9,16 @@ export class PublicDataService {
   ) {}
 
   public async getPostCategories() {
-    return await this.publicDataClient.send(PostCategoryMessagePattern.GET_POST_DATA, {});
+    return await this.publicDataClient.send(
+      publicDataMessages.POST_CATEGORY.GET_ALL_POST_CATEGORY,
+      {},
+    );
   }
 
   public async getPostCategoryById(id: number) {
-    const pattern = PostCategoryMessagePattern.GET_ONE_POST_DATA;
-    const payload = { id };
-    return this.publicDataClient.send(pattern, payload);
+    return await this.publicDataClient.send(
+      publicDataMessages.POST_CATEGORY.GET_ONE_POST_CATEGORY,
+      { id },
+    );
   }
 }

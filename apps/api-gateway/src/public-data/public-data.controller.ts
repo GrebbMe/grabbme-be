@@ -13,8 +13,7 @@ export class PublicDataController {
     description: '전체 post category 데이터 조회',
   })
   public async getPostCategories() {
-    const postDatas = await this.publicDataService.getPostCategories();
-    return postDatas;
+    return await this.publicDataService.getPostCategories();
   }
 
   @Get('post/:id')
@@ -23,7 +22,6 @@ export class PublicDataController {
     description: '특정 post category 데이터 조회',
   })
   public async getPostCategoryById(@Param('id') id: number) {
-    const postDatas = await this.publicDataService.getPostCategoryById(id);
-    return postDatas;
+    return await this.publicDataService.getPostCategoryById(id);
   }
 }

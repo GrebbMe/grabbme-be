@@ -1,8 +1,11 @@
-interface MessagePattern {
-  cmd: string;
+export enum MessagePatternEnum {
+  GET_ALL_POST_CATEGORY = 'get-all-post-category',
+  GET_ONE_POST_CATEGORY = 'get-one-post-category',
 }
 
-export class PostCategoryMessagePattern {
-  public static readonly GET_POST_DATA: MessagePattern = { cmd: 'get-post-data' };
-  public static readonly GET_ONE_POST_DATA: MessagePattern = { cmd: 'get-one-post-data' };
-}
+export const publicDataMessages = {
+  POST_CATEGORY: {
+    GET_ALL_POST_CATEGORY: { cmd: MessagePatternEnum.GET_ALL_POST_CATEGORY },
+    GET_ONE_POST_CATEGORY: { cmd: MessagePatternEnum.GET_ONE_POST_CATEGORY },
+  },
+} as const;
