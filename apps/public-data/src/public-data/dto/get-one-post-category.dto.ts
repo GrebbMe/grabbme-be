@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsInt } from 'class-validator';
 
 export class GetOnePostCategoryDto {
-  @IsNumber()
+  @IsInt()
   @ApiProperty({ description: 'post_category ID' })
   public id: number;
 }
