@@ -2,7 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PublicDataService } from './public-data.service';
 
-@Controller('pub-data')
+@Controller('public-data')
 @ApiTags('Public Data API')
 export class PublicDataController {
   public constructor(private readonly publicDataService: PublicDataService) {}
