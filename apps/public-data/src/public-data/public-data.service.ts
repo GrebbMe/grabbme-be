@@ -11,7 +11,7 @@ export class PublicDataService {
     private postCategoryRepository: Repository<PostCategory>,
   ) {}
 
-  public async getPostData(): Promise<PostCategory[]> {
+  public async getAllPostCategories(): Promise<PostCategory[]> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
@@ -26,7 +26,7 @@ export class PublicDataService {
     }
   }
 
-  public async getOnePostData(id: number): Promise<PostCategory> {
+  public async getPostCategoryById(id: number): Promise<PostCategory> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
