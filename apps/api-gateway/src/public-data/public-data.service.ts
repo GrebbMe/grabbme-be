@@ -8,12 +8,11 @@ export class PublicDataService {
     @Inject('PUBLIC_DATA_SERVICE') private readonly publicDataClient: ClientProxy,
   ) {}
 
-  public getPostData() {
-    const pattern = PostCategoryMessagePattern.GET_POST_DATA;
-    return this.publicDataClient.send(pattern, {});
+  public async getPostCategories() {
+    return await this.publicDataClient.send(PostCategoryMessagePattern.GET_POST_DATA, {});
   }
 
-  public getOnePostData(id: number) {
+  public getPostCategoryById(id: number) {
     const pattern = PostCategoryMessagePattern.GET_ONE_POST_DATA;
     const payload = { id };
     return this.publicDataClient.send(pattern, payload);

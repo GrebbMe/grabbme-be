@@ -39,7 +39,7 @@ describe('PublicDataController', () => {
 
       const result = await firstValueFrom(await controller.getPostData());
       expect(result).toEqual(mockPostCategories);
-      expect(service.getPostData).toHaveBeenCalled();
+      expect(service.getPostCategories).toHaveBeenCalled();
     });
 
     it('특정 post-category data 조회', async () => {
@@ -48,7 +48,7 @@ describe('PublicDataController', () => {
 
       const result = await firstValueFrom(await controller.getOnePostData(1));
       expect(result).toEqual(mockPostCategory);
-      expect(service.getOnePostData).toHaveBeenCalledWith(1);
+      expect(service.getPostCategoryById).toHaveBeenCalledWith(1);
     });
 
     it('전체 post-category data 조회 에러', async () => {
@@ -62,7 +62,7 @@ describe('PublicDataController', () => {
       } catch (error) {
         expect(error).toBe(mockError);
       }
-      expect(service.getPostData).toHaveBeenCalled();
+      expect(service.getPostCategories).toHaveBeenCalled();
     });
 
     it('특정 post-category data 조회 에러', async () => {
@@ -76,7 +76,7 @@ describe('PublicDataController', () => {
       } catch (error) {
         expect(error).toBe(mockError);
       }
-      expect(service.getOnePostData).toHaveBeenCalledWith(999);
+      expect(service.getPostCategoryById).toHaveBeenCalledWith(999);
     });
   });
 });
