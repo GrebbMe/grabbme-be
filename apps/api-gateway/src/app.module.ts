@@ -15,6 +15,7 @@ import mysqlConfig from './config/mysql.config';
       isGlobal: true,
       load: [mysqlConfig, mongoConfig],
     }),
+
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -32,6 +33,7 @@ import mysqlConfig from './config/mysql.config';
         return gatewayOrmOptions;
       },
     }),
+
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -45,10 +47,12 @@ import mysqlConfig from './config/mysql.config';
         return gatewayMongooseOptions;
       },
     }),
+
     UserModule,
     BoardModule,
     PublicDataModule,
   ],
+
   providers: [Logger],
 })
 

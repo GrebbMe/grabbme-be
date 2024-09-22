@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const PORT = Number(process.env.PUBLIC_DATA_PORT);
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
     transport: Transport.TCP,
     options: {
@@ -11,7 +12,9 @@ async function bootstrap() {
       port: PORT,
     },
   });
+
   await app.listen();
+
   console.info(`public-data-service Running On ${PORT} for TCP`);
 }
 bootstrap();

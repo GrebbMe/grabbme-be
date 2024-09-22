@@ -8,6 +8,7 @@ import { PublicDataService } from './public-data.service';
   controllers: [PublicDataController],
   providers: [
     PublicDataService,
+
     {
       provide: 'PUBLIC_DATA_SERVICE',
       useFactory: () => {

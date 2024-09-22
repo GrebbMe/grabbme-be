@@ -10,6 +10,7 @@ import mysqlConfig from './config/mysql.config';
       isGlobal: true,
       load: [mysqlConfig],
     }),
+
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -28,6 +29,7 @@ import mysqlConfig from './config/mysql.config';
         return publicDataTypeOrmModuleOptions;
       },
     }),
+
     PublicDataModule,
   ],
 })

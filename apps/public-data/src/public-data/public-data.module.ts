@@ -8,6 +8,7 @@ import { PostCategory } from './entities/post-category.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([PostCategory]),
+
     ClientsModule.register([
       {
         name: 'PUBLIC_DATA_SERVICE',
@@ -20,7 +21,9 @@ import { PostCategory } from './entities/post-category.entity';
     ]),
   ],
   exports: [PublicDataService],
+
   controllers: [PublicDataController],
+
   providers: [PublicDataService],
 })
 export class PublicDataModule {}
