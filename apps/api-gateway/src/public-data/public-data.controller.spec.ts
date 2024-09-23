@@ -5,7 +5,7 @@ import { firstValueFrom, of } from 'rxjs';
 import { PublicDataController } from './public-data.controller';
 import { PublicDataService } from './public-data.service';
 
-describe('PublicDataController', () => {
+describe('Public-Data Controller 테스트', () => {
   let controller: PublicDataController;
   let service: PublicDataService;
 
@@ -16,7 +16,7 @@ describe('PublicDataController', () => {
         {
           provide: PublicDataService,
           useValue: {
-            getPostCategories: jest.fn(),
+            getAllPostCategory: jest.fn(),
             getPostCategoryById: jest.fn(),
           },
         },
@@ -30,60 +30,62 @@ describe('PublicDataController', () => {
     jest.clearAllMocks();
   });
 
-  it('Controller, Service 가 정의 된다.', () => {
+  it('Public-Data Controller, Service 가 정의 된다.', () => {
     expect(controller).toBeDefined();
     expect(service).toBeDefined();
   });
 
-  describe('postData', () => {
-    it('전체 post-category Data 조회', async () => {
-      const mockPostCategories: PostCategory[] = [{ id: 1, post_category_name: '팀원 모집' }];
-      jest
-        .spyOn(service, 'getAllPostCategory')
-        .mockImplementation(async () => await of(mockPostCategories));
+  describe('post-category API 테스트', () => {
+    describe('getAllPostCategory 를 호출 하면,', () => {
+      it('전체 post-category Data가 조회 된다.', async () => {
+        const mockPostCategories: PostCategory[] = [{ id: 1, post_category_name: '팀원 모집' }];
+        jest
+          .spyOn(service, 'getAllPostCategory')
+          .mockImplementation(async () => of(mockPostCategories));
 
-      const result = await firstValueFrom(await controller.getAllPostCategory());
-      expect(result).toEqual(mockPostCategories);
-      expect(service.getAllPostCategory).toHaveBeenCalled();
-    });
-
-    it('특정 post-category data 조회', async () => {
-      const mockPostCategory: PostCategory = { id: 1, post_category_name: '팀원 모집' };
-      jest
-        .spyOn(service, 'getPostCategoryById')
-        .mockImplementation(async () => await of(mockPostCategory));
-
-      const result = await firstValueFrom(await controller.getPostCategoryById(1));
-      expect(result).toEqual(mockPostCategory);
-      expect(service.getPostCategoryById).toHaveBeenCalledWith(1);
-    });
-
-    it('전체 post-category data 조회 에러', async () => {
-      const mockError = new Error(NotFoundException.name);
-      jest.spyOn(service, 'getAllPostCategory').mockImplementation(() => {
-        throw mockError;
+        const result = await firstValueFrom(await controller.getAllPostCategory());
+        expect(result).toEqual(mockPostCategories);
+        expect(service.getAllPostCategory).toHaveBeenCalled();
       });
 
-      try {
-        await firstValueFrom(await controller.getAllPostCategory());
-      } catch (error) {
-        expect(error).toBe(mockError);
-      }
-      expect(service.getAllPostCategory).toHaveBeenCalled();
+      it('에러 발생으로 인해 NotFoundException이 발생한다', async () => {
+        const mockError = new Error(NotFoundException.name);
+
+        jest.spyOn(service, 'getAllPostCategory').mockImplementation(() => {
+          throw mockError;
+        });
+
+        expect(controller.getAllPostCategory()).rejects.toThrow(mockError);
+
+        expect(service.getAllPostCategory).toHaveBeenCalled();
+      });
     });
 
-    it('특정 post-category data 조회 에러', async () => {
-      const mockError = new Error(NotFoundException.name);
-      jest.spyOn(service, 'getPostCategoryById').mockImplementation(() => {
-        throw mockError;
-      });
+    describe('getPostCategoryById를 호출 하면,', () => {
+      it('특정 post-category가 조회 된다.', async () => {
+        const mockPostCategory: PostCategory = { id: 1, post_category_name: '팀원 모집' };
+        jest
+          .spyOn(service, 'getPostCategoryById')
+          .mockImplementation(async () => await of(mockPostCategory));
 
-      try {
-        await firstValueFrom(await controller.getPostCategoryById(999));
-      } catch (error) {
-        expect(error).toBe(mockError);
-      }
-      expect(service.getPostCategoryById).toHaveBeenCalledWith(999);
+        const result = await firstValueFrom(
+          await controller.getPostCategoryById(mockPostCategory.id),
+        );
+
+        expect(result).toEqual(mockPostCategory);
+        expect(service.getPostCategoryById).toHaveBeenCalledWith(mockPostCategory.id);
+      });
+      it('존재 하지 않는 id를 입력하여 NotFoundException 이 발생한다.', async () => {
+        const mockError = new Error(NotFoundException.name);
+
+        jest.spyOn(service, 'getPostCategoryById').mockImplementation(() => {
+          throw mockError;
+        });
+
+        expect(controller.getPostCategoryById(999)).rejects.toThrow(mockError);
+
+        expect(service.getPostCategoryById).toHaveBeenCalledWith(999);
+      });
     });
   });
 });
