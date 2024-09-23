@@ -45,7 +45,7 @@ import mysqlConfig from './config/mysql.config';
         return chatMongooseOptions;
       },
     }),
-    
+
     ChatModule,
   ],
 })
