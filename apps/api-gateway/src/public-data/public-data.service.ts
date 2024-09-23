@@ -8,7 +8,7 @@ export class PublicDataService {
     @Inject('PUBLIC_DATA_SERVICE') private readonly publicDataClient: ClientProxy,
   ) {}
 
-  public async getAllPostCategory() {
+  public async getPostCategories() {
     return await this.publicDataClient.send(
       MESSAGE.PUBLIC_DATA.POST_CATEGORY.GET_ALL_POST_CATEGORY,
       {},

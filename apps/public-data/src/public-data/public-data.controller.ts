@@ -9,8 +9,8 @@ export class PublicDataController {
   public constructor(private readonly publicDataService: PublicDataService) {}
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POST_CATEGORY.GET_ALL_POST_CATEGORY)
-  private async getPostData() {
-    return await this.publicDataService.getAllPostCategory();
+  private async getPostCategories() {
+    return await this.publicDataService.getPostCategories();
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POST_CATEGORY.GET_ONE_POST_CATEGORY)

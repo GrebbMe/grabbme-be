@@ -12,8 +12,8 @@ export class PublicDataController {
   @ApiCreatedResponse({
     description: '전체 post category 데이터 조회',
   })
-  public async getAllPostCategory() {
-    return await this.publicDataService.getAllPostCategory();
+  public async getPostCategories() {
+    return await this.publicDataService.getPostCategories();
   }
 
   @Get('post/:id')

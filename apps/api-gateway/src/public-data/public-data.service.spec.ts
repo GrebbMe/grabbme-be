@@ -33,7 +33,7 @@ describe('PublicDataService', () => {
     const mockPostData = [{ id: 1, post_category_name: '팀원 모집' }];
     jest.spyOn(clientProxy, 'send').mockImplementation(() => of(mockPostData));
 
-    const result = await firstValueFrom(await service.getAllPostCategory());
+    const result = await firstValueFrom(await service.getPostCategories());
     expect(result).toEqual(mockPostData);
     expect(clientProxy.send).toHaveBeenCalledWith({ cmd: 'get-post-data' }, {});
   });
@@ -52,7 +52,7 @@ describe('PublicDataService', () => {
     jest.spyOn(clientProxy, 'send').mockImplementation(() => throwError(() => mockError));
 
     try {
-      await firstValueFrom(await service.getAllPostCategory());
+      await firstValueFrom(await service.getPostCategories());
     } catch (error) {
       expect(error).toBe(mockError);
     }

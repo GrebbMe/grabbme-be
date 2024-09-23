@@ -43,9 +43,9 @@ describe('Public-Data Controller 테스트', () => {
           .spyOn(service, 'getAllPostCategory')
           .mockImplementation(async () => of(mockPostCategories));
 
-        const result = await firstValueFrom(await controller.getAllPostCategory());
+        const result = await firstValueFrom(await controller.getPostCategories());
         expect(result).toEqual(mockPostCategories);
-        expect(service.getAllPostCategory).toHaveBeenCalled();
+        expect(service.getPostCategories).toHaveBeenCalled();
       });
 
       it('에러 발생으로 인해 NotFoundException이 발생한다', async () => {
@@ -55,9 +55,9 @@ describe('Public-Data Controller 테스트', () => {
           throw mockError;
         });
 
-        expect(controller.getAllPostCategory()).rejects.toThrow(mockError);
+        expect(controller.getPostCategories()).rejects.toThrow(mockError);
 
-        expect(service.getAllPostCategory).toHaveBeenCalled();
+        expect(service.getPostCategories).toHaveBeenCalled();
       });
     });
 
