@@ -36,7 +36,7 @@ export class PublicDataService {
     await queryRunner.startTransaction();
 
     try {
-      const postData = await this.postCategoryRepository.findOne({ where: { id: id } });
+      const postData = await this.postCategoryRepository.findOne({ where: { id } });
       await queryRunner.commitTransaction();
 
       return postData;

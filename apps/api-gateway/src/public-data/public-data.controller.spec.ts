@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PostCategory } from 'apps/public-data/src/public-data/entities/post-category.entity';
 import { firstValueFrom, of } from 'rxjs';
-
 import { PublicDataController } from './public-data.controller';
 import { PublicDataService } from './public-data.service';
 
@@ -40,7 +39,7 @@ describe('PublicDataController', () => {
     it('전체 post-category Data 조회', async () => {
       const mockPostCategories: PostCategory[] = [{ id: 1, post_category_name: '팀원 모집' }];
       jest
-        .spyOn(service, 'getPostCategories')
+        .spyOn(service, 'getAllPostCategory')
         .mockImplementation(async () => await of(mockPostCategories));
 
       const result = await firstValueFrom(await controller.getAllPostCategory());
@@ -61,7 +60,7 @@ describe('PublicDataController', () => {
 
     it('전체 post-category data 조회 에러', async () => {
       const mockError = new Error(NotFoundException.name);
-      jest.spyOn(service, 'getPostCategories').mockImplementation(() => {
+      jest.spyOn(service, 'getAllPostCategory').mockImplementation(() => {
         throw mockError;
       });
 
