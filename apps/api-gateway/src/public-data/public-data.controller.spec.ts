@@ -16,7 +16,7 @@ describe('Public-Data Controller 테스트', () => {
         {
           provide: PublicDataService,
           useValue: {
-            getAllPostCategory: jest.fn(),
+            getPostCategories: jest.fn(),
             getPostCategoryById: jest.fn(),
           },
         },
@@ -40,7 +40,7 @@ describe('Public-Data Controller 테스트', () => {
       it('전체 post-category Data가 조회 된다.', async () => {
         const mockPostCategories: PostCategory[] = [{ id: 1, post_category_name: '팀원 모집' }];
         jest
-          .spyOn(service, 'getAllPostCategory')
+          .spyOn(service, 'getPostCategories')
           .mockImplementation(async () => of(mockPostCategories));
 
         const result = await firstValueFrom(await controller.getPostCategories());
@@ -51,7 +51,7 @@ describe('Public-Data Controller 테스트', () => {
       it('에러 발생으로 인해 NotFoundException이 발생한다', async () => {
         const mockError = new Error(NotFoundException.name);
 
-        jest.spyOn(service, 'getAllPostCategory').mockImplementation(() => {
+        jest.spyOn(service, 'getPostCategories').mockImplementation(() => {
           throw mockError;
         });
 
