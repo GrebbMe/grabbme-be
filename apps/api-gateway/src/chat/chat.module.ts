@@ -16,7 +16,7 @@ import { ChatService } from './chat.service';
           transport: Transport.TCP,
           options: {
             host: 'localhost',
-            port: Number(process.env.CHAR_PORT),
+            port: Number(process.env.CHAT_PORT),
           },
         });
       },

@@ -2,7 +2,7 @@ import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ChatModule } from 'apps/chat/src/chat/chat.module';
+import { ChatModule } from './chat/chat.module';
 import { BoardModule } from './board/board.module';
 import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';

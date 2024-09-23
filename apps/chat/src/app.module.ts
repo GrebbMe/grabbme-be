@@ -12,10 +12,11 @@ import mysqlConfig from './config/mysql.config';
       isGlobal: true,
       load: [mysqlConfig, mongoConfig],
     }),
+
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const boardTypeOrmModuleOptions: TypeOrmModuleOptions = {
+        const chatTypeOrmModuleOptions: TypeOrmModuleOptions = {
           type: 'mysql',
           host: configService.get('mysql.host'),
           port: configService.get('mysql.port'),
@@ -27,22 +28,24 @@ import mysqlConfig from './config/mysql.config';
           logging: true,
           synchronize: process.env.NODE_ENV === 'development',
         };
-        return boardTypeOrmModuleOptions;
+        return chatTypeOrmModuleOptions;
       },
     }),
+
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const gatewayMongooseOptions: MongooseModuleOptions = {
+        const chatMongooseOptions: MongooseModuleOptions = {
           uri: `${configService.get('mongo.host')}:${configService.get('mongo.port')}`,
           auth: {
             username: configService.get('mongo.username'),
             password: configService.get('mongo.password'),
           },
         };
-        return gatewayMongooseOptions;
+        return chatMongooseOptions;
       },
     }),
+    
     ChatModule,
   ],
 })
