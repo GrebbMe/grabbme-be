@@ -27,7 +27,11 @@ describe('PublicDataController', () => {
     service = module.get<PublicDataService>(PublicDataService);
   });
 
-  it('api-gateway/public-data controller should be defined', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('Controller, Service 가 정의 된다.', () => {
     expect(controller).toBeDefined();
     expect(service).toBeDefined();
   });
@@ -39,9 +43,9 @@ describe('PublicDataController', () => {
         .spyOn(service, 'getPostCategories')
         .mockImplementation(async () => await of(mockPostCategories));
 
-      const result = await firstValueFrom(await controller.getPostCategories());
+      const result = await firstValueFrom(await controller.getAllPostCategory());
       expect(result).toEqual(mockPostCategories);
-      expect(service.getPostCategories).toHaveBeenCalled();
+      expect(service.getAllPostCategory).toHaveBeenCalled();
     });
 
     it('특정 post-category data 조회', async () => {
@@ -62,11 +66,11 @@ describe('PublicDataController', () => {
       });
 
       try {
-        await firstValueFrom(await controller.getPostCategories());
+        await firstValueFrom(await controller.getAllPostCategory());
       } catch (error) {
         expect(error).toBe(mockError);
       }
-      expect(service.getPostCategories).toHaveBeenCalled();
+      expect(service.getAllPostCategory).toHaveBeenCalled();
     });
 
     it('특정 post-category data 조회 에러', async () => {
