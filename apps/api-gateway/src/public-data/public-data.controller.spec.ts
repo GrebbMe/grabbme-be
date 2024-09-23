@@ -6,6 +6,7 @@ import { PublicDataController } from './public-data.controller';
 import { PublicDataService } from './public-data.service';
 
 describe('Public-Data Controller 테스트', () => {
+  const context = describe;
   let controller: PublicDataController;
   let service: PublicDataService;
 
@@ -36,7 +37,7 @@ describe('Public-Data Controller 테스트', () => {
   });
 
   describe('post-category API 테스트', () => {
-    describe('getAllPostCategory 를 호출 하면,', () => {
+    context('getPostCategories 를 호출 하면,', () => {
       it('전체 post-category Data가 조회 된다.', async () => {
         const mockPostCategories: PostCategory[] = [{ id: 1, post_category_name: '팀원 모집' }];
         jest
@@ -61,7 +62,7 @@ describe('Public-Data Controller 테스트', () => {
       });
     });
 
-    describe('getPostCategoryById를 호출 하면,', () => {
+    context('getPostCategoryById를 호출 하면,', () => {
       it('특정 post-category가 조회 된다.', async () => {
         const mockPostCategory: PostCategory = { id: 1, post_category_name: '팀원 모집' };
         jest
