@@ -1,8 +1,20 @@
 import { NestFactory } from '@nestjs/core';
-import { ChatModule } from './chat.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ChatModule);
-  await app.listen(3000);
+  const PORT = Number(process.env.CHAT_PORT);
+
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+    transport: Transport.TCP,
+    options: {
+      host: 'localhost',
+      port: PORT,
+    },
+  });
+
+  await app.listen();
+
+  console.info(`chat-service Running On ${PORT} for TCP`);
 }
 bootstrap();
