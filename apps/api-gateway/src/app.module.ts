@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { BoardModule } from './board/board.module';
+import { PublicDataModule } from './public-data/public-data.module';
 import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import mongoConfig from './config/mongo.config';
@@ -14,6 +15,7 @@ import mysqlConfig from './config/mysql.config';
       isGlobal: true,
       load: [mysqlConfig, mongoConfig],
     }),
+
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -31,6 +33,7 @@ import mysqlConfig from './config/mysql.config';
         return gatewayOrmOptions;
       },
     }),
+
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -44,9 +47,12 @@ import mysqlConfig from './config/mysql.config';
         return gatewayMongooseOptions;
       },
     }),
+
     UserModule,
     BoardModule,
+    PublicDataModule,
   ],
+
   providers: [Logger],
 })
 
