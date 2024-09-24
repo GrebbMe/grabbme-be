@@ -12,7 +12,8 @@ export class BoardService {
   }
 
   public async getOneBoard(id: string) {
-    return await this.boardClient.send({ cmd: 'get-one-board' }, { id });
+    const data = { id: Number(id) };
+    return await this.boardClient.send({ cmd: 'get-one-board' }, data);
   }
 
   public async createBoard(createBoardDto: CreateBoardDto) {
@@ -21,10 +22,12 @@ export class BoardService {
   }
 
   public async updateBoard(id: string, updateData: UpdateBoardDto) {
-    return await this.boardClient.send({ cmd: 'update-board' }, { id, updateData });
+    const data = { id, ...updateData };
+    return await this.boardClient.send({ cmd: 'update-board' }, data);
   }
 
   public async deleteBoard(id: string) {
-    return await this.boardClient.send({ cmd: 'delete-board' }, { id });
+    const data = { id: Number(id) };
+    return await this.boardClient.send({ cmd: 'delete-board' }, data);
   }
 }

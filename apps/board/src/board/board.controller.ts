@@ -14,22 +14,26 @@ export class BoardController {
   }
 
   @MessagePattern({ cmd: 'get-one-board' })
-  public async getOneBoard(@Payload() data: { id: number }) {
-    return this.boardService.getOneBoard(data.id);
+  public async getOneBoard(@Payload() payload: { id: number }) {
+    const { id } = payload;
+    return this.boardService.getOneBoard(id);
   }
 
   @MessagePattern({ cmd: 'create-board' })
-  public async createBoard(@Payload() data: CreateBoardDto) {
+  public async createBoard(@Payload() payload: CreateBoardDto) {
+    const data = { ...payload };
     return this.boardService.createBoard(data);
   }
 
   @MessagePattern({ cmd: 'update-board' })
-  public async updateBoard(@Payload() data: { id: number; updateData: UpdateBoardDto }) {
-    return this.boardService.updateBoard(data.id, data.updateData);
+  public async updateBoard(@Payload() payload: { id: number; updateData: UpdateBoardDto }) {
+    const { id, updateData } = payload;
+    return this.boardService.updateBoard(id, updateData);
   }
 
   @MessagePattern({ cmd: 'delete-board' })
-  public async deleteBoard(@Payload() data: { id: number }) {
-    return this.boardService.deleteBoard(data.id);
+  public async deleteBoard(@Payload() payload: { id: number }) {
+    const { id } = payload;
+    return this.boardService.deleteBoard(id);
   }
 }
