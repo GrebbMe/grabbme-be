@@ -13,6 +13,7 @@ async function bootstrap() {
     .setDescription('GrabbMe Backend API Documents')
     .setVersion('1.0.0')
     .addBearerAuth()
+    .addServer('api')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
