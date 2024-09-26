@@ -21,4 +21,11 @@ export class PublicDataService {
       { id },
     );
   }
+
+  public async getPositionCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ALL_POSITION_CATEGORY,
+      {},
+    );
+  }
 }
