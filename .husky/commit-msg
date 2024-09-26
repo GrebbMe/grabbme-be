@@ -1,12 +1,14 @@
 #!/bin/sh
 
 commit_msg_file=$1
-commit_msg=$(cat "$commit_msg_file")
+commit_msg=$(cat "$commit_msg_file" | tr -d '\r\n')
 
-PATTERN='^[a-z]+ : [a-z가-힣\- ]+$'
+echo "Commit message is: '$commit_msg'"
 
-if ! echo "$commit_msg" | awk "/$PATTERN/" > /dev/null; then
-  echo "커밋 양식을 지켜주세요'"
+PATTERN='^[a-zA-Z]+ : [a-zA-Z가-힣0-9 ,()-]+$'
+
+if ! echo "$commit_msg" | awk -v pattern="$PATTERN" '$0 ~ pattern {exit 0} {exit 1}'; then
+  echo "커밋 양식을 지켜주세요"
   exit 1
 fi
 

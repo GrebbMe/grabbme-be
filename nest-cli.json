@@ -45,6 +45,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/users/tsconfig.app.json"
       }
+    },
+    "public-data": {
+      "type": "application",
+      "root": "apps/public-data",
+      "entryFile": "main",
+      "sourceRoot": "apps/public-data/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/public-data/tsconfig.app.json"
+      }
     }
   }
 }
