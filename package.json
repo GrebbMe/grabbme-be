@@ -39,7 +39,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "swagger": "^0.7.5",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-transactional": "^0.5.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
