@@ -59,4 +59,22 @@ export class PublicDataController {
   public getPositionCategories() {
     return this.publicDataService.getPositionCategories();
   }
+
+  @Get('position/:id')
+  @ApiOperation({ summary: '특정 position category 데이터 조회' })
+  @ApiOkResponse({
+    description: '특정 position category 데이터 조회',
+    example: {
+      position_category_id: 1,
+      name: 'Frontend Developer',
+      kor_name: '프론트엔드 개발자',
+      abbreviation: 'FE',
+    },
+  })
+  @ApiNotFoundResponse({
+    description: '데이터가 없습니다.',
+  })
+  public getPositionCategoryById(@Param('id') id: number) {
+    return this.publicDataService.getPositionCategoryById(id);
+  }
 }
