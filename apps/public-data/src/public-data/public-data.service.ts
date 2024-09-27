@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { PositionCategory } from './entities/position-category.entity';
@@ -9,7 +9,6 @@ import { PostCategory } from './entities/post-category.entity';
 @Injectable()
 export class PublicDataService {
   public constructor(
-    private dataSource: DataSource,
     @InjectRepository(PostCategory)
     private postCategoryRepository: Repository<PostCategory>,
     @InjectRepository(PositionCategory)
