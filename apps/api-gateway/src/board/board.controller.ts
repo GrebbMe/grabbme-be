@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Delete, Param, Body, Patch } from '@nestjs/common';
 import { BoardService } from './board.service';
-import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+
 
 @Controller('board')
 export class BoardController {
@@ -10,7 +11,7 @@ export class BoardController {
 
   @Get()
   @ApiOperation({ summary: '전체 게시글 조회' })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: '전체 게시글 조회',
   })
   public async getAllBoards() {
@@ -19,7 +20,7 @@ export class BoardController {
 
   @Get(':id')
   @ApiOperation({ summary: '게시글 상세 조회' })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: '게시글 상세 조회',
   })
   public async getOneBoard(@Param('id') postId: string) {
@@ -30,6 +31,7 @@ export class BoardController {
   @ApiOperation({ summary: '게시글 생성' })
   @ApiCreatedResponse({
     description: '게시글 생성',
+   
   })
   public async createBoard(@Body() createBoardDto: CreateBoardDto) {
     return await this.boardService.createBoard(createBoardDto);
@@ -37,7 +39,7 @@ export class BoardController {
 
   @Patch(':id')
   @ApiOperation({ summary: '게시글 수정' })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: '게시글 수정',
   })
   public async updateBoard(@Param('id') updateId: string, @Body() updateData: UpdateBoardDto) {
