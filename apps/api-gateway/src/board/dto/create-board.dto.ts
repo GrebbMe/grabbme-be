@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateBoardDto {
   @IsString()
@@ -14,16 +14,4 @@ export class CreateBoardDto {
   @IsDate()
   @IsNotEmpty()
   public expired_at: Date;
-
-  //   @IsNumber()
-  //   @IsNotEmpty()
-  //   public project_category_id: number;
-
-  //   @IsNumber()
-  //   @IsNotEmpty()
-  //   public stack_category_id: number;
-
-  //   @IsNumber()
-  //   @IsNotEmpty()
-  //   public teams: number;
 }

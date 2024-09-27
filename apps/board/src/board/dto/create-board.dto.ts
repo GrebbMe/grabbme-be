@@ -10,16 +10,4 @@ export class CreateBoardDto {
   @IsDate()
   @IsNotEmpty()
   public expired_at: Date;
-
-  // @IsNumber()
-  // @IsNotEmpty()
-  // public project_category_id: number;
-
-  // @IsNumber()
-  // @IsNotEmpty()
-  // public stack_category_id: number;
-
-  // @IsString()
-  // @IsNotEmpty()
-  // public teams: string;
 }

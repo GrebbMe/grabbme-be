@@ -13,13 +13,4 @@ export class UpdateBoardDto extends PartialType(CreateBoardDto) {
 
   @IsDate()
   public expired_at?: Date;
-
-  // @IsString()
-  // public project_category?: string;
-
-  // @IsString()
-  // public stack_category?: string;
-
-  // @IsString()
-  // public teams?: string;
 }
