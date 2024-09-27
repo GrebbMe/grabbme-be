@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Delete, Param, Body, Patch } from '@nestjs/common';
-import { BoardService } from './board.service';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
@@ -13,8 +13,8 @@ export class BoardController {
   @ApiOkResponse({
     description: '전체 게시글 조회',
   })
-  public async getAllBoards() {
-    return await this.boardService.getAllBoards();
+  public async getPosts() {
+    return await this.boardService.getPosts();
   }
 
   @Get(':id')
@@ -22,8 +22,8 @@ export class BoardController {
   @ApiOkResponse({
     description: '게시글 상세 조회',
   })
-  public async getOneBoard(@Param('id') id: string) {
-    return await this.boardService.getOneBoard(id);
+  public async getPostById(@Param('id') id: string) {
+    return await this.boardService.getPostById(id);
   }
 
   @Post()
@@ -31,8 +31,8 @@ export class BoardController {
   @ApiCreatedResponse({
     description: '게시글 생성',
   })
-  public async createBoard(@Body() createBoardDto: CreateBoardDto) {
-    return await this.boardService.createBoard(createBoardDto);
+  public async createPost(@Body() createBoardDto: CreateBoardDto) {
+    return await this.boardService.createPost(createBoardDto);
   }
 
   @Patch(':id')
@@ -40,9 +40,9 @@ export class BoardController {
   @ApiOkResponse({
     description: '게시글 수정',
   })
-  public async updateBoard(@Param('id') id: string, @Body() updateData: UpdateBoardDto) {
-    const payload = { id: Number(id), updateData };
-    return await this.boardService.updateBoard(payload);
+  public async updatePost(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
+    const payload = { id: Number(id), updateBoardDto };
+    return await this.boardService.updatePost(payload);
   }
 
   @Delete(':id')
@@ -50,7 +50,7 @@ export class BoardController {
   @ApiCreatedResponse({
     description: '게시글 삭제',
   })
-  public async deleteBoard(@Param('id') id: string) {
-    return await this.boardService.deleteBoard(id);
+  public async deletePost(@Param('id') id: string) {
+    return await this.boardService.deletePost(id);
   }
 }

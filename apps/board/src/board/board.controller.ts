@@ -9,31 +9,31 @@ export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
   @MessagePattern({ cmd: 'get-all-boards' })
-  public async getAllBoards() {
-    return this.boardService.getAllBoards();
+  public async getPosts() {
+    return this.boardService.getPosts();
   }
 
   @MessagePattern({ cmd: 'get-one-board' })
-  public async getOneBoard(@Payload() payload: { id: number }) {
+  public async getPostById(@Payload() payload: { id: number }) {
     const { id } = payload;
-    return this.boardService.getOneBoard(id);
+    return this.boardService.getPostById(id);
   }
 
   @MessagePattern({ cmd: 'create-board' })
-  public async createBoard(@Payload() payload: CreateBoardDto) {
+  public async createPost(@Payload() payload: CreateBoardDto) {
     const data = { ...payload };
-    return this.boardService.createBoard(data);
+    return this.boardService.createPost(data);
   }
 
   @MessagePattern({ cmd: 'update-board' })
-  public async updateBoard(@Payload() payload: { id: number; updateData: UpdateBoardDto }) {
-    const { id, updateData } = payload;
-    return this.boardService.updateBoard(id, updateData);
+  public async updatePost(@Payload() payload: { id: number; updateBoardDto: UpdateBoardDto }) {
+    const { id, updateBoardDto } = payload;
+    return this.boardService.updatePost(id, updateBoardDto);
   }
 
   @MessagePattern({ cmd: 'delete-board' })
-  public async deleteBoard(@Payload() payload: { id: number }) {
+  public async deletePost(@Payload() payload: { id: number }) {
     const { id } = payload;
-    return this.boardService.deleteBoard(id);
+    return this.boardService.deletePost(id);
   }
 }

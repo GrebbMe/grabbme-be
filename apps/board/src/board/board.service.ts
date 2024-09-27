@@ -13,7 +13,7 @@ export class BoardService {
     private readonly dataSource: DataSource,
   ) {}
 
-  public async getAllBoards(): Promise<Board[]> {
+  public async getPosts(): Promise<Board[]> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
@@ -28,7 +28,7 @@ export class BoardService {
     }
   }
 
-  public async getOneBoard(id: number): Promise<Board> {
+  public async getPostById(id: number): Promise<Board> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
@@ -46,7 +46,7 @@ export class BoardService {
     }
   }
 
-  public async createBoard(data: CreateBoardDto): Promise<Board> {
+  public async createPost(data: CreateBoardDto): Promise<Board> {
     const newBoardData = {
       title: data.title,
       content: data.content,
@@ -67,7 +67,7 @@ export class BoardService {
     }
   }
 
-  public async updateBoard(id: number, updateBoardDto: UpdateBoardDto): Promise<Board> {
+  public async updatePost(id: number, updateBoardDto: UpdateBoardDto): Promise<Board> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
@@ -88,7 +88,7 @@ export class BoardService {
     }
   }
 
-  public async deleteBoard(id: number): Promise<void> {
+  public async deletePost(id: number): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.startTransaction();
     try {
