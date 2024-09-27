@@ -1,14 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { ChatModule } from '../src/chat/chat.module';
+import { PublicDataModule } from './../src/public-data.module';
 
-describe('ChatController (e2e)', () => {
+describe('PublicDataController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [ChatModule],
+      imports: [PublicDataModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
