@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MESSAGE } from 'shared/constants/message-pattern';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -8,30 +9,30 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
-  @MessagePattern({ cmd: 'get-all-boards' })
+  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST)
   public async getPosts() {
     return this.boardService.getPosts();
   }
 
-  @MessagePattern({ cmd: 'get-one-board' })
+  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ONE_POST)
   public async getPostById(@Payload() payload: { id: number }) {
     const { id } = payload;
     return this.boardService.getPostById(id);
   }
 
-  @MessagePattern({ cmd: 'create-board' })
+  @MessagePattern(MESSAGE.POST_DATA.POST.CREATE_POST)
   public async createPost(@Payload() payload: CreateBoardDto) {
     const data = { ...payload };
     return this.boardService.createPost(data);
   }
 
-  @MessagePattern({ cmd: 'update-board' })
+  @MessagePattern(MESSAGE.POST_DATA.POST.UPDATE_POST)
   public async updatePost(@Payload() payload: { id: number; updateBoardDto: UpdateBoardDto }) {
     const { id, updateBoardDto } = payload;
     return this.boardService.updatePost(id, updateBoardDto);
   }
 
-  @MessagePattern({ cmd: 'delete-board' })
+  @MessagePattern(MESSAGE.POST_DATA.POST.DELETE_POST)
   public async deletePost(@Payload() payload: { id: number }) {
     const { id } = payload;
     return this.boardService.deletePost(id);
