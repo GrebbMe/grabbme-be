@@ -21,9 +21,8 @@ export class BoardService {
     return await this.boardClient.send({ cmd: 'create-board' }, data);
   }
 
-  public async updateBoard(id: string, updateData: UpdateBoardDto) {
-    const data = { id, ...updateData };
-    return await this.boardClient.send({ cmd: 'update-board' }, data);
+  public async updateBoard(payload: { id: number; updateData: UpdateBoardDto }) {
+    return await this.boardClient.send({ cmd: 'update-board' }, payload);
   }
 
   public async deleteBoard(id: string) {

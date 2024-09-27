@@ -4,7 +4,6 @@ import { ApiCreatedResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
-
 @Controller('board')
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
@@ -23,15 +22,14 @@ export class BoardController {
   @ApiOkResponse({
     description: '게시글 상세 조회',
   })
-  public async getOneBoard(@Param('id') postId: string) {
-    return await this.boardService.getOneBoard(postId);
+  public async getOneBoard(@Param('id') id: string) {
+    return await this.boardService.getOneBoard(id);
   }
 
   @Post()
   @ApiOperation({ summary: '게시글 생성' })
   @ApiCreatedResponse({
     description: '게시글 생성',
-   
   })
   public async createBoard(@Body() createBoardDto: CreateBoardDto) {
     return await this.boardService.createBoard(createBoardDto);
@@ -42,8 +40,9 @@ export class BoardController {
   @ApiOkResponse({
     description: '게시글 수정',
   })
-  public async updateBoard(@Param('id') updateId: string, @Body() updateData: UpdateBoardDto) {
-    return await this.boardService.updateBoard(updateId, updateData);
+  public async updateBoard(@Param('id') id: string, @Body() updateData: UpdateBoardDto) {
+    const payload = { id: Number(id), updateData };
+    return await this.boardService.updateBoard(payload);
   }
 
   @Delete(':id')
@@ -51,7 +50,7 @@ export class BoardController {
   @ApiCreatedResponse({
     description: '게시글 삭제',
   })
-  public async deleteBoard(@Param('id') deleteId: string) {
-    return await this.boardService.deleteBoard(deleteId);
+  public async deleteBoard(@Param('id') id: string) {
+    return await this.boardService.deleteBoard(id);
   }
 }
