@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { PublicDataService } from './public-data.service';
 
 @Controller('public-data')
@@ -75,6 +76,38 @@ export class PublicDataController {
     description: '데이터가 없습니다.',
   })
   public getPositionCategoryById(@Param('id') id: number) {
+    console.info(id);
     return this.publicDataService.getPositionCategoryById(id);
+  }
+
+  @Get('project')
+  @ApiOperation({ summary: '전체 project category 데이터 조회' })
+  @ApiOkResponse({
+    example: [
+      {
+        project_category_id: 1,
+        name: '프로젝트 1',
+      },
+      {
+        project_category_id: 2,
+        name: '프로젝트 2',
+      },
+    ],
+  })
+  public getProjectCategories() {
+    return this.publicDataService.getProjectCategories();
+  }
+
+  @Get('project/:id')
+  @ApiOperation({ summary: '특정 project category 데이터 조회' })
+  @ApiOkResponse({
+    description: '특정 project category 데이터 조회',
+    example: {
+      project_category_id: 1,
+      name: '프로젝트 1',
+    },
+  })
+  public getProjectCategoryById(@Param('id') id: number) {
+    return this.publicDataService.getProjectCategoryById(id);
   }
 }
