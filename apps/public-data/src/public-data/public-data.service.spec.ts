@@ -57,6 +57,7 @@ describe('msa public-data service 테스트', () => {
     expect(service).toBeDefined();
     expect(postCategoryRepository).toBeDefined();
     expect(positionCategoryRepository).toBeDefined();
+    expect(projectCategoryRepository).toBeDefined();
   });
 
   describe('1. post-category 서비스 로직 테스트', () => {
