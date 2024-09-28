@@ -135,4 +135,27 @@ export class PublicDataController {
     console.info(id);
     return this.publicDataService.getStackCategoryById(id);
   }
+
+  @Get('career')
+  @ApiOperation({ summary: '전체 career category 데이터 조회' })
+  @ApiOkResponse({
+    description: '전체 career category 데이터 조회',
+    example: [
+      { career_category_id: 1, content: '0년차' },
+      { career_category_id: 2, content: '1~3년차' },
+    ],
+  })
+  public getCareerCategories() {
+    return this.publicDataService.getCareerCategories();
+  }
+
+  @Get('career/:id')
+  @ApiOperation({ summary: '특정 career category 데이터 조회' })
+  @ApiOkResponse({
+    description: '특정 career category 데이터 조회',
+    example: { career_category_id: 1, content: '0년차' },
+  })
+  public getCareerCategoryById(@Param() { id }: BasicReqDto) {
+    return this.publicDataService.getCareerCategoryById(id);
+  }
 }

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
+import { CareerCategory } from './entities/career-category.entity';
 import { PositionCategory } from './entities/position-category.entity';
 import { PostCategory } from './entities/post-category.entity';
 import { ProjectCategory } from './entities/project-category.entity';
@@ -18,6 +19,8 @@ export class PublicDataService {
     private projectCategoryRepository: Repository<ProjectCategory>,
     @InjectRepository(StackCategory)
     private stackCategoryRepository: Repository<StackCategory>,
+    @InjectRepository(CareerCategory)
+    private careerCategoryRepository: Repository<CareerCategory>,
   ) {}
 
   @Transactional()
@@ -92,5 +95,22 @@ export class PublicDataService {
 
     if (!stackCategory) throw new NotFoundException('데이터가 없습니다.');
     return stackCategory;
+  }
+
+  @Transactional()
+  public async findAllCareerCategory(): Promise<CareerCategory[]> {
+    const careerCategories = await this.careerCategoryRepository.find();
+    if (careerCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+    return careerCategories;
+  }
+
+  @Transactional()
+  public async findOneCareerCategoryById(id: number): Promise<CareerCategory> {
+    const careerCategory = await this.careerCategoryRepository.findOne({
+      where: { career_category_id: id },
+    });
+
+    if (!careerCategory) throw new NotFoundException('데이터가 없습니다.');
+    return careerCategory;
   }
 }

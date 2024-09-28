@@ -63,4 +63,18 @@ export class PublicDataService {
       { id },
     );
   }
+
+  public async getCareerCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ALL_CAREER_CATEGORY,
+      {},
+    );
+  }
+
+  public async getCareerCategoryById(id: number) {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ONE_CAREER_CATEGORY,
+      { id },
+    );
+  }
 }

@@ -16,5 +16,9 @@ export const MESSAGE = {
       GET_ALL_STACK_CATEGORY: { cmd: 'get-all-stack-category' },
       GET_ONE_STACK_CATEGORY: { cmd: 'get-one-stack-category' },
     },
+    CAREER_CATEGORY: {
+      GET_ALL_CAREER_CATEGORY: { cmd: 'get-all-career-category' },
+      GET_ONE_CAREER_CATEGORY: { cmd: 'get-one-career-category' },
+    },
   },
 } as const;

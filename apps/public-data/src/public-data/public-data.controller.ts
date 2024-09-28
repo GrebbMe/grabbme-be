@@ -47,4 +47,14 @@ export class PublicDataController {
   public async getStackCategoryById(@Payload() payload: BasicReqDto) {
     return await this.publicDataService.getStackCategoryById(payload.id);
   }
+
+  @MessagePattern(MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ALL_CAREER_CATEGORY)
+  public async getCareerCategories() {
+    return await this.publicDataService.findAllCareerCategory();
+  }
+
+  @MessagePattern(MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ONE_CAREER_CATEGORY)
+  public async getCareerCategoryById(@Payload() payload: BasicReqDto) {
+    return await this.publicDataService.findOneCareerCategoryById(payload.id);
+  }
 }
