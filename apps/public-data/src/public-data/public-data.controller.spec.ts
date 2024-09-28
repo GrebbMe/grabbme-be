@@ -68,13 +68,13 @@ describe('MSA public-data controller 테스트', () => {
         jest.spyOn(service, 'getPositionCategories').mockResolvedValue(positionCategoriesFixture);
         const result = await controller.getPositionCategories();
         expect(result).toEqual(positionCategoriesFixture);
-        expect(service.getPositionCategories).toHaveBeenCalled();
+        expect(service.findAllPositionCategory).toHaveBeenCalled();
       });
       it('ERROR : NotFoundException이 발생한다.', async () => {
         mockError = new Error(NotFoundException.name);
         jest.spyOn(service, 'getPositionCategories').mockRejectedValue(mockError);
         await expect(controller.getPositionCategories()).rejects.toThrow(mockError);
-        expect(service.getPositionCategories).toHaveBeenCalled();
+        expect(service.findAllPositionCategory).toHaveBeenCalled();
       });
     });
     context('getPositionCategoryById를 호출하면,', () => {
@@ -85,14 +85,14 @@ describe('MSA public-data controller 테스트', () => {
           .mockResolvedValue({ ...positionCategoriesFixture[0] });
         const result = await controller.getPositionCategoryById(categoryId);
         expect(result).toEqual(positionCategoriesFixture[0]);
-        expect(service.getPositionCategoryById).toHaveBeenCalledWith(categoryId.id);
+        expect(service.findPositionCategoryById).toHaveBeenCalledWith(categoryId.id);
       });
       it('ERROR : 존재하지 않는 id 로 조회 시 NotFoudnException이 발생한다.', async () => {
         const categoryId: GetPositionCategoryByIdDto = { id: 999 };
         mockError = new Error(NotFoundException.name);
         jest.spyOn(service, 'getPositionCategoryById').mockRejectedValue(mockError);
         await expect(controller.getPositionCategoryById(categoryId)).rejects.toThrow(mockError);
-        expect(service.getPositionCategoryById).toHaveBeenCalledWith(categoryId.id);
+        expect(service.findPositionCategoryById).toHaveBeenCalledWith(categoryId.id);
       });
     });
   });

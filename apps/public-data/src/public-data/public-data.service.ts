@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Transactional } from 'typeorm-transactional';
 import {
   CareerCategory,
   PositionCategory,
   PostCategory,
   ProjectCategory,
   StackCategory,
-} from './entities';
+} from '@publicData/entities';
+import { Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class PublicDataService {
@@ -26,7 +26,7 @@ export class PublicDataService {
   ) {}
 
   @Transactional()
-  public async getPostCategories(): Promise<PostCategory[]> {
+  public async findAllPostCategory(): Promise<PostCategory[]> {
     const postCategories = await this.postCategoryRepository.find();
 
     if (postCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
@@ -35,7 +35,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getPostCategoryById(id: number): Promise<PostCategory> {
+  public async findPostCategoryById(id: number): Promise<PostCategory> {
     const postCategory = await this.postCategoryRepository.findOne({ where: { id } });
 
     if (!postCategory) throw new NotFoundException('데이터가 없습니다.');
@@ -44,7 +44,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getPositionCategories(): Promise<PositionCategory[]> {
+  public async findAllPositionCategory(): Promise<PositionCategory[]> {
     const positionCategories = await this.positionCategoryRepository.find();
 
     if (positionCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
@@ -53,7 +53,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getPositionCategoryById(id: number): Promise<PositionCategory> {
+  public async findPositionCategoryById(id: number): Promise<PositionCategory> {
     const positionCategory = await this.positionCategoryRepository.findOne({
       where: { position_category_id: id },
     });
@@ -64,7 +64,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getProjectCategories(): Promise<ProjectCategory[]> {
+  public async findAllProjectCategory(): Promise<ProjectCategory[]> {
     const projectCategories = await this.projectCategoryRepository.find();
 
     if (projectCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
@@ -73,7 +73,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getProjectCategoryById(id: number): Promise<ProjectCategory> {
+  public async findProjectCategoryById(id: number): Promise<ProjectCategory> {
     const projectCategory = await this.projectCategoryRepository.findOne({
       where: { project_category_id: id },
     });
@@ -82,7 +82,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getStackCategories(): Promise<StackCategory[]> {
+  public async findAllStackCategory(): Promise<StackCategory[]> {
     const stackCategories = await this.stackCategoryRepository.find();
 
     if (stackCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
@@ -90,7 +90,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getStackCategoryById(id: number): Promise<StackCategory> {
+  public async findStackCategoryById(id: number): Promise<StackCategory> {
     const stackCategory = await this.stackCategoryRepository.findOne({
       where: { stack_category_id: id },
     });
@@ -107,7 +107,7 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async findOneCareerCategoryById(id: number): Promise<CareerCategory> {
+  public async findCareerCategoryById(id: number): Promise<CareerCategory> {
     const careerCategory = await this.careerCategoryRepository.findOne({
       where: { career_category_id: id },
     });
