@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@shared/*": ["shared/*"],
-      "@apps/*": ["apps/*"]
+      "@apps/*": ["apps/*"],
+      "@publicEntity/*": ["apps/public-data/entity/*"]
     }
   }
 }
