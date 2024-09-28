@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
 import { ChatList } from './chat-list.entity';
 
-@Schema()
+@Schema({ collection: 'chat_room' })
 export class ChatRoom extends Document {
   @Prop({ required: true })
   public channel_id: number;
