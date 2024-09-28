@@ -59,7 +59,7 @@ describe('MSA public-data controller 테스트', () => {
     expect(service).toBeDefined();
   });
 
-  describe('1. position-category API 테스트', () => {
+  describe('1. position-category contoller 테스트', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });

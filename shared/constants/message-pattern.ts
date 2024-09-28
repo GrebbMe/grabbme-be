@@ -8,5 +8,9 @@ export const MESSAGE = {
       GET_ALL_POSITION_CATEGORY: { cmd: 'get-all-position-category' },
       GET_ONE_POSITION_CATEGORY: { cmd: 'get-one-position-category' },
     },
+    PROJECT_CATEGORY: {
+      GET_ALL_PROJECT_CATEGORY: { cmd: 'get-all-project-category' },
+      GET_ONE_PROJECT_CATEGORY: { cmd: 'get-one-project-category' },
+    },
   },
 } as const;
