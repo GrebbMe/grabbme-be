@@ -5,6 +5,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { PositionCategory } from './entities/position-category.entity';
 import { PostCategory } from './entities/post-category.entity';
+import { ProjectCategory } from './entities/project-category.entity';
 
 @Injectable()
 export class PublicDataService {
@@ -13,6 +14,8 @@ export class PublicDataService {
     private postCategoryRepository: Repository<PostCategory>,
     @InjectRepository(PositionCategory)
     private positionCategoryRepository: Repository<PositionCategory>,
+    @InjectRepository(ProjectCategory)
+    private projectCategoryRepository: Repository<ProjectCategory>,
   ) {}
 
   @Transactional()
@@ -51,5 +54,23 @@ export class PublicDataService {
     if (!positionCategory) throw new NotFoundException('데이터가 없습니다.');
 
     return positionCategory;
+  }
+
+  @Transactional()
+  public async getProjectCategories(): Promise<ProjectCategory[]> {
+    const projectCategories = await this.projectCategoryRepository.find();
+
+    if (projectCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+
+    return projectCategories;
+  }
+
+  @Transactional()
+  public async getProjectCategoryById(id: number): Promise<ProjectCategory> {
+    const projectCategory = await this.projectCategoryRepository.findOne({
+      where: { project_category_id: id },
+    });
+    if (!projectCategory) throw new NotFoundException('데이터가 없습니다.');
+    return projectCategory;
   }
 }

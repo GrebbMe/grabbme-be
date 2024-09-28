@@ -10,12 +10,15 @@ import { Repository } from 'typeorm';
 import { PublicDataService } from './public-data.service';
 import { PositionCategory } from './entities/position-category.entity';
 import { PostCategory } from './entities/post-category.entity';
+import { ProjectCategory } from './entities/project-category.entity';
 
 describe('msa public-data service 테스트', () => {
   const context = describe;
+  const mockNotFoundError = new NotFoundException('데이터가 없습니다.');
   let service: PublicDataService;
   let postCategoryRepository: Repository<PostCategory>;
   let positionCategoryRepository: Repository<PositionCategory>;
+  let projectCategoryRepository: Repository<ProjectCategory>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,6 +32,10 @@ describe('msa public-data service 테스트', () => {
           provide: getRepositoryToken(PositionCategory),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(ProjectCategory),
+          useClass: Repository,
+        },
       ],
     }).compile();
 
@@ -36,6 +43,9 @@ describe('msa public-data service 테스트', () => {
     postCategoryRepository = module.get<Repository<PostCategory>>(getRepositoryToken(PostCategory));
     positionCategoryRepository = module.get<Repository<PositionCategory>>(
       getRepositoryToken(PositionCategory),
+    );
+    projectCategoryRepository = module.get<Repository<ProjectCategory>>(
+      getRepositoryToken(ProjectCategory),
     );
   });
 
@@ -54,7 +64,6 @@ describe('msa public-data service 테스트', () => {
       { id: 1, post_category_name: 'post-category-1' },
       { id: 2, post_category_name: 'post-category-2' },
     ];
-    const mockNotFoundError = new NotFoundException('데이터가 없습니다.');
 
     afterEach(() => {
       jest.clearAllMocks();
@@ -139,6 +148,65 @@ describe('msa public-data service 테스트', () => {
         jest.spyOn(positionCategoryRepository, 'findOne').mockRejectedValue(mockNotFoundError);
         await expect(service.getPositionCategoryById(0.1)).rejects.toThrow(NotFoundException);
         expect(positionCategoryRepository.findOne).toHaveBeenCalled();
+      });
+    });
+  });
+  describe('3. project-category 서비스 로직 테스트', () => {
+    const mockProjectCategories: ProjectCategory[] = [
+      {
+        project_category_id: 1,
+        name: 'project-category-1',
+        kor_name: '프로젝트-카테고리-1',
+        abbreviation: 'PC1',
+        description: '프로젝트 카테고리 1 입니다.',
+      },
+      {
+        project_category_id: 2,
+        name: 'project-category-2',
+        kor_name: '프로젝트-카테고리-2',
+        abbreviation: 'PC2',
+        description: '프로젝트 카테고리 2 입니다.',
+      },
+    ];
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    context(' getProjectCategories 가 호출 되면,', () => {
+      it('SUCCESS : project-category의 전체 데이터를 반환한다.', async () => {
+        jest.spyOn(projectCategoryRepository, 'find').mockResolvedValue(mockProjectCategories);
+        const result = await service.getProjectCategories();
+        expect(result).toEqual(mockProjectCategories);
+        expect(projectCategoryRepository.find).toHaveBeenCalled();
+      });
+
+      it('ERROR : project-category의 데이터가 없으면, NotFoundException을 반환한다.', async () => {
+        jest.spyOn(projectCategoryRepository, 'find').mockResolvedValue([]);
+        const result = service.getProjectCategories();
+        await expect(result).rejects.toThrow(mockNotFoundError);
+        expect(projectCategoryRepository.find).toHaveBeenCalled();
+      });
+    });
+    context(' getProjectCategoryById 가 호출 되면,', () => {
+      it('SUCCESS : 존재하는 id를 입력받아 project-category 단일 데이터를 반환한다.', async () => {
+        jest
+          .spyOn(projectCategoryRepository, 'findOne')
+          .mockResolvedValue(mockProjectCategories[0]);
+        const result = await service.getProjectCategoryById(
+          mockProjectCategories[0].project_category_id,
+        );
+        expect(result).toEqual(mockProjectCategories[0]);
+
+        expect(projectCategoryRepository.findOne).toHaveBeenCalledWith({
+          where: { project_category_id: mockProjectCategories[0].project_category_id },
+        });
+      });
+      it('ERROR : 존재하지 않는 id를 입력받아 NotFoundException을 반환 한다.', async () => {
+        jest.spyOn(projectCategoryRepository, 'findOne').mockResolvedValue(null);
+        await expect(service.getProjectCategoryById(100)).rejects.toThrow(mockNotFoundError);
+        expect(projectCategoryRepository.findOne).toHaveBeenCalledWith({
+          where: { project_category_id: 100 },
+        });
       });
     });
   });
