@@ -35,4 +35,18 @@ export class PublicDataService {
       { id },
     );
   }
+
+  public async getProjectCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ALL_PROJECT_CATEGORY,
+      {},
+    );
+  }
+
+  public async getProjectCategoryById(id: number) {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ONE_PROJECT_CATEGORY,
+      { id },
+    );
+  }
 }
