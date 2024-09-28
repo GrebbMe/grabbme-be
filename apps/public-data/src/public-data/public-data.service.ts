@@ -10,12 +10,6 @@ import {
   StackCategory,
 } from './entities';
 
-// import { CareerCategory } from './entities/career-category.entity';
-// import { PositionCategory } from './entities/position-category.entity';
-// import { PostCategory } from './entities/post-category.entity';
-// import { ProjectCategory } from './entities/project-category.entity';
-// import { StackCategory } from './entities/stack-category.entity';
-
 @Injectable()
 export class PublicDataService {
   public constructor(
