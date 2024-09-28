@@ -49,4 +49,18 @@ export class PublicDataService {
       { id },
     );
   }
+
+  public async getStackCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ALL_STACK_CATEGORY,
+      {},
+    );
+  }
+
+  public async getStackCategoryById(id: number) {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ONE_STACK_CATEGORY,
+      { id },
+    );
+  }
 }

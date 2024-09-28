@@ -11,6 +11,7 @@ import { PublicDataService } from './public-data.service';
 import { PositionCategory } from './entities/position-category.entity';
 import { PostCategory } from './entities/post-category.entity';
 import { ProjectCategory } from './entities/project-category.entity';
+import { StackCategory } from './entities/stack-category.entity';
 
 describe('msa public-data service 테스트', () => {
   const context = describe;
@@ -19,6 +20,7 @@ describe('msa public-data service 테스트', () => {
   let postCategoryRepository: Repository<PostCategory>;
   let positionCategoryRepository: Repository<PositionCategory>;
   let projectCategoryRepository: Repository<ProjectCategory>;
+  let stackCategoryRepository: Repository<StackCategory>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,6 +38,10 @@ describe('msa public-data service 테스트', () => {
           provide: getRepositoryToken(ProjectCategory),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(StackCategory),
+          useClass: Repository,
+        },
       ],
     }).compile();
 
@@ -46,6 +52,9 @@ describe('msa public-data service 테스트', () => {
     );
     projectCategoryRepository = module.get<Repository<ProjectCategory>>(
       getRepositoryToken(ProjectCategory),
+    );
+    stackCategoryRepository = module.get<Repository<StackCategory>>(
+      getRepositoryToken(StackCategory),
     );
   });
 
@@ -58,6 +67,7 @@ describe('msa public-data service 테스트', () => {
     expect(postCategoryRepository).toBeDefined();
     expect(positionCategoryRepository).toBeDefined();
     expect(projectCategoryRepository).toBeDefined();
+    expect(stackCategoryRepository).toBeDefined();
   });
 
   describe('1. post-category 서비스 로직 테스트', () => {
@@ -207,6 +217,49 @@ describe('msa public-data service 테스트', () => {
         await expect(service.getProjectCategoryById(100)).rejects.toThrow(mockNotFoundError);
         expect(projectCategoryRepository.findOne).toHaveBeenCalledWith({
           where: { project_category_id: 100 },
+        });
+      });
+    });
+  });
+  describe('4. stack-category 서비스 로직 테스트', () => {
+    const mockStackCategories: StackCategory[] = [
+      { stack_category_id: 1, name: 'React', kor_name: '리액트', category: 'FE' },
+      { stack_category_id: 2, name: 'NestJS', kor_name: '네스트', category: 'BE' },
+    ];
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    context(' getStakcCategories 가 호출 되면,', () => {
+      it('SUCCESS : stack-category 의 전체 데이터를 반환 한다.', async () => {
+        jest.spyOn(stackCategoryRepository, 'find').mockResolvedValue(mockStackCategories);
+        const result = await service.getStackCategories();
+        expect(result).toEqual(mockStackCategories);
+        expect(stackCategoryRepository.find).toHaveBeenCalled();
+      });
+      it('ERROR : stack-category의 데이터가 없어,  NotFoundException을 반환한다.', async () => {
+        jest.spyOn(stackCategoryRepository, 'find').mockResolvedValue([]);
+        await expect(service.getStackCategories()).rejects.toThrow(mockNotFoundError);
+        expect(stackCategoryRepository.find).toHaveBeenCalled();
+      });
+    });
+
+    context(' getStackCategoryById 가 호출 되면,', () => {
+      it('SUCCESS : 존재하는 id를 입력받아 stack-category 단일 데이터를 반환한다.', async () => {
+        jest.spyOn(stackCategoryRepository, 'findOne').mockResolvedValue(mockStackCategories[0]);
+        const result = await service.getStackCategoryById(mockStackCategories[0].stack_category_id);
+        expect(result).toEqual(mockStackCategories[0]);
+        expect(stackCategoryRepository.findOne).toHaveBeenCalledWith({
+          where: { stack_category_id: mockStackCategories[0].stack_category_id },
+        });
+      });
+
+      it('ERROR : 존재하지 않는 id를 입력받아 NotFoundException을 반환한다.', async () => {
+        jest.spyOn(stackCategoryRepository, 'findOne').mockResolvedValue(null);
+        await expect(service.getStackCategoryById(100)).rejects.toThrow(mockNotFoundError);
+        expect(stackCategoryRepository.findOne).toHaveBeenCalledWith({
+          where: { stack_category_id: 100 },
         });
       });
     });

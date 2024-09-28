@@ -12,5 +12,5 @@ export class StackCategory {
   public kor_name: string;
 
   @Column({ type: 'varchar', length: 45 })
-  public abbreviation: string;
+  public category: string;
 }

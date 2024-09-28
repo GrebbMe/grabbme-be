@@ -2,6 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { PublicDataService } from './public-data.service';
+import { BasicReqDto } from './dto/req.dto';
 
 @Controller('public-data')
 @ApiTags('Public Data API')
@@ -109,5 +110,29 @@ export class PublicDataController {
   })
   public getProjectCategoryById(@Param('id') id: number) {
     return this.publicDataService.getProjectCategoryById(id);
+  }
+
+  @Get('stack')
+  @ApiOperation({ summary: '전체 stack category 데이터 조회' })
+  @ApiOkResponse({
+    description: '전체 stack category 데이터 조회',
+    example: [
+      { stakc_category_id: 1, name: 'React', kor_name: '리액트', category: 'Frontend' },
+      { stakc_category_id: 2, name: 'NestJS', kor_name: '네스트JS', category: 'Backend' },
+    ],
+  })
+  public getStackCategories() {
+    return this.publicDataService.getStackCategories();
+  }
+
+  @Get('stack/:id')
+  @ApiOperation({ summary: '특정 stack category 데이터 조회' })
+  @ApiOkResponse({
+    description: '특정 stack category 데이터 조회',
+    example: { stakc_category_id: 1, name: 'React', kor_name: '리액트', category: 'Frontend' },
+  })
+  public getStackCategoryById(@Param() { id }: BasicReqDto) {
+    console.info(id);
+    return this.publicDataService.getStackCategoryById(id);
   }
 }

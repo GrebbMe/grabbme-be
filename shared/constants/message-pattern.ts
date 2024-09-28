@@ -12,5 +12,9 @@ export const MESSAGE = {
       GET_ALL_PROJECT_CATEGORY: { cmd: 'get-all-project-category' },
       GET_ONE_PROJECT_CATEGORY: { cmd: 'get-one-project-category' },
     },
+    STACK_CATEGORY: {
+      GET_ALL_STACK_CATEGORY: { cmd: 'get-all-stack-category' },
+      GET_ONE_STACK_CATEGORY: { cmd: 'get-one-stack-category' },
+    },
   },
 } as const;

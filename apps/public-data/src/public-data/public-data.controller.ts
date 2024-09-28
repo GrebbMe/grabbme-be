@@ -2,8 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
 import { PublicDataService } from './public-data.service';
-import { GetOnePostCategoryDto } from './dto/get-one-post-category.dto';
-import { GetProjectCategoryDTO } from './dto/req.dto';
+import { BasicReqDto } from './dto/req.dto';
 
 @Controller()
 export class PublicDataController {
@@ -15,9 +14,8 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POST_CATEGORY.GET_ONE_POST_CATEGORY)
-  public async getOnePostData(@Payload() getOnePostCategoryDataDto: GetOnePostCategoryDto) {
-    const { id } = getOnePostCategoryDataDto;
-    return await this.publicDataService.getPostCategoryById(id);
+  public async getOnePostData(@Payload() payload: BasicReqDto) {
+    return await this.publicDataService.getPostCategoryById(payload.id);
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ALL_POSITION_CATEGORY)
@@ -26,7 +24,7 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ONE_POSITION_CATEGORY)
-  public async getPositionCategoryById(@Payload() payload: GetOnePostCategoryDto) {
+  public async getPositionCategoryById(@Payload() payload: BasicReqDto) {
     return await this.publicDataService.getPositionCategoryById(payload.id);
   }
 
@@ -36,7 +34,17 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ONE_PROJECT_CATEGORY)
-  public async getProjectCategoryById(@Payload() payload: GetProjectCategoryDTO) {
+  public async getProjectCategoryById(@Payload() payload: BasicReqDto) {
     return await this.publicDataService.getProjectCategoryById(payload.id);
+  }
+
+  @MessagePattern(MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ALL_STACK_CATEGORY)
+  public async getStackCategories() {
+    return await this.publicDataService.getStackCategories();
+  }
+
+  @MessagePattern(MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ONE_STACK_CATEGORY)
+  public async getStackCategoryById(@Payload() payload: BasicReqDto) {
+    return await this.publicDataService.getStackCategoryById(payload.id);
   }
 }
