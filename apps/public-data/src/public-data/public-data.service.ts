@@ -15,7 +15,6 @@ export class PublicDataService {
     private positionCategoryRepository: Repository<PositionCategory>,
   ) {}
 
-  // * post-category
   @Transactional()
   public async getPostCategories(): Promise<PostCategory[]> {
     const postCategories = await this.postCategoryRepository.find();
@@ -34,7 +33,6 @@ export class PublicDataService {
     return postCategory;
   }
 
-  // * position-category
   @Transactional()
   public async getPositionCategories(): Promise<PositionCategory[]> {
     const positionCategories = await this.positionCategoryRepository.find();
