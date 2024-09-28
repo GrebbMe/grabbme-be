@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
 import { PublicDataService } from './public-data.service';
 import { GetOnePostCategoryDto } from './dto/get-one-post-category.dto';
+import { GetProjectCategoryDTO } from './dto/req.dto';
 
 @Controller()
 export class PublicDataController {
@@ -27,5 +28,15 @@ export class PublicDataController {
   @MessagePattern(MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ONE_POSITION_CATEGORY)
   public async getPositionCategoryById(@Payload() payload: GetOnePostCategoryDto) {
     return await this.publicDataService.getPositionCategoryById(payload.id);
+  }
+
+  @MessagePattern(MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ALL_PROJECT_CATEGORY)
+  public async getProjectCategories() {
+    return await this.publicDataService.getProjectCategories();
+  }
+
+  @MessagePattern(MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ONE_PROJECT_CATEGORY)
+  public async getProjectCategoryById(@Payload() payload: GetProjectCategoryDTO) {
+    return await this.publicDataService.getProjectCategoryById(payload.id);
   }
 }
