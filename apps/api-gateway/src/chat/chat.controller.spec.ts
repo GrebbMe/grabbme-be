@@ -14,9 +14,7 @@ describe('ChatController', () => {
     chatController = app.get<ChatController>(ChatController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(chatController.getHello()).toBe('Hello World!');
-    });
+  it('should be defined', () => {
+    expect(chatController).toBeDefined();
   });
 });
