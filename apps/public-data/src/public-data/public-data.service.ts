@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import {
   CareerCategory,
   PositionCategory,
@@ -9,6 +10,7 @@ import {
 } from '@publicData/entities';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
+
 
 @Injectable()
 export class PublicDataService {
@@ -26,12 +28,15 @@ export class PublicDataService {
   ) {}
 
   @Transactional()
+
   public async findAllPostCategory(): Promise<PostCategory[]> {
+
     const postCategories = await this.postCategoryRepository.find();
 
     if (postCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
 
     return postCategories;
+
   }
 
   @Transactional()
@@ -113,6 +118,10 @@ export class PublicDataService {
     });
 
     if (!careerCategory) throw new NotFoundException('데이터가 없습니다.');
+    
     return careerCategory;
+
   }
+
+  
 }
