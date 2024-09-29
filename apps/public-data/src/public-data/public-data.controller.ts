@@ -14,8 +14,8 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POST_CATEGORY.GET_ONE_POST_CATEGORY)
-  public async getOnePostData(@Payload() payload: BasicReqDto) {
-    return await this.publicDataService.findPostCategoryById(payload.id);
+  public async getOnePostData(@Payload() { id }: BasicReqDto) {
+    return await this.publicDataService.findPostCategoryById(id);
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ALL_POSITION_CATEGORY)
@@ -24,8 +24,8 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ONE_POSITION_CATEGORY)
-  public async getPositionCategoryById(@Payload() payload: BasicReqDto) {
-    return await this.publicDataService.findPositionCategoryById(payload.id);
+  public async getPositionCategoryById(@Payload() { id }: BasicReqDto) {
+    return await this.publicDataService.findPositionCategoryById(id);
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ALL_PROJECT_CATEGORY)
@@ -34,8 +34,8 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ONE_PROJECT_CATEGORY)
-  public async getProjectCategoryById(@Payload() payload: BasicReqDto) {
-    return await this.publicDataService.findProjectCategoryById(payload.id);
+  public async getProjectCategoryById(@Payload() { id }: BasicReqDto) {
+    return await this.publicDataService.findProjectCategoryById(id);
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ALL_STACK_CATEGORY)
@@ -44,8 +44,8 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ONE_STACK_CATEGORY)
-  public async getStackCategoryById(@Payload() payload: BasicReqDto) {
-    return await this.publicDataService.findStackCategoryById(payload.id);
+  public async getStackCategoryById(@Payload() { id }: BasicReqDto) {
+    return await this.publicDataService.findStackCategoryById(id);
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ALL_CAREER_CATEGORY)
@@ -54,7 +54,7 @@ export class PublicDataController {
   }
 
   @MessagePattern(MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ONE_CAREER_CATEGORY)
-  public async getCareerCategoryById(@Payload() payload: BasicReqDto) {
-    return await this.publicDataService.findCareerCategoryById(payload.id);
+  public async getCareerCategoryById(@Payload() { id }: BasicReqDto) {
+    return await this.publicDataService.findCareerCategoryById(id);
   }
 }
