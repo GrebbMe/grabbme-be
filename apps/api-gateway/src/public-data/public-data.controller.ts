@@ -36,7 +36,7 @@ export class PublicDataController {
   @ApiOkResponse({
     description: '특정 post category 데이터 조회',
   })
-  public async getPostCategoryById(@Param('id') id: number) {
+  public async getPostCategoryById(@Param() { id }: BasicReqDto) {
     return await this.publicDataService.getPostCategoryById(id);
   }
 
@@ -76,8 +76,7 @@ export class PublicDataController {
   @ApiNotFoundResponse({
     description: '데이터가 없습니다.',
   })
-  public getPositionCategoryById(@Param('id') id: number) {
-    console.info(id);
+  public getPositionCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getPositionCategoryById(id);
   }
 
@@ -87,11 +86,17 @@ export class PublicDataController {
     example: [
       {
         project_category_id: 1,
-        name: '프로젝트 1',
+        name: 'E-commerce',
+        kor_name: '이커머스',
+        abbreviation: 'EC',
+        description: '온라인 상에서 상품이나 서비스를 판매하는 플랫폼',
       },
       {
         project_category_id: 2,
-        name: '프로젝트 2',
+        name: 'B2B',
+        kor_name: 'B2B',
+        abbreviation: 'B2B',
+        description: '기업 간의 거래를 위한 플랫폼',
       },
     ],
   })
@@ -105,10 +110,13 @@ export class PublicDataController {
     description: '특정 project category 데이터 조회',
     example: {
       project_category_id: 1,
-      name: '프로젝트 1',
+      name: 'E-commerce',
+      kor_name: '이커머스',
+      abbreviation: 'EC',
+      description: '온라인 상에서 상품이나 서비스를 판매하는 플랫폼',
     },
   })
-  public getProjectCategoryById(@Param('id') id: number) {
+  public getProjectCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getProjectCategoryById(id);
   }
 
@@ -132,7 +140,6 @@ export class PublicDataController {
     example: { stakc_category_id: 1, name: 'React', kor_name: '리액트', category: 'Frontend' },
   })
   public getStackCategoryById(@Param() { id }: BasicReqDto) {
-    console.info(id);
     return this.publicDataService.getStackCategoryById(id);
   }
 
