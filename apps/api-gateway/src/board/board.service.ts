@@ -13,13 +13,11 @@ export class BoardService {
   }
 
   public async getPostById(id: number) {
-    const data = { id };
-    return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ONE_POST, data);
+    return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ONE_POST, { id });
   }
 
   public async createPost(createBoardDto: CreateBoardDto) {
-    const data = { ...createBoardDto };
-    return await this.boardClient.send(MESSAGE.POST_DATA.POST.CREATE_POST, data);
+    return await this.boardClient.send(MESSAGE.POST_DATA.POST.CREATE_POST, { ...createBoardDto });
   }
 
   public async updatePost(payload: { id: number; updateBoardDto: UpdateBoardDto }) {
@@ -27,7 +25,6 @@ export class BoardService {
   }
 
   public async deletePost(id: number) {
-    const data = { id };
-    return await this.boardClient.send(MESSAGE.POST_DATA.POST.DELETE_POST, data);
+    return await this.boardClient.send(MESSAGE.POST_DATA.POST.DELETE_POST, { id });
   }
 }
