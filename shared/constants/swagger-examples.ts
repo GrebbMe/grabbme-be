@@ -1,4 +1,4 @@
-export const swaggerExamples = {
+export const publicDataExamples = {
   postCategory: [
     {
       id: 1,
