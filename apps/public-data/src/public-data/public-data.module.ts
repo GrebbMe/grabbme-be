@@ -15,11 +15,11 @@ import {
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      PostCategory,
-      PositionCategory,
+      User,
       CareerCategory,
       StackCategory,
-      User,
+      PostCategory,
+      PositionCategory,
       ProjectCategory,
     ]),
 

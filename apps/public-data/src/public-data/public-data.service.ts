@@ -78,6 +78,7 @@ export class PublicDataService {
       where: { project_category_id: id },
     });
     if (!projectCategory) throw new NotFoundException('데이터가 없습니다.');
+
     return projectCategory;
   }
 
@@ -86,6 +87,7 @@ export class PublicDataService {
     const stackCategories = await this.stackCategoryRepository.find();
 
     if (stackCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+
     return stackCategories;
   }
 
@@ -96,13 +98,16 @@ export class PublicDataService {
     });
 
     if (!stackCategory) throw new NotFoundException('데이터가 없습니다.');
+
     return stackCategory;
   }
 
   @Transactional()
   public async findAllCareerCategory(): Promise<CareerCategory[]> {
     const careerCategories = await this.careerCategoryRepository.find();
+
     if (careerCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+
     return careerCategories;
   }
 
