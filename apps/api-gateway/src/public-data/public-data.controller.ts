@@ -1,12 +1,11 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import {
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiParam,
   ApiTags,
+  ApiParam,
+  ApiOperation,
+  ApiOkResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { publicDataExamples } from '@shared/constants/swagger-examples';
 import { PublicDataService } from './public-data.service';
 import { BasicReqDto } from './dto/req.dto';
 import {
@@ -26,7 +25,6 @@ export class PublicDataController {
   @ApiOkResponse({
     description: '전체 post category 데이터 조회',
     type: [PostCategoryResDto],
-    example: publicDataExamples.postCategory,
   })
   @ApiNotFoundResponse({
     description: '데이터가 없습니다.',

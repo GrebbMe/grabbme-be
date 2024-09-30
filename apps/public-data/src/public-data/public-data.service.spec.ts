@@ -12,6 +12,7 @@ import {
   ProjectCategory,
   StackCategory,
 } from '@publicData/entities';
+import { publicDataExamples } from '@shared/constants/mock-examples';
 import { Repository } from 'typeorm';
 
 import { PublicDataService } from './public-data.service';
@@ -175,22 +176,10 @@ describe('msa public-data service 로직 테스트', () => {
     });
   });
   describe('3. project-category 서비스 로직 테스트', () => {
-    const mockProjectCategories: ProjectCategory[] = [
-      {
-        project_category_id: 1,
-        name: 'project-category-1',
-        kor_name: '프로젝트-카테고리-1',
-        abbreviation: 'PC1',
-        description: '프로젝트 카테고리 1 입니다.',
-      },
-      {
-        project_category_id: 2,
-        name: 'project-category-2',
-        kor_name: '프로젝트-카테고리-2',
-        abbreviation: 'PC2',
-        description: '프로젝트 카테고리 2 입니다.',
-      },
-    ];
+    const mockProjectCategories: ProjectCategory[] = publicDataExamples.projectCategory.map(
+      (data) => data,
+    );
+
     afterEach(() => {
       jest.clearAllMocks();
     });

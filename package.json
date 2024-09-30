@@ -84,7 +84,8 @@
     "rootDir": ".",
     "moduleNameMapper": {
       "^@shared/(.*)$": "<rootDir>/shared/$1",
-      "^@publicData/(.*)$": "<rootDir>/apps/public-data/src/public-data/$1"
+      "^@publicData/(.*)$": "<rootDir>/apps/public-data/src/public-data/$1",
+      "^@publicData/entities$": "<rootDir>/apps/public-data/src/public-data/entities"
     },
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
