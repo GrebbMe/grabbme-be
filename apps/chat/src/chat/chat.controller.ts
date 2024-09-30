@@ -1,14 +1,16 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ChatService } from './chat.service';
+import { CreateChatRoomDto } from '@apps/api-gateway/src/chat/dto/req.dto';
+import { MESSAGE } from '@shared/constants/message-pattern';
 
 //* 채팅 서비스의 HTTP 요청/응답 처리 Controller
 @Controller()
 export class ChatController {
   public constructor(private readonly chatService: ChatService) {}
 
-  @MessagePattern({ cmd: 'create_room' })
-  public createRoom(@Payload() { roomName }: { roomName: string }) {
-    return this.chatService.createRoom(roomName);
+  @MessagePattern(MESSAGE.PUBLIC_DATA.CHAT.CREATE_CHAT_ROOM)
+  public createChatRoom(@Payload() createChatRoomDto: CreateChatRoomDto) {
+    return this.chatService.createChatRoom(createChatRoomDto.name);
   }
 }

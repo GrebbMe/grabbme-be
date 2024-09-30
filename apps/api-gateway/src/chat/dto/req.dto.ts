@@ -1,6 +1,6 @@
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator';
 
 export class CreateChatRoomDto {
-    @IsString()
-    readonly name: string;
+  @IsString()
+  public readonly name: string;
 }
