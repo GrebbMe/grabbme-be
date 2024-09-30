@@ -2,8 +2,8 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PublicDataController } from './public-data.controller';
 import { PublicDataService } from './public-data.service';
-import { GetPositionCategoryByIdDto } from './dto/get-position-categoy-by-id.dto';
-import { PositionCategory } from './entities/position-category.entity';
+import { BasicReqDto } from './dto/req.dto';
+import { PositionCategory } from './entities';
 
 describe('MSA public-data controller 테스트', () => {
   const context = describe;
@@ -39,8 +39,8 @@ describe('MSA public-data controller 테스트', () => {
         {
           provide: PublicDataService,
           useValue: {
-            getPositionCategories: jest.fn(),
-            getPositionCategoryById: jest.fn(),
+            findAllPositionCategory: jest.fn(),
+            findPositionCategoryById: jest.fn(),
           },
         },
       ],
@@ -65,32 +65,35 @@ describe('MSA public-data controller 테스트', () => {
     });
     context('getPositionCategories를 호출하면,', () => {
       it('SUCCESS :전체 position-category 데이터가 조회 된다.', async () => {
-        jest.spyOn(service, 'getPositionCategories').mockResolvedValue(positionCategoriesFixture);
+        jest.spyOn(service, 'findAllPositionCategory').mockResolvedValue(positionCategoriesFixture);
         const result = await controller.getPositionCategories();
         expect(result).toEqual(positionCategoriesFixture);
         expect(service.findAllPositionCategory).toHaveBeenCalled();
       });
       it('ERROR : NotFoundException이 발생한다.', async () => {
         mockError = new Error(NotFoundException.name);
-        jest.spyOn(service, 'getPositionCategories').mockRejectedValue(mockError);
+        jest.spyOn(service, 'findAllPositionCategory').mockRejectedValue(mockError);
         await expect(controller.getPositionCategories()).rejects.toThrow(mockError);
         expect(service.findAllPositionCategory).toHaveBeenCalled();
       });
     });
     context('getPositionCategoryById를 호출하면,', () => {
       it('SUCCESS : 존재하는 id로 특정 position-category 데이터가 조회된다.', async () => {
-        const categoryId: GetPositionCategoryByIdDto = { id: 1 };
         jest
-          .spyOn(service, 'getPositionCategoryById')
-          .mockResolvedValue({ ...positionCategoriesFixture[0] });
-        const result = await controller.getPositionCategoryById(categoryId);
+          .spyOn(service, 'findPositionCategoryById')
+          .mockResolvedValue(positionCategoriesFixture[0]);
+        const result = await controller.getPositionCategoryById({
+          id: positionCategoriesFixture[0].position_category_id,
+        });
         expect(result).toEqual(positionCategoriesFixture[0]);
-        expect(service.findPositionCategoryById).toHaveBeenCalledWith(categoryId.id);
+        expect(service.findPositionCategoryById).toHaveBeenCalledWith(
+          positionCategoriesFixture[0].position_category_id,
+        );
       });
       it('ERROR : 존재하지 않는 id 로 조회 시 NotFoudnException이 발생한다.', async () => {
-        const categoryId: GetPositionCategoryByIdDto = { id: 999 };
+        const categoryId: BasicReqDto = { id: 999 };
         mockError = new Error(NotFoundException.name);
-        jest.spyOn(service, 'getPositionCategoryById').mockRejectedValue(mockError);
+        jest.spyOn(service, 'findPositionCategoryById').mockRejectedValue(mockError);
         await expect(controller.getPositionCategoryById(categoryId)).rejects.toThrow(mockError);
         expect(service.findPositionCategoryById).toHaveBeenCalledWith(categoryId.id);
       });
