@@ -2,24 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ChatRoom } from './entity/chat-room.entity';
+import { CHAT } from '@shared/constants/chat-constants';
 
 @Injectable()
 export class ChatService {
   public constructor(@InjectModel(ChatRoom.name) private chatRoomModel: Model<ChatRoom>) {}
 
-  public async createRoom(roomName: string) {
-    const lastRoom = await this.chatRoomModel.findOne().sort({ channel_id: -1 }).exec();
+  public async createChatRoom(chatRoomName: string) {
+    const lastChatRoom = await this.chatRoomModel.findOne().sort({ channel_id: CHAT.CHAT_ROOM_SORT_DESC }).exec();
 
-    const newRoomId = lastRoom ? lastRoom.channel_id + 1 : 1;
+    const newChatRoomId = lastChatRoom ? lastChatRoom.channel_id + 1 : 1;
 
-    const newRoom = new this.chatRoomModel({
-      channel_id: newRoomId,
-      name: roomName,
+    const newChatRoom = new this.chatRoomModel({
+      channel_id: newChatRoomId,
+      name: chatRoomName,
       users: [],
       chat_lists: [],
     });
 
-    const createdRoom = await newRoom.save();
-    return createdRoom;
+    const createdChatRoom = await newChatRoom.save();
+    return createdChatRoom;
   }
 }
