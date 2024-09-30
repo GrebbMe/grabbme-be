@@ -7,6 +7,6 @@ export class ChatService {
   public constructor(@Inject('CHAT_SERVICE') private readonly chatClient: ClientProxy) {}
 
   public createChatRoom(name: string) {
-    return this.chatClient.send(MESSAGE.PUBLIC_DATA.CHAT.CREATE_CHAT_ROOM, { name });
+    return this.chatClient.send(MESSAGE.CHAT.CREATE_CHAT_ROOM, { name });
   }
 }

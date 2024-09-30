@@ -9,7 +9,7 @@ import { ChatService } from './chat.service';
 export class ChatController {
   public constructor(private readonly chatService: ChatService) {}
 
-  @MessagePattern(MESSAGE.PUBLIC_DATA.CHAT.CREATE_CHAT_ROOM)
+  @MessagePattern(MESSAGE.CHAT.CREATE_CHAT_ROOM)
   public createChatRoom(@Payload() createChatRoomDto: CreateChatRoomDto) {
     return this.chatService.createChatRoom(createChatRoomDto.name);
   }
