@@ -36,7 +36,7 @@ import mysqlConfig from './config/mysql.config';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const chatMongooseOptions: MongooseModuleOptions = {
-          uri: 'mongodb://root:grabb@svc.sel4.cloudtype.app:32138/GrabbmeChat?authSource=admin',
+          uri: configService.get('mongo.uri'),
           auth: {
             username: configService.get('mongo.username'),
             password: configService.get('mongo.password'),
