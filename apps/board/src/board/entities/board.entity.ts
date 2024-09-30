@@ -28,5 +28,4 @@ export class Board {
 
   @Column({ type: 'boolean', default: true })
   public is_open: boolean;
-
 }
