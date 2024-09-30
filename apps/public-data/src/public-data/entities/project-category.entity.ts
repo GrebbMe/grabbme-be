@@ -11,9 +11,6 @@ export class ProjectCategory {
   @Column({ type: 'varchar', length: 255 })
   public kor_name: string;
 
-  @Column({ type: 'varchar', length: 45 })
-  public abbreviation: string;
-
   @Column({ type: 'varchar', length: 100 })
   public description: string;
 }

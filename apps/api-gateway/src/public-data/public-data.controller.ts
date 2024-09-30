@@ -1,114 +1,155 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { publicDataExamples } from '@shared/constants/swagger-examples';
 import { PublicDataService } from './public-data.service';
 import { BasicReqDto } from './dto/req.dto';
+import {
+  CareerCategoryResDto,
+  PositionCategoryResDto,
+  PostCategoryResDto,
+  ProjectCategoryResDto,
+  StackCategoryResDto,
+} from './dto/res.dto';
 
 @Controller('public-data')
 @ApiTags('Public Data API')
 export class PublicDataController {
   public constructor(private readonly publicDataService: PublicDataService) {}
 
-  @Get('post-categories')
   @ApiOperation({ summary: '전체 post category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 post category 데이터 조회',
+    type: [PostCategoryResDto],
     example: publicDataExamples.postCategory,
   })
   @ApiNotFoundResponse({
     description: '데이터가 없습니다.',
   })
+  @Get('post-categories')
   public async getPostCategories() {
     return await this.publicDataService.getPostCategories();
   }
 
-  @Get('post-categories/:id')
   @ApiOperation({ summary: '특정 post category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 post category 데이터 조회',
-    example: publicDataExamples.postCategory[0],
+    type: PostCategoryResDto,
   })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    required: true,
+  })
+  @Get('post-categories/:id')
   public async getPostCategoryById(@Param() { id }: BasicReqDto) {
     return await this.publicDataService.getPostCategoryById(id);
   }
 
-  @Get('position-categories')
   @ApiOperation({ summary: '전체 position category 데이터 조회' })
   @ApiOkResponse({
-    example: publicDataExamples.positionCategory,
+    description: '전체 position category 데이터 조회',
+    type: [PositionCategoryResDto],
   })
+  @Get('position-categories')
   public getPositionCategories() {
     return this.publicDataService.getPositionCategories();
   }
 
-  @Get('position-categories/:id')
+  @Get('/position-categories/:id')
   @ApiOperation({ summary: '특정 position category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 position category 데이터 조회',
-    example: publicDataExamples.positionCategory[0],
+    type: PositionCategoryResDto,
   })
   @ApiNotFoundResponse({
     description: '데이터가 없습니다.',
+  })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    required: true,
   })
   public getPositionCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getPositionCategoryById(id);
   }
 
-  @Get('project-categories')
   @ApiOperation({ summary: '전체 project category 데이터 조회' })
   @ApiOkResponse({
-    example: publicDataExamples.projectCategory,
+    description: '전체 project category 데이터 조회',
+    type: [ProjectCategoryResDto],
   })
+  @Get('project-categories')
   public getProjectCategories() {
     return this.publicDataService.getProjectCategories();
   }
 
-  @Get('project-categories/:id')
   @ApiOperation({ summary: '특정 project category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 project category 데이터 조회',
-    example: publicDataExamples.projectCategory[0],
+    type: ProjectCategoryResDto,
   })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    required: true,
+  })
+  @Get('project-categories/:id')
   public getProjectCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getProjectCategoryById(id);
   }
 
-  @Get('stack-categories')
   @ApiOperation({ summary: '전체 stack category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 stack category 데이터 조회',
-    example: publicDataExamples.stackCategory,
+    type: [StackCategoryResDto],
   })
+  @Get('stack-categories')
   public getStackCategories() {
     return this.publicDataService.getStackCategories();
   }
 
-  @Get('stack-categories/:id')
   @ApiOperation({ summary: '특정 stack category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 stack category 데이터 조회',
-    example: publicDataExamples.stackCategory[0],
+    type: StackCategoryResDto,
   })
+  @ApiParam({
+    type: Number,
+    name: 'id',
+    required: true,
+  })
+  @Get('stack-categories/:id')
   public getStackCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getStackCategoryById(id);
   }
 
-  @Get('career-categories')
   @ApiOperation({ summary: '전체 career category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 career category 데이터 조회',
-    example: publicDataExamples.careerCategory,
+    type: [CareerCategoryResDto],
   })
+  @Get('career-categories')
   public getCareerCategories() {
     return this.publicDataService.getCareerCategories();
   }
 
-  @Get('career-categories/:id')
   @ApiOperation({ summary: '특정 career category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 career category 데이터 조회',
-    example: publicDataExamples.careerCategory[0],
+    type: CareerCategoryResDto,
   })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    required: true,
+  })
+  @Get('career-categories/:id')
   public getCareerCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getCareerCategoryById(id);
   }
