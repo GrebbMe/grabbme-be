@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 import { BoardModule } from './board/board.module';
 import mysqlConfig from './config/mysql.config';
 
@@ -12,8 +14,8 @@ import mysqlConfig from './config/mysql.config';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const boardTypeOrmModuleOptions: TypeOrmModuleOptions = {
+      useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => {
+        return {
           type: 'mysql',
           host: configService.get('mysql.host'),
           port: configService.get('mysql.port'),
@@ -25,7 +27,11 @@ import mysqlConfig from './config/mysql.config';
           logging: true,
           synchronize: process.env.NODE_ENV === 'development',
         };
-        return boardTypeOrmModuleOptions;
+      },
+      dataSourceFactory: async (options: DataSourceOptions): Promise<DataSource> => {
+        if (!options) throw new Error('Invalid options passed');
+        const dataSource = new DataSource(options);
+        return addTransactionalDataSource(dataSource);
       },
     }),
     BoardModule,
