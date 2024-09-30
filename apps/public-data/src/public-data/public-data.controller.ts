@@ -1,9 +1,11 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseInterceptors } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
+import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { PublicDataService } from './public-data.service';
 import { BasicReqDto } from './dto/req.dto';
 
+@UseInterceptors(LoggingInterceptor)
 @Controller()
 export class PublicDataController {
   public constructor(private readonly publicDataService: PublicDataService) {}

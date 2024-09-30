@@ -1,22 +1,61 @@
-import { Inject, Injectable, Logger, LoggerService, NestMiddleware } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
 import { NextFunction, Request, Response } from 'express';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  public constructor(@Inject(Logger) private readonly logger: LoggerService) {}
+  private logger: Logger = new Logger('HTTP');
 
-  public use(request: Request, response: Response, next: NextFunction): void {
-    const { ip, method, originalUrl: url } = request;
-    const userAgent = request.get('user-agent') || '';
+  public use(req: Request, res: Response, next: NextFunction): void {
+    const { ip, method, originalUrl: url, body, headers } = req;
+    const { statusCode } = res;
+    const userAgent = req.get('user-agent') || '';
 
-    response.on('close', () => {
-      const { statusCode } = response;
-      const contentLength = response.get('content-length');
+    //* Request 출력
+    const requestMessage = { body, headers, ip, url, method, userAgent };
+    this.logger.log(`Request : ${JSON.stringify(requestMessage)}`);
 
-      this.logger.log(`${method} ${url} ${statusCode} ${contentLength} - ${userAgent} ${ip}`);
-    });
+    //* Response 출력
+    const response = res.write;
+    const responseEnd = res.end;
 
-    next();
+    const chunkBuffers = [];
+    res.write = (...chunks) => {
+      const resArgs = chunks.map((chunk) => {
+        if (!chunk) {
+          res.once('drain', res.write);
+        }
+        return chunk;
+      });
+
+      if (resArgs[0]) {
+        chunkBuffers.push(Buffer.from(resArgs[0]));
+      }
+      return response.apply(res, resArgs);
+    };
+
+    res.end = (...chunks) => {
+      const resArgs = chunks.map((chunk) => {
+        return chunk;
+      });
+
+      if (resArgs[0]) {
+        chunkBuffers.push(Buffer.from(resArgs[0]));
+      }
+
+      const body = Buffer.concat(chunkBuffers).toString('utf8');
+
+      const responseMessage = {
+        statusCode,
+        body: body || {},
+        headers: res.getHeaders(),
+      };
+      this.logger.log(`Response : ${JSON.stringify(responseMessage)}`);
+      return responseEnd.apply(res, resArgs);
+    };
+
+    if (next) {
+      next();
+    }
   }
 }

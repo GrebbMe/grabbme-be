@@ -1,7 +1,8 @@
 import { User } from '@apps/user/src/user/entities/user.entity';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { PublicDataController } from './public-data.controller';
 import { PublicDataService } from './public-data.service';
 import {
@@ -38,6 +39,6 @@ import {
 
   controllers: [PublicDataController],
 
-  providers: [PublicDataService],
+  providers: [PublicDataService, LoggingInterceptor, Logger],
 })
 export class PublicDataModule {}
