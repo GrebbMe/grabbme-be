@@ -9,7 +9,7 @@ import { BasicReqDto } from './dto/req.dto';
 export class PublicDataController {
   public constructor(private readonly publicDataService: PublicDataService) {}
 
-  @Get('post')
+  @Get('post-categories')
   @ApiOperation({ summary: '전체 post category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 post category 데이터 조회',
@@ -22,7 +22,7 @@ export class PublicDataController {
     return await this.publicDataService.getPostCategories();
   }
 
-  @Get('post/:id')
+  @Get('post-categories/:id')
   @ApiOperation({ summary: '특정 post category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 post category 데이터 조회',
@@ -32,7 +32,7 @@ export class PublicDataController {
     return await this.publicDataService.getPostCategoryById(id);
   }
 
-  @Get('position')
+  @Get('position-categories')
   @ApiOperation({ summary: '전체 position category 데이터 조회' })
   @ApiOkResponse({
     example: publicDataExamples.positionCategory,
@@ -41,7 +41,7 @@ export class PublicDataController {
     return this.publicDataService.getPositionCategories();
   }
 
-  @Get('position/:id')
+  @Get('position-categories/:id')
   @ApiOperation({ summary: '특정 position category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 position category 데이터 조회',
@@ -54,7 +54,7 @@ export class PublicDataController {
     return this.publicDataService.getPositionCategoryById(id);
   }
 
-  @Get('project')
+  @Get('project-categories')
   @ApiOperation({ summary: '전체 project category 데이터 조회' })
   @ApiOkResponse({
     example: publicDataExamples.projectCategory,
@@ -63,7 +63,7 @@ export class PublicDataController {
     return this.publicDataService.getProjectCategories();
   }
 
-  @Get('project/:id')
+  @Get('project-categories/:id')
   @ApiOperation({ summary: '특정 project category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 project category 데이터 조회',
@@ -73,7 +73,7 @@ export class PublicDataController {
     return this.publicDataService.getProjectCategoryById(id);
   }
 
-  @Get('stack')
+  @Get('stack-categories')
   @ApiOperation({ summary: '전체 stack category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 stack category 데이터 조회',
@@ -83,7 +83,7 @@ export class PublicDataController {
     return this.publicDataService.getStackCategories();
   }
 
-  @Get('stack/:id')
+  @Get('stack-categories/:id')
   @ApiOperation({ summary: '특정 stack category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 stack category 데이터 조회',
@@ -93,7 +93,7 @@ export class PublicDataController {
     return this.publicDataService.getStackCategoryById(id);
   }
 
-  @Get('career')
+  @Get('career-categories')
   @ApiOperation({ summary: '전체 career category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 career category 데이터 조회',
@@ -103,7 +103,7 @@ export class PublicDataController {
     return this.publicDataService.getCareerCategories();
   }
 
-  @Get('career/:id')
+  @Get('career-categories/:id')
   @ApiOperation({ summary: '특정 career category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 career category 데이터 조회',
