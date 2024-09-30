@@ -24,15 +24,14 @@ export const MESSAGE = {
       GET_ALL_CAREER_CATEGORY: { cmd: 'get-all-career-category' },
       GET_ONE_CAREER_CATEGORY: { cmd: 'get-one-career-category' },
     },
-
-    POST_DATA: {
-      POST: {
-        GET_ALL_POST: { cmd: 'get-all-post' },
-        GET_ONE_POST: { cmd: 'get-one-post' },
-        CREATE_POST: { cmd: 'create-post' },
-        UPDATE_POST: { cmd: 'update-post' },
-        DELETE_POST: { cmd: 'delete-post' },
-      },
+  },
+  POST_DATA: {
+    POST: {
+      GET_ALL_POST: { cmd: 'get-all-post' },
+      GET_ONE_POST: { cmd: 'get-one-post' },
+      CREATE_POST: { cmd: 'create-post' },
+      UPDATE_POST: { cmd: 'update-post' },
+      DELETE_POST: { cmd: 'delete-post' },
     },
   },
 } as const;
