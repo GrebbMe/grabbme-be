@@ -3,6 +3,7 @@ import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nest
 
 import { PublicDataService } from './public-data.service';
 import { BasicReqDto } from './dto/req.dto';
+import { swaggerExamples } from './swagger/public-data.swagger';
 
 @Controller('public-data')
 @ApiTags('Public Data API')
@@ -13,16 +14,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '전체 post category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 post category 데이터 조회',
-    example: [
-      {
-        id: 1,
-        post_category_name: '팀원 모집',
-      },
-      {
-        id: 2,
-        post_category_name: '인재 등록',
-      },
-    ],
+    example: swaggerExamples.postCategory,
   })
   @ApiNotFoundResponse({
     description: '데이터가 없습니다.',
@@ -35,6 +27,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '특정 post category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 post category 데이터 조회',
+    example: swaggerExamples.postCategory[0],
   })
   public async getPostCategoryById(@Param() { id }: BasicReqDto) {
     return await this.publicDataService.getPostCategoryById(id);
@@ -43,20 +36,7 @@ export class PublicDataController {
   @Get('position')
   @ApiOperation({ summary: '전체 position category 데이터 조회' })
   @ApiOkResponse({
-    example: [
-      {
-        position_category_id: 1,
-        name: 'Frontend Developer',
-        kor_name: '프론트엔드 개발자',
-        abbreviation: 'FE',
-      },
-      {
-        position_category_id: 2,
-        name: 'Backend Developer',
-        kor_name: '백엔드 개발자',
-        abbreviation: 'BE',
-      },
-    ],
+    example: swaggerExamples.positionCategory,
   })
   public getPositionCategories() {
     return this.publicDataService.getPositionCategories();
@@ -66,12 +46,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '특정 position category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 position category 데이터 조회',
-    example: {
-      position_category_id: 1,
-      name: 'Frontend Developer',
-      kor_name: '프론트엔드 개발자',
-      abbreviation: 'FE',
-    },
+    example: swaggerExamples.positionCategory[0],
   })
   @ApiNotFoundResponse({
     description: '데이터가 없습니다.',
@@ -83,22 +58,7 @@ export class PublicDataController {
   @Get('project')
   @ApiOperation({ summary: '전체 project category 데이터 조회' })
   @ApiOkResponse({
-    example: [
-      {
-        project_category_id: 1,
-        name: 'E-commerce',
-        kor_name: '이커머스',
-        abbreviation: 'EC',
-        description: '온라인 상에서 상품이나 서비스를 판매하는 플랫폼',
-      },
-      {
-        project_category_id: 2,
-        name: 'B2B',
-        kor_name: 'B2B',
-        abbreviation: 'B2B',
-        description: '기업 간의 거래를 위한 플랫폼',
-      },
-    ],
+    example: swaggerExamples.projectCategory,
   })
   public getProjectCategories() {
     return this.publicDataService.getProjectCategories();
@@ -108,13 +68,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '특정 project category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 project category 데이터 조회',
-    example: {
-      project_category_id: 1,
-      name: 'E-commerce',
-      kor_name: '이커머스',
-      abbreviation: 'EC',
-      description: '온라인 상에서 상품이나 서비스를 판매하는 플랫폼',
-    },
+    example: swaggerExamples.projectCategory[0],
   })
   public getProjectCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getProjectCategoryById(id);
@@ -124,10 +78,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '전체 stack category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 stack category 데이터 조회',
-    example: [
-      { stakc_category_id: 1, name: 'React', kor_name: '리액트', category: 'Frontend' },
-      { stakc_category_id: 2, name: 'NestJS', kor_name: '네스트JS', category: 'Backend' },
-    ],
+    example: swaggerExamples.stackCategory,
   })
   public getStackCategories() {
     return this.publicDataService.getStackCategories();
@@ -137,7 +88,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '특정 stack category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 stack category 데이터 조회',
-    example: { stakc_category_id: 1, name: 'React', kor_name: '리액트', category: 'Frontend' },
+    example: swaggerExamples.stackCategory[0],
   })
   public getStackCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getStackCategoryById(id);
@@ -147,10 +98,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '전체 career category 데이터 조회' })
   @ApiOkResponse({
     description: '전체 career category 데이터 조회',
-    example: [
-      { career_category_id: 1, content: '0년차' },
-      { career_category_id: 2, content: '1~3년차' },
-    ],
+    example: swaggerExamples.careerCategory,
   })
   public getCareerCategories() {
     return this.publicDataService.getCareerCategories();
@@ -160,7 +108,7 @@ export class PublicDataController {
   @ApiOperation({ summary: '특정 career category 데이터 조회' })
   @ApiOkResponse({
     description: '특정 career category 데이터 조회',
-    example: { career_category_id: 1, content: '0년차' },
+    example: swaggerExamples.careerCategory[0],
   })
   public getCareerCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getCareerCategoryById(id);
