@@ -38,8 +38,8 @@ export const publicDataExamples = {
     },
   ],
   stackCategory: [
-    { stakc_category_id: 1, name: 'React', kor_name: '리액트', category: 'Frontend' },
-    { stakc_category_id: 2, name: 'NestJS', kor_name: '네스트JS', category: 'Backend' },
+    { stack_category_id: 1, name: 'React', kor_name: '리액트', category: 'Frontend' },
+    { stack_category_id: 2, name: 'NestJS', kor_name: '네스트JS', category: 'Backend' },
   ],
   careerCategory: [
     { career_category_id: 1, content: '0년차' },

@@ -7,12 +7,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import {
   CareerCategory,
+  StackCategory,
   PositionCategory,
   PostCategory,
   ProjectCategory,
-  StackCategory,
 } from '@publicData/entities';
-import { publicDataExamples } from '@shared/constants/mock-examples';
+import { publicDataExamples } from '@shared/constants/mock-example';
 import { Repository } from 'typeorm';
 
 import { PublicDataService } from './public-data.service';
@@ -84,10 +84,7 @@ describe('msa public-data service 로직 테스트', () => {
   });
 
   describe('1. post-category 서비스 로직 테스트', () => {
-    const mockPostCategories: PostCategory[] = [
-      { id: 1, post_category_name: 'post-category-1' },
-      { id: 2, post_category_name: 'post-category-2' },
-    ];
+    const mockPostCategories: PostCategory[] = publicDataExamples.postCategory.map((data) => data);
 
     afterEach(() => {
       jest.clearAllMocks();
@@ -128,10 +125,9 @@ describe('msa public-data service 로직 테스트', () => {
     });
   });
   describe('2. position-category 서비스 로직 테스트', () => {
-    const mockPositionCategories: PositionCategory[] = [
-      { position_category_id: 1, name: 'BE Dev', kor_name: '백엔드', abbreviation: 'BE' },
-      { position_category_id: 2, name: 'FE Dev', kor_name: '프론트엔드', abbreviation: 'FE' },
-    ];
+    const mockPositionCategories: PositionCategory[] = publicDataExamples.positionCategory.map(
+      (data) => data,
+    );
     const mockNotFoundError = new NotFoundException('데이터가 없습니다.');
 
     afterEach(() => {
@@ -223,10 +219,9 @@ describe('msa public-data service 로직 테스트', () => {
     });
   });
   describe('4. stack-category 서비스 로직 테스트', () => {
-    const mockStackCategories: StackCategory[] = [
-      { stack_category_id: 1, name: 'React', kor_name: '리액트', category: 'FE' },
-      { stack_category_id: 2, name: 'NestJS', kor_name: '네스트', category: 'BE' },
-    ];
+    const mockStackCategories: StackCategory[] = publicDataExamples.stackCategory.map(
+      (data) => data,
+    );
 
     afterEach(() => {
       jest.clearAllMocks();
@@ -268,10 +263,9 @@ describe('msa public-data service 로직 테스트', () => {
     });
   });
   describe('5. career-category 서비스 로직 테스트', () => {
-    const mockCareerCategories: CareerCategory[] = [
-      { career_category_id: 1, content: '0년차' },
-      { career_category_id: 2, content: '1~3년차' },
-    ];
+    const mockCareerCategories: CareerCategory[] = publicDataExamples.careerCategory.map(
+      (data) => data,
+    );
     afterEach(() => {
       jest.clearAllMocks();
     });

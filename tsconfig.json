@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@publicData/*": ["apps/public-data/src/public-data/*"],
+      "@publicData/entities/*": ["apps/public-data/src/public-data/entities/*"],
       "@shared/*": ["shared/*"],
       "@apps/*": ["apps/*"]
     }
