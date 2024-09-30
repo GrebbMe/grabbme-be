@@ -25,6 +25,7 @@ export const MESSAGE = {
       GET_ONE_CAREER_CATEGORY: { cmd: 'get-one-career-category' },
     },
   },
+  
   POST_DATA: {
     POST: {
       GET_ALL_POST: { cmd: 'get-all-post' },
