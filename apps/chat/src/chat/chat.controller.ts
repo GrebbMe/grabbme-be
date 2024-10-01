@@ -1,4 +1,4 @@
-import { CreateChatRoomDto } from '@apps/api-gateway/src/chat/dto/req.dto';
+import { CreateChatRoomDto, GetChatRoomsByIdDto } from '@apps/api-gateway/src/chat/dto/req.dto';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
@@ -12,5 +12,10 @@ export class ChatController {
   @MessagePattern(MESSAGE.CHAT.CREATE_CHAT_ROOM)
   public createChatRoom(@Payload() createChatRoomDto: CreateChatRoomDto) {
     return this.chatService.createChatRoom(createChatRoomDto.name);
+  }
+
+  @MessagePattern(MESSAGE.CHAT.GET_ALL_CHAT_ROOM)
+  public async getChatRoomsById(@Payload() getChatRoomsByIdDto: GetChatRoomsByIdDto) {
+    return await this.chatService.getChatRoomsById(getChatRoomsByIdDto.id);
   }
 }

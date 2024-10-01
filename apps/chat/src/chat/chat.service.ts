@@ -26,4 +26,8 @@ export class ChatService {
     const createdChatRoom = await newChatRoom.save();
     return createdChatRoom;
   }
+
+  public async getChatRoomsById(id: number): Promise<ChatRoom[]> {
+    return await this.chatRoomModel.find({ users: id }).exec();
+  }
 }

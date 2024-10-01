@@ -9,4 +9,8 @@ export class ChatService {
   public createChatRoom(name: string) {
     return this.chatClient.send(MESSAGE.CHAT.CREATE_CHAT_ROOM, { name });
   }
+
+  public async getChatRoomsById(id: number) {
+    return await this.chatClient.send(MESSAGE.CHAT.GET_ALL_CHAT_ROOM, { id });
+  }
 }
