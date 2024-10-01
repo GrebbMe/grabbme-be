@@ -70,7 +70,7 @@ describe('Public-Data Controller 테스트', () => {
           .mockImplementation(async () => await of(mockPostCategory));
 
         const result = await firstValueFrom(
-          await controller.getPostCategoryById(mockPostCategory.id),
+          await controller.getPostCategoryById({ id: mockPostCategory.id }),
         );
 
         expect(result).toEqual(mockPostCategory);
@@ -83,7 +83,7 @@ describe('Public-Data Controller 테스트', () => {
           throw mockError;
         });
 
-        expect(controller.getPostCategoryById(999)).rejects.toThrow(mockError);
+        expect(controller.getPostCategoryById({ id: 999 })).rejects.toThrow(mockError);
 
         expect(service.getPostCategoryById).toHaveBeenCalledWith(999);
       });

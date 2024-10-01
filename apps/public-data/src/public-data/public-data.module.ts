@@ -1,13 +1,27 @@
+import { User } from '@apps/user/src/user/entities/user.entity';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PublicDataController } from './public-data.controller';
 import { PublicDataService } from './public-data.service';
-import { PostCategory } from './entities/post-category.entity';
+import {
+  PostCategory,
+  CareerCategory,
+  PositionCategory,
+  ProjectCategory,
+  StackCategory,
+} from './entities';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PostCategory]),
+    TypeOrmModule.forFeature([
+      User,
+      CareerCategory,
+      StackCategory,
+      PostCategory,
+      PositionCategory,
+      ProjectCategory,
+    ]),
 
     ClientsModule.register([
       {
