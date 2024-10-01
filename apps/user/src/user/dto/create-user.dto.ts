@@ -1,5 +1,5 @@
 import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/entities';
-import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString, ArrayMaxSize } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -11,6 +11,7 @@ export class CreateUserDto {
   public email: string;
 
   @IsArray()
+  @ArrayMaxSize(5)
   @IsNumber({}, { each: true })
   public stack_category_id: number[];
 
