@@ -21,4 +21,60 @@ export class PublicDataService {
       { id },
     );
   }
+
+  public async getPositionCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ALL_POSITION_CATEGORY,
+      {},
+    );
+  }
+
+  public async getPositionCategoryById(id: number) {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.POSITION_CATEGORY.GET_ONE_POSITION_CATEGORY,
+      { id },
+    );
+  }
+
+  public async getProjectCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ALL_PROJECT_CATEGORY,
+      {},
+    );
+  }
+
+  public async getProjectCategoryById(id: number) {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.PROJECT_CATEGORY.GET_ONE_PROJECT_CATEGORY,
+      { id },
+    );
+  }
+
+  public async getStackCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ALL_STACK_CATEGORY,
+      {},
+    );
+  }
+
+  public async getStackCategoryById(id: number) {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.STACK_CATEGORY.GET_ONE_STACK_CATEGORY,
+      { id },
+    );
+  }
+
+  public async getCareerCategories() {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ALL_CAREER_CATEGORY,
+      {},
+    );
+  }
+
+  public async getCareerCategoryById(id: number) {
+    return await this.publicDataClient.send(
+      MESSAGE.PUBLIC_DATA.CAREER_CATEGORY.GET_ONE_CAREER_CATEGORY,
+      { id },
+    );
+  }
 }
