@@ -62,7 +62,7 @@ export class BoardController {
       is_open: true,
     },
   })
-  public async getPostById(@Param('id') id: string) {
+  public async getPostById(@Param('id') id: number) {
     return await this.boardService.getPostById(id);
   }
 
@@ -102,8 +102,8 @@ export class BoardController {
       is_open: false,
     },
   })
-  public async updatePost(@Param('id') id: string, @Body() updateBoardDto: UpdateBoardDto) {
-    const payload = { id: Number(id), updateBoardDto };
+  public async updatePost(@Param('id') id: number, @Body() updateBoardDto: UpdateBoardDto) {
+    const payload = { id, updateBoardDto };
     return await this.boardService.updatePost(payload);
   }
 
@@ -112,7 +112,7 @@ export class BoardController {
   @ApiNoContentResponse({
     description: '게시글 삭제 완료',
   })
-  public async deletePost(@Param('id') id: string) {
+  public async deletePost(@Param('id') id: number) {
     return await this.boardService.deletePost(id);
   }
 }

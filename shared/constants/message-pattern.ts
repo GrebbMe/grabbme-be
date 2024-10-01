@@ -36,6 +36,10 @@ export const MESSAGE = {
     },
   },
 
+  CHAT: {
+    CREATE_CHAT_ROOM: { cmd: 'create-chat-room' },
+  },
+
   USER: {
     CREATE_USER: { cmd: 'create-user' },
   },
