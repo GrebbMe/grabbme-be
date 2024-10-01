@@ -12,22 +12,19 @@ export class BoardService {
     return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ALL_POST, {});
   }
 
-  public async getPostById(id: string) {
-    const data = { id: Number(id) };
-    return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ONE_POST, data);
+  public async getPostById(id: number) {
+    return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ONE_POST, { id });
   }
 
   public async createPost(createBoardDto: CreateBoardDto) {
-    const data = { ...createBoardDto };
-    return await this.boardClient.send(MESSAGE.POST_DATA.POST.CREATE_POST, data);
+    return await this.boardClient.send(MESSAGE.POST_DATA.POST.CREATE_POST, { ...createBoardDto });
   }
 
   public async updatePost(payload: { id: number; updateBoardDto: UpdateBoardDto }) {
     return await this.boardClient.send(MESSAGE.POST_DATA.POST.UPDATE_POST, payload);
   }
 
-  public async deletePost(id: string) {
-    const data = { id: Number(id) };
-    return await this.boardClient.send(MESSAGE.POST_DATA.POST.DELETE_POST, data);
+  public async deletePost(id: number) {
+    return await this.boardClient.send(MESSAGE.POST_DATA.POST.DELETE_POST, { id });
   }
 }
