@@ -35,6 +35,7 @@ export const MESSAGE = {
       DELETE_POST: { cmd: 'delete-post' },
     },
   },
+
   USER: {
     CREATE_USER: { cmd: 'create-user' },
   },
