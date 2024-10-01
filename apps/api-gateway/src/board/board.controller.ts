@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Param, Body, Patch, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Patch } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -62,7 +62,7 @@ export class BoardController {
       is_open: true,
     },
   })
-  public async getPostById(@Param('id', ParseIntPipe) id: number) {
+  public async getPostById(@Param('id') id: number) {
     return await this.boardService.getPostById(id);
   }
 
@@ -102,10 +102,7 @@ export class BoardController {
       is_open: false,
     },
   })
-  public async updatePost(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateBoardDto: UpdateBoardDto,
-  ) {
+  public async updatePost(@Param('id') id: number, @Body() updateBoardDto: UpdateBoardDto) {
     const payload = { id, updateBoardDto };
     return await this.boardService.updatePost(payload);
   }
@@ -115,7 +112,7 @@ export class BoardController {
   @ApiNoContentResponse({
     description: '게시글 삭제 완료',
   })
-  public async deletePost(@Param('id', ParseIntPipe) id: number) {
+  public async deletePost(@Param('id') id: number) {
     return await this.boardService.deletePost(id);
   }
 }
