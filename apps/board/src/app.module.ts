@@ -28,10 +28,12 @@ import mysqlConfig from './config/mysql.config';
           synchronize: process.env.NODE_ENV === 'development',
         };
       },
-      dataSourceFactory: async (options: DataSourceOptions): Promise<DataSource> => {
-        if (!options) throw new Error('Invalid options passed');
-        const dataSource = new DataSource(options);
-        return addTransactionalDataSource(dataSource);
+      dataSourceFactory: async (options?: DataSourceOptions): Promise<DataSource> => {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+
+        return addTransactionalDataSource(new DataSource(options));
       },
     }),
     BoardModule,
