@@ -7,12 +7,12 @@ import { UserService } from './user.service';
 export class UserController {
   public constructor(private readonly userService: UserService) {}
 
-  @Post()
   @ApiOperation({ summary: '신규 사용자 추가' })
   @ApiCreatedResponse({
     description: '신규 사용자 추가',
   })
-  public async createUser(@Body() user: CreateUserDto) {
-    return await this.userService.createUser(user);
+  @Post()
+  public async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.userService.createUser(createUserDto);
   }
 }

@@ -9,7 +9,7 @@ export class UserController {
   public constructor(private readonly userService: UserService) {}
 
   @MessagePattern(MESSAGE.USER.CREATE_USER)
-  private async createUser(@Payload() user: CreateUserDto) {
-    return await this.userService.createUser(user);
+  private async createUser(@Payload() createUserDto: CreateUserDto) {
+    return await this.userService.createUser({ ...createUserDto });
   }
 }

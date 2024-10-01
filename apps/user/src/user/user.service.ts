@@ -13,8 +13,8 @@ export class UserService {
   ) {}
 
   @Transactional()
-  public async createUser(user: CreateUserDto): Promise<User> {
-    const newUser = this.userRepository.create(user);
-    return await this.userRepository.save(newUser);
+  public async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const newUser = this.userRepository.create(createUserDto);
+    return this.userRepository.save(newUser);
   }
 }

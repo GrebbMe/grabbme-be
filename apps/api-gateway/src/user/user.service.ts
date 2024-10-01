@@ -7,7 +7,7 @@ import { MESSAGE } from '@shared/constants/message-pattern';
 export class UserService {
   public constructor(@Inject('USER_SERVICE') private readonly userClient: ClientProxy) {}
 
-  public async createUser(user: CreateUserDto) {
-    return await this.userClient.send(MESSAGE.USER.CREATE_USER, { ...user });
+  public async createUser(createUserDto: CreateUserDto) {
+    return await this.userClient.send(MESSAGE.USER.CREATE_USER, { ...createUserDto });
   }
 }
