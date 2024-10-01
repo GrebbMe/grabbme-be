@@ -1,3 +1,4 @@
+import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/entities';
 import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
@@ -14,11 +15,11 @@ export class CreateUserDto {
   public stack_category_id: number[];
 
   @IsNumber()
-  public position_category_id: number;
+  public position_category_id: PositionCategory;
 
   @IsNumber()
-  public project_category_id: number;
+  public project_category_id: ProjectCategory;
 
   @IsNumber()
-  public career_category_id: number;
+  public career_category_id: CareerCategory;
 }
