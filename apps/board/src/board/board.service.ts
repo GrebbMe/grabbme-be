@@ -27,9 +27,11 @@ export class BoardService {
   @Transactional()
   public async getPostById(id: number): Promise<Board> {
     const post = await this.boardRepository.findOneBy({ post_id: id });
+
     if (!post) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
+
     return post;
   }
 
@@ -48,18 +50,19 @@ export class BoardService {
   @Transactional()
   public async updatePost(id: number, updateBoardDto: UpdateBoardDto): Promise<Board> {
     const post = await this.boardRepository.findOneBy({ post_id: id });
+
     if (!post) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
 
     const updatedPost = this.boardRepository.merge(post, updateBoardDto);
-    const savedPost = await this.boardRepository.save(updatedPost);
-    return savedPost;
+    return await this.boardRepository.save(updatedPost);
   }
 
   @Transactional()
   public async deletePost(id: number): Promise<void> {
     const post = await this.boardRepository.findOneBy({ post_id: id });
+
     if (!post) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
