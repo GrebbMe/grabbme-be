@@ -36,7 +36,7 @@ import mysqlConfig from './config/mysql.config';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const chatMongooseOptions: MongooseModuleOptions = {
-          uri: `${configService.get('mongo.host')}:${configService.get('mongo.port')}`,
+          uri: configService.get('mongo.uri'),
           auth: {
             username: configService.get('mongo.username'),
             password: configService.get('mongo.password'),
