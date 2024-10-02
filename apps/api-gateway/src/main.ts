@@ -1,8 +1,9 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { GatewayRpcExceptionFilter } from './common/filter/gateway-rpc-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,7 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters(new GatewayRpcExceptionFilter(app.get(HttpAdapterHost)));
   await app.listen(configService.get<number>('GATEWAY_PORT'));
 }
 
