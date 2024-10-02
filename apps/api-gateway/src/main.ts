@@ -8,6 +8,8 @@ import { GatewayRpcExceptionFilter } from './common/filter/gateway-rpc-exception
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  const httpAdapterHost = app.get(HttpAdapterHost);
+
   // Swagger Setting
   const config = new DocumentBuilder()
     .setTitle('GrabbMe API Docs')
@@ -31,7 +33,7 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new GatewayRpcExceptionFilter(app.get(HttpAdapterHost)));
+  app.useGlobalFilters(new GatewayRpcExceptionFilter(httpAdapterHost));
   await app.listen(configService.get<number>('GATEWAY_PORT'));
 }
 
