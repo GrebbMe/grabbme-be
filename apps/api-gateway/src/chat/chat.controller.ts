@@ -8,7 +8,7 @@ import { CreateChatRoomDto, GetChatListDto, GetChatRoomsByIdDto } from './dto/re
 export class ChatController {
   public constructor(private readonly chatService: ChatService) {}
 
-  @Post('create-chat-room')
+  @Post('chat-rooms')
   public createChatRoom(@Body() createChatRoomDto: CreateChatRoomDto) {
     return this.chatService.createChatRoom(createChatRoomDto.name);
   }
