@@ -12,6 +12,12 @@ export class GetChatRoomsDto {
   public readonly id: number;
 }
 
+export class GetChatRoomDto {
+  @Type(() => Number)
+  @IsInt()
+  public readonly id: number;
+}
+
 export class GetChatListDto {
   @IsInt()
   public readonly id: number;

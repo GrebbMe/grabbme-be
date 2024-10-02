@@ -39,6 +39,14 @@ export class ChatService {
     return chatRooms;
   }
 
+  public async getChatRoom(channelId: number): Promise<ChatRoom> {
+    const chatRoom = await this.chatRoomModel.findOne({ channel_id: channelId }).exec();
+
+    if (!chatRoom) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
+
+    return chatRoom;
+  }
+
   public async getChatList(channelId: number, page: number): Promise<ChatList> {
     const chatRoom = await this.chatRoomModel.findOne({ channel_id: channelId }).exec();
 
