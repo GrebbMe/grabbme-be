@@ -6,7 +6,7 @@ export class CreateChatRoomDto {
   public readonly name: string;
 }
 
-export class GetChatRoomsByIdDto {
+export class GetChatRoomsDto {
   @Type(() => Number)
   @IsInt()
   public readonly id: number;
