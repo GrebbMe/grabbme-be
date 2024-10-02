@@ -1,7 +1,7 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ChatService } from './chat.service';
-import { CreateChatRoomDto, GetChatRoomsByIdDto } from './dto/req.dto';
+import { CreateChatRoomDto, GetChatListDto, GetChatRoomsByIdDto } from './dto/req.dto';
 
 @Controller('chat')
 @ApiTags('Chat API')
@@ -16,5 +16,10 @@ export class ChatController {
   @Get('chat-rooms/:id')
   public async getChatRoomsById(@Param() { id }: GetChatRoomsByIdDto) {
     return await this.chatService.getChatRoomsById(id);
+  }
+
+  @Get('chat-lists/:id')
+  public getChatList(@Param() { id }: GetChatListDto, @Query() { page }: GetChatListDto) {
+    return this.chatService.getChatList(id, page);
   }
 }

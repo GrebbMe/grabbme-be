@@ -1,4 +1,8 @@
-import { CreateChatRoomDto, GetChatRoomsByIdDto } from '@apps/api-gateway/src/chat/dto/req.dto';
+import {
+  CreateChatRoomDto,
+  GetChatListDto,
+  GetChatRoomsByIdDto,
+} from '@apps/api-gateway/src/chat/dto/req.dto';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
@@ -17,5 +21,10 @@ export class ChatController {
   @MessagePattern(MESSAGE.CHAT.GET_ALL_CHAT_ROOM)
   public async getChatRoomsById(@Payload() getChatRoomsByIdDto: GetChatRoomsByIdDto) {
     return await this.chatService.getChatRoomsById(getChatRoomsByIdDto.id);
+  }
+
+  @MessagePattern(MESSAGE.CHAT.GET_ONE_CHAT_LIST)
+  public async getChatList(@Payload() getChatListDto: GetChatListDto) {
+    return await this.chatService.getChatList(getChatListDto.id, getChatListDto.page);
   }
 }

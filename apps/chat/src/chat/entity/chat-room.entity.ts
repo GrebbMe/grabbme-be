@@ -16,6 +16,9 @@ export class ChatRoom extends Document {
   @Prop({ type: [{ type: Types.ObjectId, ref: ChatList.name }] })
   public chat_lists: ChatList[];
 
+  @Prop()
+  public last_chat: string;
+
   @Prop({ default: Date.now })
   public created_at: Date;
 

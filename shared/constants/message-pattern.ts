@@ -38,5 +38,6 @@ export const MESSAGE = {
   CHAT: {
     CREATE_CHAT_ROOM: { cmd: 'create-chat-room' },
     GET_ALL_CHAT_ROOM: { cmd: 'get-all-chat-room' },
+    GET_ONE_CHAT_LIST: { cmd: 'get-one-chat-list' },
   },
 } as const;

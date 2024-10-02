@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'chat' })
 export class Chat extends Document {
   @Prop({ required: true })
   public chat_id: number;

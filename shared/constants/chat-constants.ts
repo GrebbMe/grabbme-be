@@ -1,3 +1,5 @@
 export const CHAT = {
   CHAT_ROOM_SORT_DESC: -1,
+  CHAT_LIST_SORT_DESC: -1,
+  CHAT_LIST_PAGINATION_LIMIT: 1,
 } as const;

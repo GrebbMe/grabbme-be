@@ -13,4 +13,8 @@ export class ChatService {
   public async getChatRoomsById(id: number) {
     return await this.chatClient.send(MESSAGE.CHAT.GET_ALL_CHAT_ROOM, { id });
   }
+
+  public getChatList(id: number, page: number) {
+    return this.chatClient.send(MESSAGE.CHAT.GET_ONE_CHAT_LIST, { id, page });
+  }
 }
