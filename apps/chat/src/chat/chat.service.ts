@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CHAT } from '@shared/constants/chat-constants';
 import { Model } from 'mongoose';
-import { ChatList } from './entity/chat-list.entity';
-import { ChatRoom } from './entity/chat-room.entity';
+import { ChatList } from './entities/chat-list.entity';
+import { ChatRoom } from './entities/chat-room.entity';
 
 @Injectable()
 export class ChatService {
