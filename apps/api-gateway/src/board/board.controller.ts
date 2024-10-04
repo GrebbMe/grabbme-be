@@ -13,7 +13,7 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
-  @Get()
+  @Get('category/:postCategoryId')
   @ApiOperation({ summary: '전체 게시글 조회' })
   @ApiOkResponse({
     description: '전체 게시글 조회',
@@ -42,11 +42,11 @@ export class BoardController {
       },
     ],
   })
-  public async getPosts() {
-    return await this.boardService.getPosts();
+  public async getPosts(@Param('postCategoryId') postCategoryId: number) {
+    return await this.boardService.getPosts(postCategoryId);
   }
 
-  @Get(':id')
+  @Get('/:id')
   @ApiOperation({ summary: '게시글 상세 조회' })
   @ApiOkResponse({
     description: '게시글 상세 조회',
@@ -66,7 +66,7 @@ export class BoardController {
     return await this.boardService.getPostById(id);
   }
 
-  @Post()
+  @Post('category/:postCategoryId')
   @ApiOperation({ summary: '게시글 생성' })
   @ApiCreatedResponse({
     description: '게시글 생성',
@@ -82,8 +82,12 @@ export class BoardController {
       is_open: true,
     },
   })
-  public async createPost(@Body() createBoardDto: CreateBoardDto) {
-    return await this.boardService.createPost(createBoardDto);
+  public async createPost(
+    @Param('postCategoryId') postCategoryId: number,
+    @Body() createBoardDto: CreateBoardDto,
+  ) {
+    const payload = { postCategoryId, createBoardDto };
+    return await this.boardService.createPost(payload);
   }
 
   @Patch(':id')

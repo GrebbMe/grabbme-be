@@ -14,8 +14,19 @@ export class BoardService {
   ) {}
 
   @Transactional()
-  public async getPosts(): Promise<Board[]> {
-    const posts = await this.boardRepository.find();
+  public async getPosts(postCategoryId: number): Promise<Board[]> {
+    let posts;
+
+    if (postCategoryId) {
+      posts = await this.boardRepository.find({
+        where: { postCategory: { id: postCategoryId } },
+        relations: ['postCategory'],
+      });
+    } else {
+      posts = await this.boardRepository.find({
+        relations: ['postCategory'],
+      });
+    }
 
     if (posts.length === 0) {
       throw new NotFoundException('게시글이 존재하지 않습니다.');
@@ -36,11 +47,12 @@ export class BoardService {
   }
 
   @Transactional()
-  public async createPost(data: CreateBoardDto): Promise<Board> {
+  public async createPost(postCategoryId: number, createBoardDto: CreateBoardDto): Promise<Board> {
     const newPost = this.boardRepository.create({
-      title: data.title,
-      content: data.content,
-      expired_at: new Date(data.expired_at),
+      title: createBoardDto.title,
+      content: createBoardDto.content,
+      expired_at: new Date(createBoardDto.expired_at),
+      postCategory: { id: postCategoryId },
     });
 
     const savedPost = await this.boardRepository.save(newPost);
