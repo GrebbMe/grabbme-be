@@ -21,7 +21,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, CustomRes<T>>
 
     return next.handle().pipe(
       map((data: T): CustomRes<T> => {
-        const responseData = data as unknown as { message: string; status: number };
+        const responseData = data as { message: string; status: number };
         return {
           status: status ? (responseData.status >= 400 ? responseData.status : status) : 'error',
           data: responseData.status >= 400 ? null : data,
