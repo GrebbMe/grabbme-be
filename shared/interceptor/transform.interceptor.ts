@@ -17,19 +17,15 @@ export class TransformInterceptor<T> implements NestInterceptor<T, CustomRes<T>>
       context.getHandler(),
     );
 
-    const status = response.status
-      ? response.status
-      : context.switchToHttp().getResponse().statusCode;
+    const status = response.status ?? context.switchToHttp().getResponse().statusCode;
 
     return next.handle().pipe(
-      map((data): CustomRes<T> => {
+      map((data: T): CustomRes<T> => {
+        const responseData = data as unknown as { message: string; status: number };
         return {
-          // eslint-disable-next-line dot-notation
-          status: status ? (data['status'] >= 400 ? data['status'] : status) : 'error',
-          // eslint-disable-next-line dot-notation
-          data: data['status'] >= 400 ? null : data,
-          // eslint-disable-next-line dot-notation
-          message: data['status'] >= 400 ? data['message'] : response.message,
+          status: status ? (responseData.status >= 400 ? responseData.status : status) : 'error',
+          data: responseData.status >= 400 ? null : data,
+          message: responseData.status >= 400 ? responseData.message : response.message,
         };
       }),
     );
