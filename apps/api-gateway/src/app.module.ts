@@ -7,14 +7,13 @@ import { ChatModule } from './chat/chat.module';
 import { PublicDataModule } from './public-data/public-data.module';
 import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import mongoConfig from './config/mongo.config';
-import mysqlConfig from './config/mysql.config';
+import { mongoConfig, githubConfig, mysqlConfig } from './config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [mysqlConfig, mongoConfig],
+      load: [mysqlConfig, mongoConfig, githubConfig],
     }),
 
     TypeOrmModule.forRootAsync({
