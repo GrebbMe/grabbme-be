@@ -1,5 +1,5 @@
-import { getModelToken } from '@nestjs/mongoose';
 import { InternalServerErrorException } from '@nestjs/common';
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import { ChatService } from './chat.service';
