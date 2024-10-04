@@ -10,11 +10,11 @@ export class GatewayRpcExceptionFilter implements ExceptionFilter<CustomRpcExcep
     const { httpAdapter } = this.httpAdpterHost;
     const ctx = host.switchToHttp();
 
-    const httpStatus = exception.status ? exception.status : HttpStatus.INTERNAL_SERVER_ERROR;
+    const httpStatus = exception.status ?? HttpStatus.INTERNAL_SERVER_ERROR;
 
     const response = {
       status: httpStatus,
-      timeStamp: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
       message: exception.message,
     };
