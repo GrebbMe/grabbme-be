@@ -7,7 +7,6 @@ export class LoggingInterceptor implements NestInterceptor {
 
   public intercept(
     context: ExecutionContext,
-
     next: CallHandler<unknown>,
   ): Observable<unknown> | Promise<Observable<unknown>> {
     const { body } = context.getArgByIndex(0);
