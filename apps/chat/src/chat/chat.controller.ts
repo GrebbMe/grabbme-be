@@ -1,4 +1,4 @@
-import { CreateChatRoomDto } from '@apps/api-gateway/src/chat/dto/req.dto';
+import { CreateChatRoomDto } from './dto/req.dto';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
