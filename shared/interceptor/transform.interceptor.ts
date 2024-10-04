@@ -1,13 +1,8 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { responseMessageKey } from '@shared/decorator/set-response.decorator';
+import { CustomRes } from '@shared/filter/custom-res';
 import { map, Observable } from 'rxjs';
-
-interface CustomRes<T> {
-  status: number;
-  data: T;
-  message: string;
-}
 
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<T, CustomRes<T>> {
