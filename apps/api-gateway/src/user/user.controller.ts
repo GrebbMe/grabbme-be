@@ -1,5 +1,3 @@
-import { CreateUserDto } from '@apps/user/src/user/dto/create-user.dto';
-import { User } from '@apps/user/src/user/entities/user.entity';
 import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -9,6 +7,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/req.dto';
+import { User } from './entities/user.entity';
 @Controller('user')
 @ApiTags('User API')
 export class UserController {
