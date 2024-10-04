@@ -8,13 +8,20 @@ describe('ChatController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [ChatController],
-      providers: [ChatService],
+      providers: [
+        {
+          provide: ChatService,
+          useValue: {
+            createChatRoom: jest.fn().mockResolvedValue({ success: true }),
+          },
+        },
+      ],
     }).compile();
 
     chatController = app.get<ChatController>(ChatController);
   });
 
-  it('should be defined', () => {
+  it('ChatController be defined', () => {
     expect(chatController).toBeDefined();
   });
 });
