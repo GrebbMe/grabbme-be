@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/entities';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, CareerCategory, PositionCategory, ProjectCategory]),
     ClientsModule.register([
       {
         name: 'USER_SERVICE',

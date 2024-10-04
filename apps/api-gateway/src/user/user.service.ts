@@ -1,8 +1,10 @@
 import { HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientProxy } from '@nestjs/microservices';
+import { MESSAGE } from '@shared/constants/message-pattern';
 import { CustomRes } from '@shared/filter/custom-res';
 import axios, { AxiosResponse } from 'axios';
+import { CreateUserDto } from './dto/req.dto';
 
 interface GithubClient {
   client_id: string;
@@ -83,5 +85,8 @@ export class UserService {
       data: githubUser,
       message: 'github 로그인 성공',
     };
+  }
+  public async createUser(createUserDto: CreateUserDto) {
+    return await this.userClient.send(MESSAGE.USER.CREATE_USER, { ...createUserDto });
   }
 }

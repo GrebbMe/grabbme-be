@@ -7,6 +7,7 @@ import { GatewayRpcExceptionFilter } from './common/filter/gateway-rpc-exception
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   const configService = app.get(ConfigService);
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.enableCors({
