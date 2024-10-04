@@ -2,6 +2,7 @@ import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import { BoardModule } from './board/board.module';
 import { ChatModule } from './chat/chat.module';
 import { PublicDataModule } from './public-data/public-data.module';
@@ -52,6 +53,7 @@ import { mongoConfig, githubConfig, mysqlConfig } from './config';
     BoardModule,
     ChatModule,
     PublicDataModule,
+    AuthModule,
   ],
 
   providers: [Logger],
