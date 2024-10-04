@@ -35,7 +35,12 @@ export const MESSAGE = {
       DELETE_POST: { cmd: 'delete-post' },
     },
   },
+
   CHAT: {
     CREATE_CHAT_ROOM: { cmd: 'create-chat-room' },
+  },
+
+  USER: {
+    CREATE_USER: { cmd: 'create-user' },
   },
 } as const;
