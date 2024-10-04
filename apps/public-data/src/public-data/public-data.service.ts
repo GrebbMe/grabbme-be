@@ -7,7 +7,7 @@ import {
   ProjectCategory,
   StackCategory,
 } from '@publicData/entities';
-import { CustomRpcException } from '@shared/filter/custrom-rpc-exception';
+import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 

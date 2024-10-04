@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { CustomRpcException } from '@shared/filter/custrom-rpc-exception';
+import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 
 @Catch()
 export class GatewayRpcExceptionFilter implements ExceptionFilter<CustomRpcException> {
