@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CareerCategory,
@@ -7,6 +7,7 @@ import {
   ProjectCategory,
   StackCategory,
 } from '@publicData/entities';
+import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -29,7 +30,9 @@ export class PublicDataService {
   public async findAllPostCategory(): Promise<PostCategory[]> {
     const postCategories = await this.postCategoryRepository.find();
 
-    if (postCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+    if (postCategories.length === 0) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return postCategories;
   }
@@ -38,7 +41,9 @@ export class PublicDataService {
   public async findPostCategoryById(id: number): Promise<PostCategory> {
     const postCategory = await this.postCategoryRepository.findOne({ where: { id } });
 
-    if (!postCategory) throw new NotFoundException('데이터가 없습니다.');
+    if (!postCategory) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return postCategory;
   }
@@ -47,7 +52,8 @@ export class PublicDataService {
   public async findAllPositionCategory(): Promise<PositionCategory[]> {
     const positionCategories = await this.positionCategoryRepository.find();
 
-    if (positionCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+    if (positionCategories.length === 0)
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
 
     return positionCategories;
   }
@@ -58,7 +64,9 @@ export class PublicDataService {
       where: { position_category_id: id },
     });
 
-    if (!positionCategory) throw new NotFoundException('데이터가 없습니다.');
+    if (!positionCategory) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return positionCategory;
   }
@@ -67,7 +75,9 @@ export class PublicDataService {
   public async findAllProjectCategory(): Promise<ProjectCategory[]> {
     const projectCategories = await this.projectCategoryRepository.find();
 
-    if (projectCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+    if (projectCategories.length === 0) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return projectCategories;
   }
@@ -77,7 +87,9 @@ export class PublicDataService {
     const projectCategory = await this.projectCategoryRepository.findOne({
       where: { project_category_id: id },
     });
-    if (!projectCategory) throw new NotFoundException('데이터가 없습니다.');
+    if (!projectCategory) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return projectCategory;
   }
@@ -86,7 +98,9 @@ export class PublicDataService {
   public async findAllStackCategory(): Promise<StackCategory[]> {
     const stackCategories = await this.stackCategoryRepository.find();
 
-    if (stackCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+    if (stackCategories.length === 0) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return stackCategories;
   }
@@ -97,7 +111,9 @@ export class PublicDataService {
       where: { stack_category_id: id },
     });
 
-    if (!stackCategory) throw new NotFoundException('데이터가 없습니다.');
+    if (!stackCategory) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return stackCategory;
   }
@@ -106,7 +122,9 @@ export class PublicDataService {
   public async findAllCareerCategory(): Promise<CareerCategory[]> {
     const careerCategories = await this.careerCategoryRepository.find();
 
-    if (careerCategories.length === 0) throw new NotFoundException('데이터가 없습니다.');
+    if (careerCategories.length === 0) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return careerCategories;
   }
@@ -117,7 +135,9 @@ export class PublicDataService {
       where: { career_category_id: id },
     });
 
-    if (!careerCategory) throw new NotFoundException('데이터가 없습니다.');
+    if (!careerCategory) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return careerCategory;
   }
