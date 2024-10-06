@@ -55,11 +55,13 @@ export class UserService {
   }
 
   @Transactional()
-  public async deleteUser(id: number): Promise<void> {
-    const result = await this.userRepository.delete(id);
+  public async deleteUser(id: number): Promise<boolean> {
+    const result = await this.userRepository.delete({ user_id: id });
 
     if (result.affected === 0) {
       throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
     }
+
+    return result.affected && true;
   }
 }
