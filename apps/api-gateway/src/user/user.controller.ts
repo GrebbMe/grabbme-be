@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -9,7 +9,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto, GetUserDto } from './dto/req.dto';
+import { CreateUserDto, GetUserDto, DeleteUserDto } from './dto/req.dto';
 import { User } from './entities/user.entity';
 @Controller('user')
 @ApiTags('User API')
@@ -46,5 +46,10 @@ export class UserController {
   @Get()
   public async getUser(@Param() { id }: GetUserDto) {
     return this.userService.getUser(id);
+  }
+
+  @Delete()
+  public async deleteUser(@Param() { id }: DeleteUserDto) {
+    return this.userService.deleteUser(id);
   }
 }
