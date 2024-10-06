@@ -43,7 +43,7 @@ export class UserController {
     required: true,
     description: 'user_id',
   })
-  @Get()
+  @Get('/id')
   public async getUser(@Param() { id }: GetUserDto) {
     return await this.userService.getUser(id);
   }
@@ -58,7 +58,7 @@ export class UserController {
     required: true,
     description: 'user_id',
   })
-  @Delete()
+  @Delete('/id')
   public async deleteUser(@Param() { id }: DeleteUserDto) {
     return await this.userService.deleteUser(id);
   }
