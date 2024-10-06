@@ -43,5 +43,6 @@ export const MESSAGE = {
   USER: {
     CREATE_USER: { cmd: 'create-user' },
     GET_USER: { smd: 'get-user' },
+    DELETE_USER: { smd: 'delete-user' },
   },
 } as const;
