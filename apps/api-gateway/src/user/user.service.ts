@@ -10,4 +10,8 @@ export class UserService {
   public async createUser(createUserDto: CreateUserDto) {
     return await this.userClient.send(MESSAGE.USER.CREATE_USER, { ...createUserDto });
   }
+
+  public async getUser(id: number) {
+    return await this.userClient.send(MESSAGE.USER.GET_USER, { id });
+  }
 }
