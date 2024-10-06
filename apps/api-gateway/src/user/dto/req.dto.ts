@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString, ArrayMaxSize } from 'class-validator';
 
 export class CreateUserDto {
@@ -30,12 +29,6 @@ export class CreateUserDto {
   @ApiProperty({ type: 'number' })
   @IsNumber()
   public career_category_id: number;
-}
-
-export class ParamIdDto {
-  @Type(() => Number)
-  @IsNumber()
-  public id: number;
 }
 
 export class UpdateUserDto {

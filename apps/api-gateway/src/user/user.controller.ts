@@ -9,7 +9,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto, ParamIdDto, UpdateUserDto } from './dto/req.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/req.dto';
 import { User } from './entities/user.entity';
 @Controller('user')
 @ApiTags('User API')
@@ -44,7 +44,7 @@ export class UserController {
     required: true,
   })
   @Get('/:id')
-  public async getUser(@Param() { id }: ParamIdDto) {
+  public async getUser(@Param('id') id: number) {
     return await this.userService.getUser(id);
   }
 
@@ -59,7 +59,7 @@ export class UserController {
     required: true,
   })
   @Delete('/:id')
-  public async deleteUser(@Param() { id }: ParamIdDto) {
+  public async deleteUser(@Param('id') id: number) {
     return await this.userService.deleteUser(id);
   }
 
@@ -73,7 +73,7 @@ export class UserController {
     type: UpdateUserDto,
   })
   @Patch('/:id')
-  public async updateUser(@Param() { id }: ParamIdDto, @Body() updateUserDto: UpdateUserDto) {
+  public async updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.updateUser(id, updateUserDto);
   }
 }
