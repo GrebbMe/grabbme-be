@@ -35,3 +35,8 @@ export class GetUserDto {
   @IsNumber()
   public id: number;
 }
+
+export class DeleteUserDto {
+  @IsNumber()
+  public id: number;
+}
