@@ -18,7 +18,7 @@ export class UserController {
 
   @ApiOperation({ summary: '신규 사용자 추가' })
   @ApiCreatedResponse({
-    description: '신규 사용자 추가',
+    description: '사용자가 추가되었습니다.',
     type: User,
   })
   @ApiBadRequestResponse({
@@ -34,7 +34,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '사용자 조회' })
-  @ApiResponse({ description: '사용자 조회' })
+  @ApiResponse({ description: '사용자가 조회되었습니다.' })
   @ApiBadRequestResponse({
     description: '잘못된 요청',
   })
@@ -45,11 +45,21 @@ export class UserController {
   })
   @Get()
   public async getUser(@Param() { id }: GetUserDto) {
-    return this.userService.getUser(id);
+    return await this.userService.getUser(id);
   }
 
+  @ApiOperation({ summary: '사용자 계정 삭제' })
+  @ApiResponse({ description: '사용자 계정이 성공적으로 삭제되었습니다.' })
+  @ApiBadRequestResponse({
+    description: '잘못된 요청',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'user_id',
+  })
   @Delete()
   public async deleteUser(@Param() { id }: DeleteUserDto) {
-    return this.userService.deleteUser(id);
+    return await this.userService.deleteUser(id);
   }
 }
