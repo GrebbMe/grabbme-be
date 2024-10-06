@@ -24,6 +24,6 @@ export class UserController {
   @SetResponse(MESSAGE.USER.DELETE_USER.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.USER.DELETE_USER)
   private async deleteUser(@Payload() deleteUserDto: DeleteUserDto) {
-    return await this.userService.getUser(deleteUserDto.id);
+    return await this.userService.deleteUser(deleteUserDto.id);
   }
 }
