@@ -4,6 +4,8 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiOperation,
+  ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
@@ -31,6 +33,16 @@ export class UserController {
     return await this.userService.createUser(createUserDto);
   }
 
+  @ApiOperation({ summary: '사용자 조회' })
+  @ApiResponse({ description: '사용자 조회' })
+  @ApiBadRequestResponse({
+    description: '잘못된 요청',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'user_id',
+  })
   @Get()
   public async getUser(@Param() { id }: GetUserDto) {
     return this.userService.getUser(id);
