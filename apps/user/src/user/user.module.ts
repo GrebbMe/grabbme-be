@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/entities';
+import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
@@ -21,7 +22,7 @@ import { User } from './entities/user.entity';
     ]),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, LoggingInterceptor, Logger],
   exports: [UserService],
 })
 export class UserModule {}

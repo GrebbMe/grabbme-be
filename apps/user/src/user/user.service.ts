@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/entities';
+import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { CreateUserDto } from './dto/req.dto';
@@ -45,6 +46,10 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: { user_id: id },
     });
+
+    if (!user) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '데이터가 없습니다.');
+    }
 
     return user;
   }
