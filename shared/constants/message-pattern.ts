@@ -42,7 +42,7 @@ export const MESSAGE = {
 
   USER: {
     CREATE_USER: { cmd: 'create-user' },
-    GET_USER: { smd: 'get-user' },
-    DELETE_USER: { smd: 'delete-user' },
+    GET_USER: { cmd: 'get-user' },
+    DELETE_USER: { cmd: 'delete-user' },
   },
 } as const;
