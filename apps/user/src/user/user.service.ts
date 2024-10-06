@@ -39,4 +39,13 @@ export class UserService {
     });
     return this.userRepository.save(newUser);
   }
+
+  @Transactional()
+  public async getUser(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { user_id: id },
+    });
+
+    return user;
+  }
 }
