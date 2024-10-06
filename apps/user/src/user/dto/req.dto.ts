@@ -30,3 +30,8 @@ export class CreateUserDto {
   @IsNumber()
   public career_category_id: number;
 }
+
+export class GetUserDto {
+  @IsNumber()
+  public id: number;
+}
