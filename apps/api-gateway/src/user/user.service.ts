@@ -14,4 +14,8 @@ export class UserService {
   public async getUser(id: number) {
     return await this.userClient.send(MESSAGE.USER.GET_USER, { id });
   }
+
+  public async deleteUser(id: number) {
+    return await this.userClient.send(MESSAGE.USER.DELETE_USER, { id });
+  }
 }
