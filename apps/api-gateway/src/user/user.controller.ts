@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -7,7 +7,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/req.dto';
+import { CreateUserDto, GetUserDto } from './dto/req.dto';
 import { User } from './entities/user.entity';
 @Controller('user')
 @ApiTags('User API')
@@ -29,5 +29,10 @@ export class UserController {
   @Post()
   public async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.userService.createUser(createUserDto);
+  }
+
+  @Get()
+  public async getUser(@Param() { id }: GetUserDto) {
+    return this.userService.getUser(id);
   }
 }
