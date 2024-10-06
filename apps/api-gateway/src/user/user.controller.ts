@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -9,7 +9,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto, GetUserDto, DeleteUserDto } from './dto/req.dto';
+import { CreateUserDto, ParamIdDto, UpdateUserDto } from './dto/req.dto';
 import { User } from './entities/user.entity';
 @Controller('user')
 @ApiTags('User API')
@@ -44,7 +44,7 @@ export class UserController {
     required: true,
   })
   @Get('/:id')
-  public async getUser(@Param() { id }: GetUserDto) {
+  public async getUser(@Param() { id }: ParamIdDto) {
     return await this.userService.getUser(id);
   }
 
@@ -59,7 +59,21 @@ export class UserController {
     required: true,
   })
   @Delete('/:id')
-  public async deleteUser(@Param() { id }: DeleteUserDto) {
+  public async deleteUser(@Param() { id }: ParamIdDto) {
     return await this.userService.deleteUser(id);
+  }
+
+  @ApiOperation({ summary: '사용자 정보 수정' })
+  @ApiResponse({ description: '사용자 정보가 성공적으로 수정되었습니다.' })
+  @ApiBadRequestResponse({
+    description: '잘못된 요청',
+  })
+  @ApiBody({
+    description: '사용자 정보 수정',
+    type: UpdateUserDto,
+  })
+  @Patch('/:id')
+  public async updateUser(@Param() { id }: ParamIdDto, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateUser(id, updateUserDto);
   }
 }
