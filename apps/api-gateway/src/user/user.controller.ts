@@ -39,11 +39,11 @@ export class UserController {
     description: '잘못된 요청',
   })
   @ApiParam({
+    type: Number,
     name: 'id',
     required: true,
-    description: 'user_id',
   })
-  @Get('/id')
+  @Get('/:id')
   public async getUser(@Param() { id }: GetUserDto) {
     return await this.userService.getUser(id);
   }
@@ -54,11 +54,11 @@ export class UserController {
     description: '잘못된 요청',
   })
   @ApiParam({
+    type: Number,
     name: 'id',
     required: true,
-    description: 'user_id',
   })
-  @Delete('/id')
+  @Delete('/:id')
   public async deleteUser(@Param() { id }: DeleteUserDto) {
     return await this.userService.deleteUser(id);
   }
