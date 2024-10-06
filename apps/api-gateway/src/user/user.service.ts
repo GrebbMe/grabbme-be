@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
-import { CreateUserDto } from './dto/req.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/req.dto';
 
 @Injectable()
 export class UserService {
@@ -17,5 +17,9 @@ export class UserService {
 
   public async deleteUser(id: number) {
     return await this.userClient.send(MESSAGE.USER.DELETE_USER, { id });
+  }
+
+  public async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    return await this.userClient.send(MESSAGE.USER.UPDATE_USER, { id, ...updateUserDto });
   }
 }
