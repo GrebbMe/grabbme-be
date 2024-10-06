@@ -3,7 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
 import { SetResponse } from '@shared/decorator/set-response.decorator';
 import { UserService } from './user.service';
-import { CreateUserDto, DeleteUserDto, GetUserDto } from './dto/req.dto';
+import { CreateUserDto, ParamIdDto, UpdateUserDto } from './dto/req.dto';
 
 @Controller()
 export class UserController {
@@ -17,13 +17,19 @@ export class UserController {
 
   @SetResponse(MESSAGE.USER.GET_USER.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.USER.GET_USER)
-  private async getUser(@Payload() getUserDto: GetUserDto) {
-    return await this.userService.getUser(getUserDto.id);
+  private async getUser(@Payload() { id }: ParamIdDto) {
+    return await this.userService.getUser(id);
   }
 
   @SetResponse(MESSAGE.USER.DELETE_USER.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.USER.DELETE_USER)
-  private async deleteUser(@Payload() deleteUserDto: DeleteUserDto) {
-    return await this.userService.deleteUser(deleteUserDto.id);
+  private async deleteUser(@Payload() { id }: ParamIdDto) {
+    return await this.userService.deleteUser(id);
+  }
+
+  @SetResponse(MESSAGE.USER.UPDATE_USER.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.USER.UPDATE_USER)
+  private async updateUser(@Payload() { id }: ParamIdDto, @Payload() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateUser(id, { ...updateUserDto });
   }
 }
