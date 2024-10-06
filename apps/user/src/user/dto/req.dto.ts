@@ -32,38 +32,28 @@ export class CreateUserDto {
   public career_category_id: number;
 }
 
-export class GetUserDto {
-  @Type(() => Number)
-  @IsNumber()
-  public id: number;
-}
-
-export class DeleteUserDto {
+export class ParamIdDto {
   @Type(() => Number)
   @IsNumber()
   public id: number;
 }
 
 export class UpdateUserDto {
-  @Type(() => Number)
-  @IsNumber()
-  public id: number;
-
   @ApiProperty({ type: 'array', items: { type: 'number' } })
   @IsArray()
   @ArrayMaxSize(5)
   @IsNumber({}, { each: true })
-  public stack_category_id: number[];
+  public stack_category_id?: number[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
-  public position_category_id: number;
+  public position_category_id?: number;
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
-  public project_category_id: number;
+  public project_category_id?: number;
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
-  public career_category_id: number;
+  public career_category_id?: number;
 }
