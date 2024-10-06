@@ -43,7 +43,7 @@ export class UserService {
 
   @Transactional()
   public async getUser(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({
+    const user: User = await this.userRepository.findOne({
       where: { user_id: id },
     });
 
