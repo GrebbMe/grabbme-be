@@ -55,7 +55,7 @@ export class ChatService {
     const [chatList] = await this.chatListModel
       .find({ _id: { $in: chatRoom.chat_lists } })
       .sort({ created_at: CHAT.CHAT_LIST_SORT_DESC })
-      .skip(page)
+      .skip((page - 1) * CHAT.CHAT_LIST_PAGINATION_LIMIT)
       .limit(CHAT.CHAT_LIST_PAGINATION_LIMIT)
       .exec();
 

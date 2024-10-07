@@ -24,6 +24,6 @@ export class GetChatListDto {
 
   @IsOptional()
   @IsInt()
-  @Min(0)
-  public readonly page?: number = 0;
+  @Min(1)
+  public readonly page?: number = 1;
 }
