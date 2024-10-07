@@ -35,10 +35,15 @@ export const MESSAGE = {
       DELETE_POST: { cmd: 'delete-post' },
     },
   },
+
   CHAT: {
     CREATE_CHAT_ROOM: { cmd: 'create-chat-room' },
     GET_CHAT_ROOMS: { cmd: 'get-chat-rooms' },
     GET_CHAT_ROOM: { cmd: 'get-chat-room' },
     GET_CHAT_LIST: { cmd: 'get-chat-list' },
+  },
+
+  USER: {
+    CREATE_USER: { cmd: 'create-user' },
   },
 } as const;

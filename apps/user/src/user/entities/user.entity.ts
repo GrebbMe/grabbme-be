@@ -1,6 +1,4 @@
-import { CareerCategory } from '@publicData/entities/career-category.entity';
-import { PositionCategory } from '@publicData/entities/position-category.entity';
-import { ProjectCategory } from '@publicData/entities/project-category.entity';
+import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/entities';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')

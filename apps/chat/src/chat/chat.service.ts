@@ -20,14 +20,13 @@ export class ChatService {
 
     const newChatRoomId = lastChatRoom ? lastChatRoom.channel_id + 1 : 1;
 
-    const newChatRoom = new this.chatRoomModel({
+    const createdChatRoom = await this.chatRoomModel.create({
       channel_id: newChatRoomId,
       name: chatRoomName,
       users: [],
       chat_lists: [],
     });
 
-    const createdChatRoom = await newChatRoom.save();
     return createdChatRoom;
   }
 

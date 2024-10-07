@@ -14,12 +14,12 @@ import {
 } from '@publicData/entities';
 import { publicDataExamples } from '@shared/constants/mock-example';
 import { Repository } from 'typeorm';
-
 import { PublicDataService } from './public-data.service';
 
 describe('msa public-data service 로직 테스트', () => {
   const context = describe;
   const mockNotFoundError = new NotFoundException('데이터가 없습니다.');
+
   let service: PublicDataService;
   let postCategoryRepository: Repository<PostCategory>;
   let positionCategoryRepository: Repository<PositionCategory>;

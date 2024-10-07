@@ -1,5 +1,4 @@
 import {
-  CreateChatRoomDto,
   GetChatListDto,
   GetChatRoomDto,
   GetChatRoomsDto,
@@ -8,6 +7,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from '@shared/constants/message-pattern';
 import { ChatService } from './chat.service';
+import { CreateChatRoomDto } from './dto/req.dto';
 
 @Controller()
 export class ChatController {
