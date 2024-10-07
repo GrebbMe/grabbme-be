@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
-import { ChatRoom } from './entity/chat-room.entity';
+import { ChatRoom } from './entities/chat-room.entity';
 
 describe('ChatController', () => {
   const context = describe;

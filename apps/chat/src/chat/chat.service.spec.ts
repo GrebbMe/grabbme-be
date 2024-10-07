@@ -3,7 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import { ChatService } from './chat.service';
-import { ChatRoom } from './entity/chat-room.entity';
+import { ChatRoom } from './entities/chat-room.entity';
 
 describe('ChatService', () => {
   const context = describe;
