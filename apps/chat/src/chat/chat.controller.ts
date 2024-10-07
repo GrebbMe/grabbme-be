@@ -14,22 +14,22 @@ export class ChatController {
   public constructor(private readonly chatService: ChatService) {}
 
   @MessagePattern(MESSAGE.CHAT.CREATE_CHAT_ROOM)
-  public createChatRoom(@Payload() createChatRoomDto: CreateChatRoomDto) {
-    return this.chatService.createChatRoom(createChatRoomDto.name);
+  public createChatRoom(@Payload() { name }: CreateChatRoomDto) {
+    return this.chatService.createChatRoom(name);
   }
 
   @MessagePattern(MESSAGE.CHAT.GET_CHAT_ROOMS)
-  public async getChatRooms(@Payload() getChatRoomsDto: GetChatRoomsDto) {
-    return await this.chatService.getChatRooms(getChatRoomsDto.id);
+  public async getChatRooms(@Payload() { id }: GetChatRoomsDto) {
+    return await this.chatService.getChatRooms(id);
   }
 
   @MessagePattern(MESSAGE.CHAT.GET_CHAT_ROOM)
-  public async getChatRoom(@Payload() getChatRoomDto: GetChatRoomDto) {
-    return await this.chatService.getChatRoom(getChatRoomDto.id);
+  public async getChatRoom(@Payload() { id }: GetChatRoomDto) {
+    return await this.chatService.getChatRoom(id);
   }
 
   @MessagePattern(MESSAGE.CHAT.GET_CHAT_LIST)
-  public async getChatList(@Payload() getChatListDto: GetChatListDto) {
-    return await this.chatService.getChatList(getChatListDto.id, getChatListDto.page);
+  public async getChatList(@Payload() { id, page }: GetChatListDto) {
+    return await this.chatService.getChatList(id, page);
   }
 }

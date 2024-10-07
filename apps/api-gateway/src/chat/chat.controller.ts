@@ -9,8 +9,8 @@ export class ChatController {
   public constructor(private readonly chatService: ChatService) {}
 
   @Post('rooms')
-  public createChatRoom(@Body() createChatRoomDto: CreateChatRoomDto) {
-    return this.chatService.createChatRoom(createChatRoomDto.name);
+  public createChatRoom(@Body() { name }: CreateChatRoomDto) {
+    return this.chatService.createChatRoom(name);
   }
 
   @Get('rooms')
