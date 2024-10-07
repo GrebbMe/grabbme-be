@@ -1,11 +1,11 @@
 import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CHAT } from '@shared/constants/chat-constants';
 import mongoose, { Model } from 'mongoose';
 import { ChatService } from './chat.service';
-import { ChatRoom } from './entities/chat-room.entity';
 import { ChatList } from './entities/chat-list.entity';
-import { CHAT } from '@shared/constants/chat-constants';
+import { ChatRoom } from './entities/chat-room.entity';
 
 describe('ChatService', () => {
   const context = describe;
