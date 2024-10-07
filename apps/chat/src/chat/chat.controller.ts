@@ -18,17 +18,17 @@ export class ChatController {
     return this.chatService.createChatRoom(createChatRoomDto.name);
   }
 
-  @MessagePattern(MESSAGE.CHAT.GET_ALL_CHAT_ROOM)
+  @MessagePattern(MESSAGE.CHAT.GET_CHAT_ROOMS)
   public async getChatRooms(@Payload() getChatRoomsDto: GetChatRoomsDto) {
     return await this.chatService.getChatRooms(getChatRoomsDto.id);
   }
 
-  @MessagePattern(MESSAGE.CHAT.GET_ONE_CHAT_ROOM)
+  @MessagePattern(MESSAGE.CHAT.GET_CHAT_ROOM)
   public async getChatRoom(@Payload() getChatRoomDto: GetChatRoomDto) {
     return await this.chatService.getChatRoom(getChatRoomDto.id);
   }
 
-  @MessagePattern(MESSAGE.CHAT.GET_ONE_CHAT_LIST)
+  @MessagePattern(MESSAGE.CHAT.GET_CHAT_LIST)
   public async getChatList(@Payload() getChatListDto: GetChatListDto) {
     return await this.chatService.getChatList(getChatListDto.id, getChatListDto.page);
   }
