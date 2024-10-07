@@ -4,7 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 import { ChatGateway } from './chat.gateway';
-import { CHAT_ROOM_SCHEMA, ChatRoom } from './entity/chat-room.entity';
+import { CHAT_LIST_SCHEMA, ChatList } from './entities/chat-list.entity';
+import { CHAT_ROOM_SCHEMA, ChatRoom } from './entities/chat-room.entity';
 
 @Module({
   imports: [
@@ -22,6 +23,10 @@ import { CHAT_ROOM_SCHEMA, ChatRoom } from './entity/chat-room.entity';
       {
         name: ChatRoom.name,
         schema: CHAT_ROOM_SCHEMA,
+      },
+      {
+        name: ChatList.name,
+        schema: CHAT_LIST_SCHEMA,
       },
     ]),
   ],
