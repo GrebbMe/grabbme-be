@@ -44,16 +44,13 @@ describe('ChatService', () => {
     chat_lists: [],
   } as ChatRoom;
 
-  const userId = 1;
   const chatRooms: ChatRoom[] = [
-    { channel_id: 1, name: 'room1', users: [userId], chat_lists: [] } as ChatRoom,
-    { channel_id: 2, name: 'room2', users: [userId], chat_lists: [] } as ChatRoom,
+    { channel_id: 1, name: 'room1', users: [1], chat_lists: [] } as ChatRoom,
+    { channel_id: 2, name: 'room2', users: [1], chat_lists: [] } as ChatRoom,
   ];
 
-  const channelId = 1;
-  const page = 1;
   const chatRoom: ChatRoom = {
-    channel_id: channelId,
+    channel_id: 1,
     name: 'room1',
     users: [],
     chat_lists: [],
@@ -161,7 +158,9 @@ describe('ChatService', () => {
     });
 
     context('getChatRooms를 실행하면,', () => {
-      it('success: 사용자의 채팅방 목록이 반환된다.', async () => {
+      const userId = 1;
+
+      it('success: 사용자의 채팅방 목록을 반환한다.', async () => {
         mockFindExec(chatRooms);
 
         const result = await chatService.getChatRooms(userId);
@@ -170,7 +169,7 @@ describe('ChatService', () => {
         expect(mockChatRoomModel.find).toHaveBeenCalledWith({ users: userId });
       });
 
-      it('error : 사용자의 채팅방이 없으면 NotFoundException을 던진다.', async () => {
+      it('error : 사용자의 채팅방이 없으면 NotFoundException을 반환한다.', async () => {
         mockFindExec([]);
 
         await expect(chatService.getChatRooms(userId)).rejects.toThrow(NotFoundException);
@@ -179,7 +178,9 @@ describe('ChatService', () => {
     });
 
     context('getChatRoom을 실행하면,', () => {
-      it('success : 채널 ID에 맞는 채팅방이 반환된다.', async () => {
+      const channelId = 1;
+
+      it('success : 채널 ID에 맞는 채팅방을 반환한다.', async () => {
         mockFindOneExec(chatRoom);
 
         const result = await chatService.getChatRoom(channelId);
@@ -188,7 +189,7 @@ describe('ChatService', () => {
         expect(mockChatRoomModel.findOne).toHaveBeenCalledWith({ channel_id: channelId });
       });
 
-      it('error : 채널 ID로 채팅방을 찾을 수 없으면 NotFoundException을 던진다.', async () => {
+      it('error : 채널 ID로 채팅방을 찾을 수 없으면 NotFoundException을 반환한다.', async () => {
         mockFindOneExec(null);
 
         await expect(chatService.getChatRoom(channelId)).rejects.toThrow(NotFoundException);
@@ -197,7 +198,10 @@ describe('ChatService', () => {
     });
 
     context('getChatList를 실행하면,', () => {
-      it('success : 채팅방과 채팅 리스트가 정상적으로 반환된다.', async () => {
+      const channelId = 1;
+      const page = 1;
+
+      it('success : 채팅방과 채팅 리스트를 정상적으로 반환한다.', async () => {
         mockFindOneExec(chatRoom);
         mockFindChatListExec([chatList]);
 
@@ -206,21 +210,23 @@ describe('ChatService', () => {
         expect(result).toEqual(chatList);
         expect(mockChatRoomModel.findOne).toHaveBeenCalledWith({ channel_id: channelId });
         expect(mockChatListModel.find).toHaveBeenCalledWith({ _id: { $in: chatRoom.chat_lists } });
-        expect(mockChatListModel.sort).toHaveBeenCalledWith({ created_at: -1 });
+        expect(mockChatListModel.sort).toHaveBeenCalledWith({
+          created_at: CHAT.CHAT_LIST_SORT_DESC,
+        });
         expect(mockChatListModel.skip).toHaveBeenCalledWith(
           (page - 1) * CHAT.CHAT_LIST_PAGINATION_LIMIT,
         );
         expect(mockChatListModel.limit).toHaveBeenCalledWith(CHAT.CHAT_LIST_PAGINATION_LIMIT);
       });
 
-      it('error : 채팅방이 없으면 NotFoundException을 던진다.', async () => {
+      it('error : 채팅방이 없으면 NotFoundException을 반환한다.', async () => {
         mockFindOneExec(null);
 
         await expect(chatService.getChatList(channelId, page)).rejects.toThrow(NotFoundException);
         expect(mockChatRoomModel.findOne).toHaveBeenCalledWith({ channel_id: channelId });
       });
 
-      it('error : 채팅 리스트가 없으면 NotFoundException을 던진다.', async () => {
+      it('error : 채팅 리스트가 없으면 NotFoundException을 반환한다.', async () => {
         mockFindOneExec(chatRoom);
         mockFindChatListExec([]);
 

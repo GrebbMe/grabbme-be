@@ -65,57 +65,80 @@ describe('ChatController', () => {
     context('createChatRoom을 생성하면,', () => {
       it('success : 생성된 채팅방이 return 된다.', async () => {
         jest.spyOn(chatService, 'createChatRoom').mockResolvedValue(chatRoom);
+
         const result = await chatController.createChatRoom({ name: chatRoom.name });
+
         expect(result).toEqual(chatRoom);
         expect(chatService.createChatRoom).toHaveBeenCalledWith(chatRoom.name);
       });
       it('error : name이 undefined면 BadRequestException 에러가 발생한다.', async () => {
         mockError = new Error(BadRequestException.name);
         jest.spyOn(chatService, 'createChatRoom').mockRejectedValue(mockError);
+        
         await expect(chatController.createChatRoom({ name: undefined })).rejects.toThrow(mockError);
         expect(chatService.createChatRoom).rejects.toThrow(mockError);
       });
     });
 
     context('getChatRooms를 실행하면,', () => {
+      const userId = 1;
+
       it('success: 유저에게 해당되는 채팅방 목록을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRooms').mockResolvedValue(chatRooms);
-        const result = await chatController.getChatRooms({ id: 1 });
+
+        const result = await chatController.getChatRooms({ id: userId });
+
         expect(result).toEqual(chatRooms);
-        expect(chatService.getChatRooms).toHaveBeenCalledWith(1);
+        expect(chatService.getChatRooms).toHaveBeenCalledWith(userId);
       });
 
-      it('error: 채팅방이 없을 경우 NotFoundException를 던진다.', async () => {
+      it('error: 채팅방이 없을 경우 NotFoundException을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRooms').mockRejectedValue(new NotFoundException());
-        await expect(chatController.getChatRooms({ id: 1 })).rejects.toThrow(NotFoundException);
+
+        await expect(chatController.getChatRooms({ id: userId })).rejects.toThrow(
+          NotFoundException,
+        );
       });
     });
 
-    describe('getChatRoom을 실행하면,', () => {
+    context('getChatRoom을 실행하면,', () => {
+      const channelId = 1;
+
       it('success: 해당 채널의 채팅방을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRoom').mockResolvedValue(chatRoom);
-        const result = await chatController.getChatRoom({ id: 1 });
+
+        const result = await chatController.getChatRoom({ id: channelId });
+
         expect(result).toEqual(chatRoom);
-        expect(chatService.getChatRoom).toHaveBeenCalledWith(1);
+        expect(chatService.getChatRoom).toHaveBeenCalledWith(channelId);
       });
 
-      it('error: 채팅방이 없을 경우 NotFoundException를 던진다.', async () => {
+      it('error: 채팅방이 없을 경우 NotFoundException을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRoom').mockRejectedValue(new NotFoundException());
-        await expect(chatController.getChatRoom({ id: 1 })).rejects.toThrow(NotFoundException);
+
+        await expect(chatController.getChatRoom({ id: channelId })).rejects.toThrow(
+          NotFoundException,
+        );
       });
     });
 
-    describe('getChatList를 실행하면,', () => {
+    context('getChatList를 실행하면,', () => {
+      const channelId = 1;
+      const page = 1;
+
       it('success: 해당 채널의 채팅 리스트를 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatList').mockResolvedValue(chatList);
-        const result = await chatController.getChatList({ id: 1, page: 1 });
+
+        const result = await chatController.getChatList({ id: channelId, page: page });
+
         expect(result).toEqual(chatList);
-        expect(chatService.getChatList).toHaveBeenCalledWith(1, 1);
+        expect(chatService.getChatList).toHaveBeenCalledWith(channelId, page);
       });
 
-      it('error: 채팅 리스트가 없을 경우 NotFoundException를 던진다.', async () => {
+      it('error: 채팅 리스트가 없을 경우 NotFoundException을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatList').mockRejectedValue(new NotFoundException());
-        await expect(chatController.getChatList({ id: 1, page: 1 })).rejects.toThrow(
+
+        await expect(chatController.getChatList({ id: channelId, page: page })).rejects.toThrow(
           NotFoundException,
         );
       });
