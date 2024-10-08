@@ -74,7 +74,7 @@ describe('ChatController', () => {
       it('error : name이 undefined면 BadRequestException 에러가 발생한다.', async () => {
         mockError = new Error(BadRequestException.name);
         jest.spyOn(chatService, 'createChatRoom').mockRejectedValue(mockError);
-        
+
         await expect(chatController.createChatRoom({ name: undefined })).rejects.toThrow(mockError);
         expect(chatService.createChatRoom).rejects.toThrow(mockError);
       });
