@@ -25,18 +25,14 @@ export class UserService {
 
   @Transactional()
   public async createUser(createUserDto: CreateUserDto): Promise<User> {
-    let positionCategory, projectCategory, careerCategory;
+    let positionCategory, careerCategory;
 
     if (createUserDto.position_category_id !== null && createUserDto.position_category_id !== 0) {
       positionCategory = await this.positionRepository.findOne({
         where: { position_category_id: createUserDto.position_category_id },
       });
     }
-    if (createUserDto.project_category_id !== null && createUserDto.project_category_id !== 0) {
-      projectCategory = await this.projectRepository.findOne({
-        where: { project_category_id: createUserDto.project_category_id },
-      });
-    }
+
     if (createUserDto.career_category_id !== null && createUserDto.career_category_id !== 0) {
       careerCategory = await this.careerRepository.findOne({
         where: { career_category_id: createUserDto.career_category_id },
@@ -46,11 +42,11 @@ export class UserService {
     const newUser = this.userRepository.create({
       ...createUserDto,
       position_category_id: positionCategory?.position_category_id ?? null,
-      project_category_id: projectCategory?.project_category_id ?? null,
       career_category_id: careerCategory?.career_category_id ?? null,
-      stack_category_id: createUserDto.stack_category_id
-        ? [...createUserDto.stack_category_id]
-        : [],
+      project_category_id:
+        createUserDto.project_category_id.length > 0 ? [...createUserDto.project_category_id] : [],
+      stack_category_id:
+        createUserDto.stack_category_id.length > 0 ? [...createUserDto.stack_category_id] : [],
     });
 
     const deleteTempUser = await this.deleteTempUser(createUserDto.email);

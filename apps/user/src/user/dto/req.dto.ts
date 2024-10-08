@@ -32,10 +32,12 @@ export class CreateUserDto {
   @IsOptional({ always: true })
   public position_category_id: number;
 
-  @ApiProperty({ type: 'number' })
-  @IsNumber()
+  @ApiProperty({ type: 'array', items: { type: 'number' } })
+  @IsArray()
+  @ArrayMaxSize(3)
+  @IsNumber({}, { each: true })
   @IsOptional({ always: true })
-  public project_category_id: number;
+  public project_category_id: number[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
