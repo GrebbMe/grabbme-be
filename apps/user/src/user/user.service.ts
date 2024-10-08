@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/entities';
+import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { CreateUserDto } from './dto/req.dto';
+import { TempUser } from './entities/temp-user.entity';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -17,26 +19,103 @@ export class UserService {
     private projectRepository: Repository<ProjectCategory>,
     @InjectRepository(CareerCategory)
     private careerRepository: Repository<CareerCategory>,
+    @InjectRepository(TempUser)
+    private tempUserRepository: Repository<TempUser>,
   ) {}
 
   @Transactional()
   public async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const positionCategory = await this.positionRepository.findOne({
-      where: { position_category_id: createUserDto.position_category_id },
-    });
-    const projectCategory = await this.projectRepository.findOne({
-      where: { project_category_id: createUserDto.project_category_id },
-    });
-    const careerCategory = await this.careerRepository.findOne({
-      where: { career_category_id: createUserDto.career_category_id },
-    });
+    let positionCategory, projectCategory, careerCategory;
+
+    if (createUserDto.position_category_id !== null && createUserDto.position_category_id !== 0) {
+      positionCategory = await this.positionRepository.findOne({
+        where: { position_category_id: createUserDto.position_category_id },
+      });
+    }
+    if (createUserDto.project_category_id !== null && createUserDto.project_category_id !== 0) {
+      projectCategory = await this.projectRepository.findOne({
+        where: { project_category_id: createUserDto.project_category_id },
+      });
+    }
+    if (createUserDto.career_category_id !== null && createUserDto.career_category_id !== 0) {
+      careerCategory = await this.careerRepository.findOne({
+        where: { career_category_id: createUserDto.career_category_id },
+      });
+    }
 
     const newUser = this.userRepository.create({
       ...createUserDto,
-      position_category_id: positionCategory,
-      project_category_id: projectCategory,
-      career_category_id: careerCategory,
+      position_category_id: positionCategory?.position_category_id ?? null,
+      project_category_id: projectCategory?.project_category_id ?? null,
+      career_category_id: careerCategory?.career_category_id ?? null,
+      stack_category_id: createUserDto.stack_category_id
+        ? [...createUserDto.stack_category_id]
+        : [],
     });
-    return this.userRepository.save(newUser);
+
+    const deleteTempUser = await this.deleteTempUser(createUserDto.email);
+
+    if (deleteTempUser) {
+      return this.userRepository.save(newUser);
+    } else {
+      throw new CustomRpcException(HttpStatus.BAD_REQUEST, '템프 유저 삭제 실패');
+    }
+  }
+
+  @Transactional()
+  public async loginOrCreateUser(email: string, nickname: string) {
+    const user = await this.userRepository.findOneBy({ email });
+    let tempUser = await this.tempUserRepository.findOneBy({ email });
+
+    if (user === null && tempUser === null) {
+      // * 유저가 처음 회원가입 하는 경우
+      tempUser = await this.createTempUser(email, nickname);
+
+      return {
+        isExist: false,
+        email: tempUser.email,
+        nickname: tempUser.nickname,
+      };
+    }
+
+    if (user === null && tempUser !== null) {
+      // * 유저가 회원가입을 완료하지 않은 경우
+
+      return {
+        isExist: false,
+        email: tempUser.email,
+        nickname: tempUser.nickname,
+      };
+    }
+
+    if (user !== null) {
+      // * 유저가 회원인 경우
+      return {
+        isExist: true,
+        ...user,
+      };
+    }
+  }
+
+  @Transactional()
+  public async createTempUser(email: string, nickname: string) {
+    const newTempUser = this.tempUserRepository.create({
+      email,
+      nickname,
+    });
+
+    return this.tempUserRepository.save(newTempUser);
+  }
+
+  public async deleteTempUser(email: string) {
+    const tempUser = await this.tempUserRepository.findOneBy({ email });
+    console.log('템프 유저', tempUser);
+
+    return this.tempUserRepository.delete(tempUser);
+  }
+
+  @Transactional()
+  public async findUserByEmail(email: string) {
+    return this.userRepository.findOneBy({ email });
   }
 }
