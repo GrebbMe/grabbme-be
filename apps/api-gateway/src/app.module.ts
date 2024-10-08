@@ -8,13 +8,14 @@ import { ChatModule } from './chat/chat.module';
 import { PublicDataModule } from './public-data/public-data.module';
 import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { mongoConfig, githubConfig, mysqlConfig } from './config';
+import { mongoConfig, githubConfig, mysqlConfig, clientConfig } from './config';
+import jwtConfig from './config/jwt.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [mysqlConfig, mongoConfig, githubConfig],
+      load: [mysqlConfig, mongoConfig, githubConfig, jwtConfig, clientConfig],
     }),
 
     TypeOrmModule.forRootAsync({
