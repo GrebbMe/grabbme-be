@@ -1,8 +1,10 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
+import { ChatList } from './entities/chat-list.entity';
 import { ChatRoom } from './entities/chat-room.entity';
+import { Types } from 'mongoose';
 
 describe('ChatController', () => {
   const context = describe;
@@ -17,6 +19,19 @@ describe('ChatController', () => {
     chat_lists: [],
   } as ChatRoom;
 
+  const chatRooms: ChatRoom[] = [
+    { channel_id: 1, name: 'test1', users: [], chat_lists: [] },
+    { channel_id: 2, name: 'test2', users: [], chat_lists: [] },
+  ] as ChatRoom[];
+
+  const chatList: ChatList = {
+    _id: new Types.ObjectId(),
+    chat_list_id: 1,
+    chats: [],
+    created_at: new Date(),
+    updated_at: new Date(),
+  } as ChatList;
+
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [ChatController],
@@ -25,6 +40,9 @@ describe('ChatController', () => {
           provide: ChatService,
           useValue: {
             createChatRoom: jest.fn(),
+            getChatRooms: jest.fn(),
+            getChatRoom: jest.fn(),
+            getChatList: jest.fn(),
           },
         },
       ],
@@ -56,6 +74,50 @@ describe('ChatController', () => {
         jest.spyOn(chatService, 'createChatRoom').mockRejectedValue(mockError);
         await expect(chatController.createChatRoom({ name: undefined })).rejects.toThrow(mockError);
         expect(chatService.createChatRoom).rejects.toThrow(mockError);
+      });
+    });
+
+    context('getChatRooms를 실행하면,', () => {
+      it('success: 유저에게 해당되는 채팅방 목록을 반환한다.', async () => {
+        jest.spyOn(chatService, 'getChatRooms').mockResolvedValue(chatRooms);
+        const result = await chatController.getChatRooms({ id: 1 });
+        expect(result).toEqual(chatRooms);
+        expect(chatService.getChatRooms).toHaveBeenCalledWith(1);
+      });
+
+      it('error: 채팅방이 없을 경우 NotFoundException를 던진다.', async () => {
+        jest.spyOn(chatService, 'getChatRooms').mockRejectedValue(new NotFoundException());
+        await expect(chatController.getChatRooms({ id: 1 })).rejects.toThrow(NotFoundException);
+      });
+    });
+
+    describe('getChatRoom을 실행하면,', () => {
+      it('success: 해당 채널의 채팅방을 반환한다.', async () => {
+        jest.spyOn(chatService, 'getChatRoom').mockResolvedValue(chatRoom);
+        const result = await chatController.getChatRoom({ id: 1 });
+        expect(result).toEqual(chatRoom);
+        expect(chatService.getChatRoom).toHaveBeenCalledWith(1);
+      });
+
+      it('error: 채팅방이 없을 경우 NotFoundException를 던진다.', async () => {
+        jest.spyOn(chatService, 'getChatRoom').mockRejectedValue(new NotFoundException());
+        await expect(chatController.getChatRoom({ id: 1 })).rejects.toThrow(NotFoundException);
+      });
+    });
+
+    describe('getChatList를 실행하면,', () => {
+      it('success: 해당 채널의 채팅 리스트를 반환한다.', async () => {
+        jest.spyOn(chatService, 'getChatList').mockResolvedValue(chatList);
+        const result = await chatController.getChatList({ id: 1, page: 1 });
+        expect(result).toEqual(chatList);
+        expect(chatService.getChatList).toHaveBeenCalledWith(1, 1);
+      });
+
+      it('error: 채팅 리스트가 없을 경우 NotFoundException를 던진다.', async () => {
+        jest.spyOn(chatService, 'getChatList').mockRejectedValue(new NotFoundException());
+        await expect(chatController.getChatList({ id: 1, page: 1 })).rejects.toThrow(
+          NotFoundException,
+        );
       });
     });
   });
