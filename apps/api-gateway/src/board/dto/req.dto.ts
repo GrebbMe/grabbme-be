@@ -53,9 +53,4 @@ export class CreateBoardDto {
   public expired_at?: Date;
 }
 
-export class UpdateBoardDto extends PartialType(CreateBoardDto) {
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  public id: number;
-}
+export class UpdateBoardDto extends PartialType(CreateBoardDto) {}

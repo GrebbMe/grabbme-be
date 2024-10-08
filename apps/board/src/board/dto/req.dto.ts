@@ -55,10 +55,6 @@ export class CreateBoardDto {
 
 export class UpdateBoardDto extends PartialType(CreateBoardDto) {
   @ApiProperty()
-  @IsNumber()
-  public id: number;
-
-  @ApiProperty()
   @IsString()
   @IsOptional()
   public title?: string;
