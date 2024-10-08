@@ -1,10 +1,10 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Types } from 'mongoose';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 import { ChatList } from './entities/chat-list.entity';
 import { ChatRoom } from './entities/chat-room.entity';
-import { Types } from 'mongoose';
 
 describe('ChatController', () => {
   const context = describe;
