@@ -2,17 +2,16 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from 'shared/constants/message-pattern';
 import { BoardService } from './board.service';
-import { CreateBoardDto } from './dto/create-board.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
+import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
 
 @Controller()
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
   @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST)
-  public async getPosts(@Payload() payload: { postCategoryId: number }) {
+  public async getPostsByPostCategory(@Payload() payload: { postCategoryId: number }) {
     const { postCategoryId } = payload;
-    return this.boardService.getPosts(postCategoryId);
+    return this.boardService.getPostsByPostCategory(postCategoryId);
   }
 
   @MessagePattern(MESSAGE.POST_DATA.POST.GET_ONE_POST)

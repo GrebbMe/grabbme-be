@@ -6,62 +6,25 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { BoardService } from './board.service';
-import { CreateBoardDto } from './dto/create-board.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
+import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
 
 @Controller('board')
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
   @Get('category/:postCategoryId')
-  @ApiOperation({ summary: '전체 게시글 조회' })
+  @ApiOperation({ summary: 'post_category_id 별 전체 게시글 조회' })
   @ApiOkResponse({
-    description: '전체 게시글 조회',
-    example: [
-      {
-        post_id: 1,
-        title: '게시물 제목',
-        content: '게시물 내용',
-        update_at: '2024-10-01T00:00:12',
-        create_at: '2024-10-03T00:00:12',
-        expired_at: '2024-10-06T00:00:12',
-        view_cnt: 15,
-        bookmarked_cnt: 3,
-        is_open: true,
-      },
-      {
-        post_id: 2,
-        title: '게시물 제목2',
-        content: '게시물 내용2',
-        update_at: '2024-10-01T00:00:12',
-        create_at: '2024-10-03T00:00:12',
-        expired_at: '2024-10-06T00:00:12',
-        view_cnt: 13,
-        bookmarked_cnt: 52,
-        is_open: true,
-      },
-    ],
+    description: 'post_category_id 별 전체 게시글 조회 성공',
+    example: [],
   })
-  public async getPosts(@Param('postCategoryId') postCategoryId: number) {
-    return await this.boardService.getPosts(postCategoryId);
+  public async getPostsByPostCategory(@Param('postCategoryId') postCategoryId: number) {
+    return await this.boardService.getPostsByPostCategory(postCategoryId);
   }
 
-  @Get('/:id')
+  @Get(':id')
   @ApiOperation({ summary: '게시글 상세 조회' })
-  @ApiOkResponse({
-    description: '게시글 상세 조회',
-    example: {
-      post_id: 1,
-      title: '게시물 제목',
-      content: '게시물 내용',
-      update_at: '2024-10-01T00:00:12',
-      create_at: '2024-10-03T00:00:12',
-      expired_at: '2024-10-06T00:00:12',
-      view_cnt: 15,
-      bookmarked_cnt: 3,
-      is_open: true,
-    },
-  })
+  @ApiOkResponse({})
   public async getPostById(@Param('id') id: number) {
     return await this.boardService.getPostById(id);
   }
@@ -70,17 +33,7 @@ export class BoardController {
   @ApiOperation({ summary: '게시글 생성' })
   @ApiCreatedResponse({
     description: '게시글 생성',
-    example: {
-      post_id: 1,
-      title: '게시물 제목',
-      content: '게시물 내용',
-      update_at: '2024-10-01T00:00:12',
-      create_at: '2024-10-03T00:00:12',
-      expired_at: '2024-10-06T00:00:12',
-      view_cnt: 15,
-      bookmarked_cnt: 3,
-      is_open: true,
-    },
+    example: {},
   })
   public async createPost(
     @Param('postCategoryId') postCategoryId: number,
@@ -94,17 +47,7 @@ export class BoardController {
   @ApiOperation({ summary: '게시글 수정' })
   @ApiOkResponse({
     description: '게시글 수정',
-    example: {
-      post_id: 1,
-      title: '수정된 게시물 제목',
-      content: '수정된 게시물 내용',
-      update_at: '2024-10-01T00:00:12',
-      create_at: '2024-10-03T00:00:12',
-      expired_at: '2024-10-06T00:00:12',
-      view_cnt: 15,
-      bookmarked_cnt: 3,
-      is_open: false,
-    },
+    example: {},
   })
   public async updatePost(@Param('id') id: number, @Body() updateBoardDto: UpdateBoardDto) {
     const payload = { id, updateBoardDto };

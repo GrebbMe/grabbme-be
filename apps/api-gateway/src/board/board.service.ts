@@ -1,14 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { MESSAGE } from 'shared/constants/message-pattern';
-import { CreateBoardDto } from './dto/create-board.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
+import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
 
 @Injectable()
 export class BoardService {
   public constructor(@Inject('BOARD_SERVICE') private readonly boardClient: ClientProxy) {}
 
-  public async getPosts(postCategoryId: number) {
+  public async getPostsByPostCategory(postCategoryId: number) {
     return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ALL_POST, { postCategoryId });
   }
 
