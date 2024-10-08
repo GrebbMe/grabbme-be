@@ -8,7 +8,9 @@ export class BoardService {
   public constructor(@Inject('BOARD_SERVICE') private readonly boardClient: ClientProxy) {}
 
   public async getPostsByPostCategory(postCategoryId: number) {
-    return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ALL_POST, { postCategoryId });
+    return await this.boardClient.send(MESSAGE.POST_DATA.POST.GET_ALL_POST_BY_POST_CATEGORY_ID, {
+      postCategoryId,
+    });
   }
 
   public async getPostById(id: number) {

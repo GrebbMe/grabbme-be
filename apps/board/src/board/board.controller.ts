@@ -8,7 +8,7 @@ import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
-  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST)
+  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST_BY_POST_CATEGORY_ID)
   public async getPostsByPostCategory(@Payload() payload: { postCategoryId: number }) {
     const { postCategoryId } = payload;
     return this.boardService.getPostsByPostCategory(postCategoryId);
