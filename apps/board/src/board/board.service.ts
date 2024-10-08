@@ -1,11 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  CareerCategory,
-  PositionCategory,
-  ProjectCategory,
-  StackCategory,
-} from '@publicData/entities';
+import { CareerCategory, PositionCategory } from '@publicData/entities';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
@@ -16,16 +11,8 @@ export class BoardService {
   public constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
-
-    @InjectRepository(ProjectCategory)
-    private readonly projectCategoryRepository: Repository<ProjectCategory>,
-
-    @InjectRepository(StackCategory)
-    private readonly stackCategoryRepository: Repository<StackCategory>,
-
     @InjectRepository(CareerCategory)
     private readonly careerCategoryRepository: Repository<CareerCategory>,
-
     @InjectRepository(PositionCategory)
     private readonly positionCategoryRepository: Repository<PositionCategory>,
   ) {}
@@ -37,7 +24,7 @@ export class BoardService {
     }
 
     const posts = await this.boardRepository.find({
-      where: { postCategory: { id: postCategoryId } },
+      where: { post_category_id: { id: postCategoryId } },
       select: [
         'post_id',
         'title',
@@ -48,8 +35,10 @@ export class BoardService {
         'update_at',
         'expired_at',
         'is_open',
+        'stack_category_id',
+        'project_category_id',
       ],
-      relations: ['postCategory', 'stackCategories', 'careerCategory'],
+      relations: ['post_category_id'],
     });
 
     if (posts.length === 0) {
@@ -74,13 +63,7 @@ export class BoardService {
         'expired_at',
         'is_open',
       ],
-      relations: [
-        'postCategory',
-        'projectCategories',
-        'stackCategories',
-        'positionCategory',
-        'careerCategory',
-      ],
+      relations: ['post_category_id', 'career_category_id', 'position_category_id'],
     });
 
     if (!post) {
@@ -92,14 +75,6 @@ export class BoardService {
 
   @Transactional()
   public async createPost(postCategoryId: number, createBoardDto: CreateBoardDto): Promise<Board> {
-    const projectCategories = await this.projectCategoryRepository.findByIds(
-      createBoardDto.project_category_id,
-    );
-
-    const stackCategories = await this.stackCategoryRepository.findByIds(
-      createBoardDto.stack_category_id,
-    );
-
     const careerCategory = createBoardDto.career_category_id
       ? await this.careerCategoryRepository.findOne({
           where: { career_category_id: createBoardDto.career_category_id },
@@ -113,16 +88,11 @@ export class BoardService {
       : null;
 
     const newPost = this.boardRepository.create({
-      title: createBoardDto.title,
-      content: createBoardDto.content,
-      expired_at: createBoardDto.expired_at ? new Date(createBoardDto.expired_at) : null,
-      postCategory: { id: postCategoryId },
-      projectCategories: projectCategories,
-      stackCategories: stackCategories,
-      careerCategory: careerCategory,
-      positionCategory: positionCategory,
+      ...createBoardDto,
+      post_category_id: { id: postCategoryId },
+      career_category_id: careerCategory,
+      position_category_id: positionCategory,
     });
-
     return await this.boardRepository.save(newPost);
   }
 
@@ -130,42 +100,46 @@ export class BoardService {
   public async updatePost(id: number, updateBoardDto: UpdateBoardDto): Promise<Board> {
     const post = await this.boardRepository.findOne({
       where: { post_id: id },
-      relations: ['projectCategories', 'stackCategories', 'careerCategory', 'positionCategory'],
+      relations: ['career_category_id', 'position_category_id'],
     });
 
     if (!post) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
 
+    if (updateBoardDto.title) {
+      post.title = updateBoardDto.title;
+    }
+
+    if (updateBoardDto.content) {
+      post.content = updateBoardDto.content;
+    }
+
+    if (updateBoardDto.expired_at) {
+      post.expired_at = updateBoardDto.expired_at;
+    }
+
     if (updateBoardDto.project_category_id) {
-      const projectCategories = await this.projectCategoryRepository.findByIds(
-        updateBoardDto.project_category_id,
-      );
-      post.projectCategories = projectCategories;
+      post.project_category_id = updateBoardDto.project_category_id;
     }
 
     if (updateBoardDto.stack_category_id) {
-      const stackCategories = await this.stackCategoryRepository.findByIds(
-        updateBoardDto.stack_category_id,
-      );
-      post.stackCategories = stackCategories;
+      post.stack_category_id = updateBoardDto.stack_category_id;
     }
 
     if (updateBoardDto.career_category_id) {
       const careerCategory = await this.careerCategoryRepository.findOne({
         where: { career_category_id: updateBoardDto.career_category_id },
       });
-      post.careerCategory = careerCategory || null;
+      post.career_category_id = careerCategory || null;
     }
 
     if (updateBoardDto.position_category_id) {
       const positionCategory = await this.positionCategoryRepository.findOne({
         where: { position_category_id: updateBoardDto.position_category_id },
       });
-      post.positionCategory = positionCategory || null;
+      post.position_category_id = positionCategory || null;
     }
-
-    this.boardRepository.merge(post, updateBoardDto);
 
     return await this.boardRepository.save(post);
   }

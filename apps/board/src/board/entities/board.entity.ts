@@ -1,19 +1,5 @@
-import {
-  CareerCategory,
-  PositionCategory,
-  PostCategory,
-  ProjectCategory,
-  StackCategory,
-} from '@publicData/entities';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { CareerCategory, PositionCategory, PostCategory } from '@publicData/entities';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('posts')
 export class Board {
@@ -46,21 +32,19 @@ export class Board {
 
   @ManyToOne(() => PostCategory)
   @JoinColumn({ name: 'post_category_id' })
-  public postCategory: PostCategory;
+  public post_category_id: PostCategory;
 
   @ManyToOne(() => CareerCategory, { nullable: true })
   @JoinColumn({ name: 'career_category_id' })
-  public careerCategory?: CareerCategory;
+  public career_category_id?: CareerCategory;
 
   @ManyToOne(() => PositionCategory, { nullable: true })
   @JoinColumn({ name: 'position_category_id' })
-  public positionCategory?: PositionCategory;
+  public position_category_id?: PositionCategory;
 
-  @ManyToMany(() => ProjectCategory)
-  @JoinTable({ name: 'posts_project_category_relation' })
-  public projectCategories: ProjectCategory[];
+  @Column('simple-array')
+  public project_category_id: number[];
 
-  @ManyToMany(() => StackCategory)
-  @JoinTable({ name: 'posts_stack_category_relation' })
-  public stackCategories: StackCategory[];
+  @Column('simple-array')
+  public stack_category_id: number[];
 }
