@@ -12,16 +12,18 @@ export class CreateBoardDto {
   public content: string;
 
   @IsArray()
+  @IsNumber({}, { each: true })
   @IsNotEmpty()
   public project_category_id: number[];
+
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @IsNotEmpty()
+  public stack_category_id: number[];
 
   @IsNumber()
   @IsOptional()
   public position_category_id?: number;
-
-  @IsArray()
-  @IsNotEmpty()
-  public stack_category_id: number[];
 
   @IsNumber()
   @IsOptional()
