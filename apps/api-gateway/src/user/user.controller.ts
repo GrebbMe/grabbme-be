@@ -5,7 +5,6 @@ import {
   HttpStatus,
   Param,
   Post,
-  Res,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
@@ -17,7 +16,6 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { Response } from 'express';
 
 import { firstValueFrom } from 'rxjs';
 import { UserService } from './user.service';
@@ -48,10 +46,7 @@ export class UserController {
     type: CreateUserDto,
   })
   @Post()
-  public async createUser(
-    @Body() createUserDto: CreateUserDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  public async createUser(@Body() createUserDto: CreateUserDto) {
     const createdUser = await firstValueFrom(await this.userService.createUser(createUserDto));
     // * 회원가입 성공 시, JWT 토큰 response
 
