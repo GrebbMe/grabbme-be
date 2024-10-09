@@ -22,9 +22,11 @@ export class CreateUserDto {
   @IsNumber()
   public position_category_id: number;
 
-  @ApiProperty({ type: 'number' })
-  @IsNumber()
-  public project_category_id: number;
+  @ApiProperty({ type: 'array', items: { type: 'number' } })
+  @IsArray()
+  @ArrayMaxSize(3)
+  @IsNumber({}, { each: true })
+  public project_category_id: number[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()

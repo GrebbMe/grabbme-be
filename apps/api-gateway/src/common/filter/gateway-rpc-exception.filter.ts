@@ -4,10 +4,10 @@ import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 
 @Catch()
 export class GatewayRpcExceptionFilter implements ExceptionFilter<CustomRpcException> {
-  public constructor(private readonly httpAdpterHost: HttpAdapterHost) {}
+  public constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   public catch(exception: CustomRpcException, host: ArgumentsHost) {
-    const { httpAdapter } = this.httpAdpterHost;
+    const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 
     const httpStatus = exception.status ?? HttpStatus.INTERNAL_SERVER_ERROR;
