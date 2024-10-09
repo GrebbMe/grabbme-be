@@ -105,7 +105,6 @@ export class UserService {
 
   public async deleteTempUser(email: string) {
     const tempUser = await this.tempUserRepository.findOneBy({ email });
-    console.log('템프 유저', tempUser);
 
     return this.tempUserRepository.delete(tempUser);
   }
