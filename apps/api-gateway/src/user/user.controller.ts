@@ -3,8 +3,8 @@ import {
   Controller,
   Get,
   HttpStatus,
-  Param,
   Post,
+  Query,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
@@ -68,9 +68,9 @@ export class UserController {
     }
   }
 
-  @Get(':email')
+  @Get('/info')
   @UseGuards(JwtAuthGuard)
-  public async getUserInfoByEmail(@Param('email') email: string) {
+  public async getUserInfoByEmail(@Query('email') email: string) {
     return await this.userService.findUserByEmail(email);
   }
 }
