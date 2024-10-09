@@ -20,7 +20,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     try {
       const canActivate = await super.canActivate(context);
-      console.log('canActivate', canActivate);
 
       // * access token 유효 확인
       return canActivate as boolean;
@@ -30,8 +29,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       const refreshToken = cookies.refreshToken ?? (request.headers['x-refresh-token'] as string);
       if (refreshToken) {
         const newAccessToken = await this.authService.refreshAccessToken(refreshToken);
-
-        console.log('새로운 accessToken', newAccessToken.access_token);
 
         if (newAccessToken) {
           response.cookie('accessToken', newAccessToken.access_token, {
