@@ -24,19 +24,20 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const loginUser = await this.authService.login(req.user as GithubUser);
-    const clientBaseUrl = this.configService.get<string>('network.CLIENT_MAIN_URL');
-    const clientSignupUrl = this.configService.get<string>('network.CLIENT_SIGNUP_URL');
+    const loginUser = await this.authService.login({ ...req.user } as GithubUser);
+    const clientBaseUrl = new URL(this.configService.get<string>('network.CLIENT_MAIN_URL'));
+    const clientSignupUrl = new URL(this.configService.get<string>('network.CLIENT_SIGNUP_URL'));
 
     if (loginUser.isExist === false) {
-      res.redirect(301, `${clientSignupUrl}?email=${loginUser.email}&nickname=${loginUser.name}`);
+      clientSignupUrl.searchParams.append('email', loginUser.email);
+      clientSignupUrl.searchParams.append('nickname', loginUser.name);
 
-      return;
+      return res.redirect(301, clientSignupUrl.toString());
     } else {
       res.cookie('accessToken', loginUser.access_token, { httpOnly: true, path: '/' });
       res.cookie('refreshToken', loginUser.refresh_token, { httpOnly: true, path: '/' });
-      res.redirect(301, clientBaseUrl);
-      return;
+
+      return res.redirect(301, clientBaseUrl.toString());
     }
   }
 
@@ -48,8 +49,7 @@ export class AuthController {
       httpOnly,
       path,
     } = await this.authService.generateAccessToken(req.user as Payload);
-    res.cookie('accessToken', accessToken, { httpOnly, path });
 
-    return;
+    return res.cookie('accessToken', accessToken, { httpOnly, path });
   }
 }
