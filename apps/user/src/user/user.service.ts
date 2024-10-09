@@ -63,6 +63,14 @@ export class UserService {
     const user = await this.userRepository.findOneBy({ email });
     let tempUser = await this.tempUserRepository.findOneBy({ email });
 
+    if (user !== null) {
+      // * 유저가 회원인 경우
+      return {
+        isExist: true,
+        ...user,
+      };
+    }
+
     if (user === null && tempUser === null) {
       // * 유저가 처음 회원가입 하는 경우
       tempUser = await this.createTempUser(email, nickname);
@@ -81,14 +89,6 @@ export class UserService {
         isExist: false,
         email: tempUser.email,
         nickname: tempUser.nickname,
-      };
-    }
-
-    if (user !== null) {
-      // * 유저가 회원인 경우
-      return {
-        isExist: true,
-        ...user,
       };
     }
   }
