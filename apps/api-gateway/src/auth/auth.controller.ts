@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { GithubGuard } from './guards/github.guard';
-import { JwtRefreshGuard } from './guards/jwt-refresh-auth.guard';
+import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guard';
 import { Payload } from './types/jwt.type';
 import { GithubUser } from './types/user.type';
 
@@ -42,7 +42,7 @@ export class AuthController {
   }
 
   @Post('refresh')
-  @UseGuards(JwtRefreshGuard)
+  @UseGuards(JwtRefreshAuthGuard)
   public async refreshToken(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const {
       access_token: accessToken,
