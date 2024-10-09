@@ -37,11 +37,11 @@ export class AuthService {
       };
     }
 
-    const paylaod: JwtPayload = { email, sub: githubId };
+    const payload: JwtPayload = { email, sub: githubId };
 
     return {
-      access_token: this.jwtService.sign(paylaod, this.configService.get('jwt.accessSignOptions')),
-      refresh_token: this.jwtService.sign(paylaod, {
+      access_token: this.jwtService.sign(payload, this.configService.get('jwt.accessSignOptions')),
+      refresh_token: this.jwtService.sign(payload, {
         ...this.configService.get('jwt.refreshSignOptions'),
         secret: this.configService.get('jwt.secret'),
       }),
