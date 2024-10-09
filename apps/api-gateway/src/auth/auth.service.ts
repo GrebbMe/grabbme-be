@@ -69,6 +69,7 @@ export class AuthService {
       { email: payload.email },
       {
         secret: this.configService.get('jwt.secret'),
+        ...this.configService.get('jwt.refreshSignOptions'),
       },
     );
 
