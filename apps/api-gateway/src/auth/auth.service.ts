@@ -63,7 +63,7 @@ export class AuthService {
     }
   }
 
-  public generateRefreshToken(payload: JwtPayload | User) {
+  public async generateRefreshToken(payload: JwtPayload | User) {
     const token = this.jwtService.sign(
       { email: payload.email },
       {
