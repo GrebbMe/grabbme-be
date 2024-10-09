@@ -54,7 +54,7 @@ export class AuthService {
       const payload = this.jwtService.verify(refreshToken, {
         secret: this.configService.get('jwt.secret'),
       });
-      const user = await firstValueFrom(await this.validateUser(payload.email));
+      const user = await firstValueFrom(await this.validateUserByEmail(payload.email));
 
       if (user.status === HttpStatus.OK) {
         return this.generateAccessToken(payload);
@@ -121,7 +121,7 @@ export class AuthService {
     }
   }
 
-  public async validateUser(email: string) {
+  public async validateUserByEmail(email: string) {
     return await this.userService.findUserByEmail(email);
   }
 }

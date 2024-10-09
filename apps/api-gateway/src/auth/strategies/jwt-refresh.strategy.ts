@@ -20,7 +20,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
   }
 
   public async validate(payload: Payload) {
-    const user = await this.authService.validateUser(payload.email);
+    const user = await this.authService.validateUserByEmail(payload.email);
 
     if (!user) {
       throw new UnauthorizedException('유효하지 않은 사용자 입니다.');
