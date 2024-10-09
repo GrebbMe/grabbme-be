@@ -24,8 +24,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  fs.writeFileSync('./swagger-static/swagger.json', JSON.stringify(document));
-
   // swagger.json deploy를 위한 설정
   if (process.env.NODE_ENV === 'generate-swagger') {
     fs.writeFileSync('./swagger-static/swagger.json', JSON.stringify(document));
