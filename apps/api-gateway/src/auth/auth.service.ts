@@ -59,7 +59,7 @@ export class AuthService {
       if (user.status === HttpStatus.OK) {
         return this.generateAccessToken(payload);
       }
-    } catch (err) {
+    } catch {
       return null;
     }
   }
