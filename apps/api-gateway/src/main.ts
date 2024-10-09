@@ -26,6 +26,13 @@ async function bootstrap() {
 
   fs.writeFileSync('./swagger-static/swagger.json', JSON.stringify(document));
 
+  // swagger.json deploy를 위한 설정
+  if (process.env.NODE_ENV === 'generate-swagger') {
+    fs.writeFileSync('./swagger-static/swagger.json', JSON.stringify(document));
+    await app.close();
+    return;
+  }
+
   // root Endpoint 설정
   app.setGlobalPrefix('api');
 
