@@ -54,7 +54,7 @@ export class UserService {
     if (deleteTempUser) {
       return this.userRepository.save(newUser);
     } else {
-      throw new CustomRpcException(HttpStatus.BAD_REQUEST, '템프 유저 삭제 실패');
+      throw new CustomRpcException(HttpStatus.BAD_REQUEST, '임시 유저 삭제 실패');
     }
   }
 
