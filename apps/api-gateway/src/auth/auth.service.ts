@@ -8,7 +8,9 @@ import { UserService } from '../user/user.service';
 import { Payload } from './types/jwt.type';
 import { GithubUser } from './types/user.type';
 
-type LoginReturn = Partial<GithubUser> & { access_token?: string; refresh_token?: string } & {
+type LoginReturn = Partial<GithubUser> & {
+  access_token?: string;
+  refresh_token?: string;
   isExist: boolean;
 };
 
