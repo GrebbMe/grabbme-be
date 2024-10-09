@@ -4,6 +4,4 @@ export interface GithubUser {
   name: string;
   location?: string;
   email: string;
-  exist?: boolean;
-  accessToken?: string;
 }
