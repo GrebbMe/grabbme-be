@@ -18,7 +18,6 @@ export class UserService {
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
-    console.log('createUserDto', createUserDto);
     return await this.userClient.send(MESSAGE.USER.CREATE_USER, { ...createUserDto });
   }
 
