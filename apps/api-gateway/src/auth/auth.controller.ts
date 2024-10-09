@@ -16,7 +16,7 @@ export class AuthController {
 
   @Get('github')
   @UseGuards(GithubGuard)
-  private async gituhblogin() {}
+  private async gituhbLogin() {}
 
   @Get('github/callback')
   @UseGuards(GithubGuard)
