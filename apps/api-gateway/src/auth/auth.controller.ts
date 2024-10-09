@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { GithubGuard } from './guards/github.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guard';
-import { Payload } from './types/jwt.type';
+import { JwtPayload } from './types/jwt.type';
 import { GithubUser } from './types/user.type';
 
 @Controller('auth')
@@ -48,7 +48,7 @@ export class AuthController {
       access_token: accessToken,
       httpOnly,
       path,
-    } = await this.authService.generateAccessToken(req.user as Payload);
+    } = await this.authService.generateAccessToken(req.user as JwtPayload);
 
     return res.cookie('accessToken', accessToken, { httpOnly, path });
   }

@@ -1,11 +1,10 @@
 import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from 'jsonwebtoken';
 import { firstValueFrom } from 'rxjs';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
-import { Payload } from './types/jwt.type';
+import { JwtPayload } from './types/jwt.type';
 import { GithubUser } from './types/user.type';
 
 type LoginReturn = Partial<GithubUser> & {
@@ -64,7 +63,7 @@ export class AuthService {
     }
   }
 
-  public generateRefreshToken(payload: Payload | User) {
+  public generateRefreshToken(payload: JwtPayload | User) {
     const token = this.jwtService.sign(
       { email: payload.email },
       {
@@ -80,7 +79,7 @@ export class AuthService {
     };
   }
 
-  public async generateAccessToken(paylaod: Payload | User) {
+  public async generateAccessToken(paylaod: JwtPayload | User) {
     const token = this.jwtService.sign(
       { email: paylaod.email },
       {

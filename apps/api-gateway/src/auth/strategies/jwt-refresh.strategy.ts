@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
 import { AuthService } from '../auth.service';
-import { Payload } from '../types/jwt.type';
+import { JwtPayload } from '../types/jwt.type';
 
 // * Refresh Token 검증 및 유저 정보 반환
 @Injectable()
@@ -19,7 +19,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
     });
   }
 
-  public async validate(payload: Payload) {
+  public async validate(payload: JwtPayload) {
     const user = await this.authService.validateUserByEmail(payload.email);
 
     if (!user) {
