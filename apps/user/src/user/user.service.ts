@@ -44,9 +44,9 @@ export class UserService {
       position_category_id: positionCategory?.position_category_id ?? null,
       career_category_id: careerCategory?.career_category_id ?? null,
       project_category_id:
-        createUserDto.project_category_id.length > 0 ? [...createUserDto.project_category_id] : [],
+        createUserDto.project_category_id.length > 0 ? createUserDto.project_category_id : [],
       stack_category_id:
-        createUserDto.stack_category_id.length > 0 ? [...createUserDto.stack_category_id] : [],
+        createUserDto.stack_category_id.length > 0 ? createUserDto.stack_category_id : [],
     });
 
     const deleteTempUser = await this.deleteTempUser(createUserDto.email);
