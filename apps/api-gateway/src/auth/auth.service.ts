@@ -53,7 +53,8 @@ export class AuthService {
       const payload = this.jwtService.verify(refreshToken, {
         secret: this.configService.get('jwt.secret'),
       });
-      const user = await firstValueFrom(await this.validateUserByEmail(payload.email));
+
+      const user = await firstValueFrom(await this.userService.findUserByEmail(payload.email));
 
       if (user.status === HttpStatus.OK) {
         return this.generateAccessToken(payload);
@@ -79,9 +80,9 @@ export class AuthService {
     };
   }
 
-  public async generateAccessToken(paylaod: JwtPayload | User) {
+  public async generateAccessToken(payload: JwtPayload | User) {
     const token = this.jwtService.sign(
-      { email: paylaod.email },
+      { email: payload.email },
       {
         secret: this.configService.get('jwt.secret'),
         ...this.configService.get('jwt.accessSignOptions'),
@@ -118,9 +119,5 @@ export class AuthService {
     } catch (error) {
       throw new ForbiddenException('올바른 토큰이 아닙니다.');
     }
-  }
-
-  public async validateUserByEmail(email: string) {
-    return await this.userService.findUserByEmail(email);
   }
 }
