@@ -21,7 +21,6 @@ export class UserController {
   @SetResponse(MESSAGE.USER.FIND_USER_BY_EMAIL.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.USER.FIND_USER_BY_EMAIL)
   public async findUserByEmail(@Payload() { email }: { email: string }) {
-    console.log('유저 이메일', email);
     return await this.userService.findUserByEmail(email);
   }
 
