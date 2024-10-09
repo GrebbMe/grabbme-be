@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'jsonwebtoken';
@@ -56,7 +56,7 @@ export class AuthService {
       });
       const user = await firstValueFrom(await this.validateUser(payload.email));
 
-      if (user.status === 200) {
+      if (user.status === HttpStatus.OK) {
         return this.generateAccessToken(payload);
       }
     } catch (err) {
