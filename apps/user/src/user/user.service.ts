@@ -59,7 +59,7 @@ export class UserService {
   }
 
   @Transactional()
-  public async loginOrCreateUser(email: string, nickname: string) {
+  public async loginOrCreateTempUser(email: string, nickname: string) {
     const user = await this.userRepository.findOneBy({ email });
     let tempUser = await this.tempUserRepository.findOneBy({ email });
 

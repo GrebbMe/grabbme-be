@@ -29,6 +29,6 @@ export class UserController {
   public async createOrLoginUser(
     @Payload() { email, nickname }: { email: string; nickname: string },
   ) {
-    return await this.userService.loginOrCreateUser(email, nickname);
+    return await this.userService.loginOrCreateTempUser(email, nickname);
   }
 }
