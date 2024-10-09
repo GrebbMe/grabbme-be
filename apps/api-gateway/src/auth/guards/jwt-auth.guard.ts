@@ -19,11 +19,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const response = context.switchToHttp().getResponse();
 
     try {
-      const canActivate = await super.canActivate(context);
-
       // * access token 유효 확인
-      return canActivate as boolean;
-    } catch (err) {
+      return (await super.canActivate(context)) as boolean;
+    } catch {
       // * access token 유효하지 않을 경우 refresh token 확인
       const cookies = request.cookies || {};
       const refreshToken = cookies.refreshToken ?? (request.headers['x-refresh-token'] as string);
