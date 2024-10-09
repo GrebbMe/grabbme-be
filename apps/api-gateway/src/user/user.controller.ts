@@ -53,7 +53,6 @@ export class UserController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const createdUser = await firstValueFrom(await this.userService.createUser(createUserDto));
-    console.log('createdUser', createdUser);
     // * 회원가입 성공 시, JWT 토큰 response
 
     if (createdUser.status === HttpStatus.CREATED) {
