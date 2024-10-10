@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
@@ -29,8 +28,6 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-
-  fs.writeFileSync('./swagger-static/swagger.json', JSON.stringify(document));
 
   // root Endpoint 설정
   app.setGlobalPrefix('api');
