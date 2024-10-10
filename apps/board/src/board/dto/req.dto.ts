@@ -24,14 +24,14 @@ export class CreateBoardDto {
 
   @ApiProperty({ type: 'array', items: { type: 'number' } })
   @IsArray()
-  @ArrayMaxSize(5)
+  @ArrayMaxSize(3)
   @IsNumber({}, { each: true })
   @IsNotEmpty()
   public project_category_id: number[];
 
   @ApiProperty({ type: 'array', items: { type: 'number' } })
   @IsArray()
-  @ArrayMaxSize(3)
+  @ArrayMaxSize(5)
   @IsNumber({}, { each: true })
   @IsNotEmpty()
   public stack_category_id: number[];
@@ -66,13 +66,14 @@ export class UpdateBoardDto extends PartialType(CreateBoardDto) {
 
   @ApiProperty({ type: 'array', items: { type: 'number' } })
   @IsArray()
+  @ArrayMaxSize(3)
   @IsNumber({}, { each: true })
   @IsOptional()
   public project_category_id?: number[];
 
   @ApiProperty({ type: 'array', items: { type: 'number' } })
   @IsArray()
-  @ArrayMaxSize(3)
+  @ArrayMaxSize(5)
   @IsNumber({}, { each: true })
   @IsOptional()
   public stack_category_id?: number[];
