@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly userService: UserService,
   ) {
     super({
-      jwtFromRequest: (req) => req.cookies.accessToken ?? req.headers.authorization,
+      jwtFromRequest: (req) => req.cookies.accessToken,
       ignoreExpiration: false,
       secretOrKey: configService.get('jwt.secret'),
     });
