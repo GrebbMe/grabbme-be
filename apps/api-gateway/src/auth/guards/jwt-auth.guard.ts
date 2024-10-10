@@ -24,7 +24,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     } catch {
       // * access token 유효하지 않을 경우 refresh token 확인
       const cookies = request.cookies || {};
-      const refreshToken = cookies.refreshToken ?? (request.headers['x-refresh-token'] as string);
+      const refreshToken = cookies.refreshToken;
       if (refreshToken) {
         const newAccessToken = await this.authService.refreshAccessToken(refreshToken);
 
