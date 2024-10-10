@@ -18,7 +18,7 @@ export class BoardService {
   ) {}
 
   @Transactional()
-  public async getPostsByPostCategory(postCategoryId: number): Promise<Board[]> {
+  public async getPostsByPostCategoryId(postCategoryId: number): Promise<Board[]> {
     if (!postCategoryId) {
       throw new NotFoundException('유효한 postCategoryId를 입력해주세요.');
     }

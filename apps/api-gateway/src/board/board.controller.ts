@@ -32,8 +32,8 @@ export class BoardController {
       },
     ],
   })
-  public async getPostsByPostCategory(@Param('postCategoryId') postCategoryId: number) {
-    return await this.boardService.getPostsByPostCategory(postCategoryId);
+  public async getPostsByPostCategoryId(@Param('postCategoryId') postCategoryId: number) {
+    return await this.boardService.getPostsByPostCategoryId(postCategoryId);
   }
 
   @Get(':id')

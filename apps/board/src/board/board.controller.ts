@@ -9,9 +9,9 @@ export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
   @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST_BY_POST_CATEGORY_ID)
-  public async getPostsByPostCategory(@Payload() payload: { postCategoryId: number }) {
+  public async getPostsByPostCategoryId(@Payload() payload: { postCategoryId: number }) {
     const { postCategoryId } = payload;
-    return this.boardService.getPostsByPostCategory(postCategoryId);
+    return this.boardService.getPostsByPostCategoryId(postCategoryId);
   }
 
   @MessagePattern(MESSAGE.POST_DATA.POST.GET_ONE_POST)
