@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CHAT } from '@shared/constants/chat-constants';
 import { Model } from 'mongoose';
-import { ChatList } from './entities/chat-list.entity';
 import { ChatRoom } from './entities/chat-room.entity';
+import { ChatList } from './entities/chat-list.entity';
 import { Chat } from './entities/chat.entity';
 
 @Injectable()
@@ -14,22 +14,37 @@ export class ChatService {
     @InjectModel(Chat.name) private chatModel: Model<Chat>,
   ) {}
 
-  public async createChatRoom(chatRoomName: string) {
-    const lastChatRoom = await this.chatRoomModel
-      .findOne()
-      .sort({ channel_id: CHAT.CHAT_ROOM_SORT_DESC })
+  public async createChatRoom(postId: number, senderId: number, receiverId: number) {
+    const existingChatroom = await this.chatRoomModel
+      .findOne({ post_id: postId })
+      .populate({ path: 'users' })
       .exec();
 
-    const newChatRoomId = lastChatRoom ? lastChatRoom.channel_id + 1 : 1;
+    if (existingChatroom) {
+      const isSenderInChatRoom = existingChatroom.users.includes(senderId);
+      if (!isSenderInChatRoom) {
+        return existingChatroom;
+      } else {
+        return existingChatroom;
+      }
+    } else {
+      const lastChatRoom = await this.chatRoomModel
+        .findOne()
+        .sort({ channel_id: CHAT.CHAT_ROOM_SORT_DESC })
+        .exec();
 
-    const createdChatRoom = await this.chatRoomModel.create({
-      channel_id: newChatRoomId,
-      name: chatRoomName,
-      users: [],
-      chat_lists: [],
-    });
+      const newChatRoomId = lastChatRoom ? lastChatRoom.channel_id + 1 : 1;
+      const createdChatRoom = await this.chatRoomModel.create({
+        channel_id: newChatRoomId,
+        name: `${senderId}, ${receiverId}`,
+        post_id: postId,
+        last_chat: `${senderId}님이 ${receiverId}님에게 채팅을 신청하였습니다.`,
+        users: [senderId, receiverId],
+        chat_lists: [],
+      });
 
-    return createdChatRoom;
+      return createdChatRoom;
+    }
   }
 
   public async getChatRooms(userId: number): Promise<ChatRoom[]> {
@@ -64,7 +79,6 @@ export class ChatService {
 
     return chatList;
   }
-
   public async saveMessage(chatRoomId: number, content: string, senderId: number) {
     const chatRoom = await this.chatRoomModel
       .findOne({ channel_id: chatRoomId })
@@ -84,7 +98,7 @@ export class ChatService {
     if (!chatList || chatList.chats.length >= CHAT.CHAT_LIMIT_IN_CHAT_LIST) {
       const lastChatList = await this.chatListModel
         .findOne()
-        .sort({ chat_list_id: CHAT.CHAT_LIST_SORT_DESC })
+        .sort({ chat_list_id: CHAT.CHAT_SORT_DESC })
         .exec();
       const newChatListId = lastChatList ? lastChatList.chat_list_id + 1 : 1;
       chatList = await this.chatListModel.create({
