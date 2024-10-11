@@ -19,10 +19,6 @@ export class BoardService {
 
   @Transactional()
   public async getPostsByPostCategoryId(postCategoryId: number): Promise<Board[]> {
-    if (!postCategoryId) {
-      throw new NotFoundException('유효한 postCategoryId를 입력해주세요.');
-    }
-
     const posts = await this.boardRepository.find({
       where: { post_category_id: { id: postCategoryId } },
       select: [
