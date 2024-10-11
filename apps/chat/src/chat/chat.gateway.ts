@@ -5,19 +5,32 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { ChatService } from './chat.service';
 
 //TODO: CORS 설정.
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway(Number(process.env.CHAT_GATEWAY_PORT), { cors: { origin: '*' } })
 export class ChatGateway {
   @WebSocketServer()
   public server: Server;
+
+  public constructor(private readonly chatService: ChatService) {}
 
   public handleConnection(client: Socket) {
     //TODO: 토큰 인증 로직 처리
   }
 
-  @SubscribeMessage('message')
-  public handleMessage(@MessageBody() message: string): void {
-    this.server.emit('message', message);
+  @SubscribeMessage('sendMessage')
+  public async handleSendMessage(
+    @MessageBody() messageData: { chatRoomId: string; content: string; senderId: number },
+  ) {
+    const chatRoomId = parseInt(messageData.chatRoomId, 10);
+
+    const savedChat = await this.chatService.saveMessage(
+      chatRoomId,
+      messageData.content,
+      messageData.senderId,
+    );
+
+    this.server.to(messageData.chatRoomId).emit('receiveMessage', savedChat);
   }
 }
