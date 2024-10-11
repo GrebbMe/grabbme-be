@@ -6,8 +6,12 @@ import { MESSAGE } from '@shared/constants/message-pattern';
 export class ChatService {
   public constructor(@Inject('CHAT_SERVICE') private readonly chatClient: ClientProxy) {}
 
-  public createChatRoom(name: string) {
-    return this.chatClient.send(MESSAGE.CHAT.CREATE_CHAT_ROOM, { name });
+  public createChatRoom(postId: number, senderId: number, receiverId: number) {
+    return this.chatClient.send(MESSAGE.CHAT.CREATE_CHAT_ROOM, {
+      postId,
+      senderId,
+      receiverId,
+    });
   }
 
   public getChatRooms(id: number) {

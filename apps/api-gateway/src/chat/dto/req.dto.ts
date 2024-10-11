@@ -1,9 +1,15 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsInt, IsOptional, Min } from 'class-validator';
 
 export class CreateChatRoomDto {
-  @IsString()
-  public readonly name: string;
+  @IsInt()
+  public readonly postId: number;
+
+  @IsInt()
+  public readonly senderId: number;
+
+  @IsInt()
+  public readonly receiverId: number;
 }
 
 export class GetChatRoomsDto {

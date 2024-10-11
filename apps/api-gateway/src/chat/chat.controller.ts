@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ChatService } from './chat.service';
 import { CreateChatRoomDto, GetChatListDto, GetChatRoomDto, GetChatRoomsDto } from './dto/req.dto';
@@ -9,8 +9,8 @@ export class ChatController {
   public constructor(private readonly chatService: ChatService) {}
 
   @Post('rooms')
-  public createChatRoom(@Body() { name }: CreateChatRoomDto) {
-    return this.chatService.createChatRoom(name);
+  public createChatRoom(@Body() { postId, senderId, receiverId }: CreateChatRoomDto) {
+    return this.chatService.createChatRoom(postId, senderId, receiverId);
   }
 
   @Get('rooms')
