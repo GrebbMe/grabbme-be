@@ -10,6 +10,9 @@ export class ChatRoom extends Document {
   @Prop({ required: true })
   public name: string;
 
+  @Prop()
+  public post_id: number;
+
   @Prop({ type: [Number] })
   public users: number[];
 
