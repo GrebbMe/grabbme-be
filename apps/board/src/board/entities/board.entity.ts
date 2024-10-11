@@ -1,4 +1,5 @@
 import { CareerCategory, PositionCategory, PostCategory } from '@publicData/entities';
+import { Transform } from 'class-transformer';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('posts')
@@ -13,12 +14,15 @@ export class Board {
   public content: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  public create_at: string;
+  @Transform(({ value }) => (value ? value.toISOString().split('T')[0] : null))
+  public create_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @Transform(({ value }) => (value ? value.toISOString().split('T')[0] : null))
   public update_at: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', default: null, nullable: true })
+  @Transform(({ value }) => (value ? value.toISOString().split('T')[0] : null))
   public expired_at: Date;
 
   @Column({ type: 'int', default: 0 })
@@ -32,6 +36,7 @@ export class Board {
 
   @ManyToOne(() => PostCategory)
   @JoinColumn({ name: 'post_category_id' })
+  @Transform(({ value }) => value?.id)
   public post_category_id: PostCategory;
 
   @ManyToOne(() => CareerCategory, { nullable: true })

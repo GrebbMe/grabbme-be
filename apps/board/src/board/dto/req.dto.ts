@@ -53,4 +53,10 @@ export class CreateBoardDto {
   public expired_at?: Date;
 }
 
-export class UpdateBoardDto extends PartialType(CreateBoardDto) {}
+export class UpdateBoardDto extends PartialType(CreateBoardDto) {
+  @ApiProperty({ type: 'string', format: 'date-time', required: false })
+  @Type(() => Date)
+  @IsDate()
+  @IsOptional()
+  public expired_at?: Date;
+}

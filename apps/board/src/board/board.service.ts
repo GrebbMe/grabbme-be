@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CareerCategory, PositionCategory } from '@publicData/entities';
+import { CareerCategory, PositionCategory, PostCategory } from '@publicData/entities';
+import { classToPlain } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
@@ -11,6 +12,8 @@ export class BoardService {
   public constructor(
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
+    @InjectRepository(PostCategory)
+    private readonly postCategoryRepository: Repository<PostCategory>,
     @InjectRepository(CareerCategory)
     private readonly careerCategoryRepository: Repository<CareerCategory>,
     @InjectRepository(PositionCategory)
@@ -37,7 +40,7 @@ export class BoardService {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
 
-    return posts;
+    return posts.map((post) => classToPlain(post) as Board);
   }
 
   @Transactional()
@@ -63,11 +66,15 @@ export class BoardService {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
 
-    return post;
+    return classToPlain(post) as Board;
   }
 
   @Transactional()
   public async createPost(postCategoryId: number, createBoardDto: CreateBoardDto): Promise<Board> {
+    const postCategory = await this.postCategoryRepository.findOne({
+      where: { id: postCategoryId },
+    });
+
     const careerCategory = createBoardDto.career_category_id
       ? await this.careerCategoryRepository.findOne({
           where: { career_category_id: createBoardDto.career_category_id },
@@ -82,11 +89,14 @@ export class BoardService {
 
     const newPost = this.boardRepository.create({
       ...createBoardDto,
-      post_category_id: { id: postCategoryId },
+      post_category_id: postCategory,
       career_category_id: careerCategory,
       position_category_id: positionCategory,
     });
-    return await this.boardRepository.save(newPost);
+
+    const savedPost = await this.boardRepository.save(newPost);
+
+    return classToPlain(savedPost) as Board;
   }
 
   @Transactional()
@@ -109,7 +119,10 @@ export class BoardService {
     }
 
     if (updateBoardDto.expired_at) {
-      post.expired_at = updateBoardDto.expired_at;
+      post.expired_at =
+        updateBoardDto.expired_at instanceof Date
+          ? updateBoardDto.expired_at
+          : new Date(updateBoardDto.expired_at);
     }
 
     if (updateBoardDto.project_category_id) {
@@ -134,7 +147,9 @@ export class BoardService {
       post.position_category_id = positionCategory || null;
     }
 
-    return await this.boardRepository.save(post);
+    const updatedPost = await this.boardRepository.save(post);
+
+    return classToPlain(updatedPost) as unknown as Board;
   }
 
   @Transactional()
