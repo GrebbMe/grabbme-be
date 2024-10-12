@@ -111,7 +111,7 @@ describe('ChatService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it('Chat Service, Model이 정의된다.', () => {
     expect(chatService).toBeDefined();
     expect(chatRoomModel).toBeDefined();
     expect(chatListModel).toBeDefined();
