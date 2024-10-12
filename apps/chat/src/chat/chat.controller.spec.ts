@@ -12,19 +12,19 @@ describe('ChatController', () => {
   let chatService: ChatService;
   let mockError: Error;
 
-  const chatRoom: ChatRoom = {
+  const chatRoom = {
     channel_id: 1,
     name: 'test',
     users: [],
     chat_lists: [],
   } as ChatRoom;
 
-  const chatRooms: ChatRoom[] = [
+  const chatRooms = [
     { channel_id: 1, name: 'test1', users: [], chat_lists: [] },
     { channel_id: 2, name: 'test2', users: [], chat_lists: [] },
   ] as ChatRoom[];
 
-  const chatList: ChatList = {
+  const chatList = {
     _id: new Types.ObjectId(),
     chat_list_id: 1,
     chats: [],

@@ -30,26 +30,26 @@ describe('ChatService', () => {
     exec: jest.fn(),
   };
 
-  const lastChatRoom: ChatRoom = {
+  const lastChatRoom = {
     channel_id: 1,
     name: 'last',
     users: [],
     chat_lists: [],
   } as ChatRoom;
 
-  const newChatRoom: ChatRoom = {
+  const newChatRoom = {
     channel_id: 2,
     name: 'test',
     users: [],
     chat_lists: [],
   } as ChatRoom;
 
-  const chatRooms: ChatRoom[] = [
-    { channel_id: 1, name: 'room1', users: [1], chat_lists: [] } as ChatRoom,
-    { channel_id: 2, name: 'room2', users: [1], chat_lists: [] } as ChatRoom,
-  ];
+  const chatRooms = [
+    { channel_id: 1, name: 'room1', users: [1], chat_lists: [] },
+    { channel_id: 2, name: 'room2', users: [1], chat_lists: [] },
+  ] as ChatRoom[];
 
-  const chatRoom: ChatRoom = {
+  const chatRoom = {
     channel_id: 1,
     name: 'room1',
     users: [],
