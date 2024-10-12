@@ -1,4 +1,4 @@
-import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { firstValueFrom } from 'rxjs';
@@ -58,9 +58,11 @@ export class AuthService {
 
       if (user.status === HttpStatus.OK) {
         return this.generateAccessToken(payload);
+      } else {
+        throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
       }
     } catch {
-      return null;
+      throw new ForbiddenException('올바른 토큰이 아닙니다.');
     }
   }
 
