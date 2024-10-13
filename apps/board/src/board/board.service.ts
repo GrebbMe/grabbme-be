@@ -6,7 +6,7 @@ import { classToPlain } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
-import { Board } from './entities/board.entity';
+import { Board, Team } from './entities';
 
 @Injectable()
 export class BoardService {
@@ -19,6 +19,8 @@ export class BoardService {
     private readonly careerCategoryRepository: Repository<CareerCategory>,
     @InjectRepository(PositionCategory)
     private readonly positionCategoryRepository: Repository<PositionCategory>,
+    @InjectRepository(Team)
+    private readonly teamRepository: Repository<Team>,
   ) {}
 
   @Transactional()
@@ -164,7 +166,7 @@ export class BoardService {
   }
 
   @Transactional()
-  public async deletePost(id: number): Promise<void> {
+  public async deletePost(id: number): Promise<boolean> {
     const post = await this.boardRepository.findOne({
       where: { post_id: id },
     });
@@ -174,5 +176,7 @@ export class BoardService {
     }
 
     await this.boardRepository.remove(post);
+
+    return true;
   }
 }
