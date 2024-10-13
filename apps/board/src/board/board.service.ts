@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CareerCategory, PositionCategory, PostCategory } from '@publicData/entities';
+import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { classToPlain } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
@@ -37,7 +38,7 @@ export class BoardService {
     });
 
     if (posts.length === 0) {
-      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글이 존재하지 않습니다.');
     }
 
     return posts.map((post) => classToPlain(post) as Board);
@@ -63,7 +64,7 @@ export class BoardService {
     });
 
     if (!post) {
-      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글을 찾을 수 없습니다.');
     }
 
     return classToPlain(post) as Board;
@@ -107,7 +108,7 @@ export class BoardService {
     });
 
     if (!post) {
-      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글을 찾을 수 없습니다.');
     }
 
     if (updateBoardDto.title) {
@@ -159,7 +160,7 @@ export class BoardService {
     });
 
     if (!post) {
-      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글을 찾을 수 없습니다.');
     }
 
     await this.boardRepository.remove(post);
