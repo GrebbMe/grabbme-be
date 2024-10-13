@@ -13,6 +13,12 @@ export class Board {
   @Column({ type: 'text' })
   public content: string;
 
+  @Column({ type: 'varchar', length: 7 })
+  public start_month: string;
+
+  @Column({ type: 'varchar', length: 7 })
+  public end_month: string;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Transform(({ value }) => (value ? value.toISOString().split('T')[0] : null))
   public create_at: Date;

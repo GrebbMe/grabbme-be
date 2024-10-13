@@ -52,6 +52,8 @@ export class BoardService {
         'post_id',
         'title',
         'content',
+        'start_month',
+        'end_month',
         'create_at',
         'expired_at',
         'view_cnt',
@@ -117,6 +119,14 @@ export class BoardService {
 
     if (updateBoardDto.content) {
       post.content = updateBoardDto.content;
+    }
+
+    if (updateBoardDto.start_month) {
+      post.start_month = updateBoardDto.start_month;
+    }
+
+    if (updateBoardDto.end_month) {
+      post.end_month = updateBoardDto.end_month;
     }
 
     if (updateBoardDto.expired_at) {

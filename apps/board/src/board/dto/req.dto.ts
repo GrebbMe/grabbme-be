@@ -22,6 +22,16 @@ export class CreateBoardDto {
   @IsNotEmpty()
   public content: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  public start_month?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  public end_month?: string;
+
   @ApiProperty({ type: 'array', items: { type: 'number' } })
   @IsArray()
   @ArrayMaxSize(3)
