@@ -2,7 +2,8 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CHAT } from '@shared/constants/chat-constants';
-import mongoose, { Model } from 'mongoose';
+import { chatExamples } from '@shared/constants/mock-example';
+import { Model } from 'mongoose';
 import { ChatService } from './chat.service';
 import { ChatList } from './entities/chat-list.entity';
 import { ChatRoom } from './entities/chat-room.entity';
@@ -29,40 +30,6 @@ describe('ChatService', () => {
     limit: jest.fn().mockReturnThis(),
     exec: jest.fn(),
   };
-
-  const lastChatRoom = {
-    channel_id: 1,
-    name: 'last',
-    users: [],
-    chat_lists: [],
-  } as ChatRoom;
-
-  const newChatRoom = {
-    channel_id: 2,
-    name: 'test',
-    users: [],
-    chat_lists: [],
-  } as ChatRoom;
-
-  const chatRooms = [
-    { channel_id: 1, name: 'room1', users: [1], chat_lists: [] },
-    { channel_id: 2, name: 'room2', users: [1], chat_lists: [] },
-  ] as ChatRoom[];
-
-  const chatRoom = {
-    channel_id: 1,
-    name: 'room1',
-    users: [],
-    chat_lists: [],
-  } as ChatRoom;
-
-  const chatList: ChatList = {
-    _id: new mongoose.Types.ObjectId().toString(),
-    chat_list_id: 1,
-    chats: [],
-    created_at: new Date(),
-    updated_at: new Date(),
-  } as ChatList;
 
   const mockFindOneSortExec = (chatRoom: ChatRoom) => {
     mockChatRoomModel.findOne.mockReturnValueOnce({
@@ -119,6 +86,9 @@ describe('ChatService', () => {
 
   describe('chat service 테스트', () => {
     context('createChatRoom을 실행하면,', () => {
+      const lastChatRoom = chatExamples.lastChatRoom;
+      const newChatRoom = chatExamples.newChatRoom;
+
       it('success : Mogoose Model API가 호출된다.', async () => {
         mockFindOneSortExec(lastChatRoom);
         mockChatRoomModel.create.mockResolvedValue(newChatRoom);
@@ -158,7 +128,10 @@ describe('ChatService', () => {
     });
 
     context('getChatRooms를 실행하면,', () => {
-      const userId = 1;
+      const userId = 101;
+      const chatRooms = chatExamples.chatRooms.filter((chatRoom) =>
+        chatRoom.users.includes(userId),
+      );
 
       it('success: 사용자의 채팅방 목록을 반환한다.', async () => {
         mockFindExec(chatRooms);
@@ -179,6 +152,7 @@ describe('ChatService', () => {
 
     context('getChatRoom을 실행하면,', () => {
       const channelId = 1;
+      const chatRoom = chatExamples.chatRooms.find((room) => room.channel_id === channelId);
 
       it('success : 채널 ID에 맞는 채팅방을 반환한다.', async () => {
         mockFindOneExec(chatRoom);
@@ -200,6 +174,8 @@ describe('ChatService', () => {
     context('getChatList를 실행하면,', () => {
       const channelId = 1;
       const page = 1;
+      const chatRoom = chatExamples.chatRooms.find((room) => room.channel_id === channelId);
+      const chatList = chatExamples.chatLists.find((list) => list.chat_list_id === channelId);
 
       it('success : 채팅방과 채팅 리스트를 정상적으로 반환한다.', async () => {
         mockFindOneExec(chatRoom);

@@ -1,36 +1,14 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Types } from 'mongoose';
+import { chatExamples } from '@shared/constants/mock-example';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
-import { ChatList } from './entities/chat-list.entity';
-import { ChatRoom } from './entities/chat-room.entity';
 
 describe('ChatController', () => {
   const context = describe;
   let chatController: ChatController;
   let chatService: ChatService;
   let mockError: Error;
-
-  const chatRoom = {
-    channel_id: 1,
-    name: 'test',
-    users: [],
-    chat_lists: [],
-  } as ChatRoom;
-
-  const chatRooms = [
-    { channel_id: 1, name: 'test1', users: [], chat_lists: [] },
-    { channel_id: 2, name: 'test2', users: [], chat_lists: [] },
-  ] as ChatRoom[];
-
-  const chatList = {
-    _id: new Types.ObjectId(),
-    chat_list_id: 1,
-    chats: [],
-    created_at: new Date(),
-    updated_at: new Date(),
-  } as ChatList;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -63,6 +41,8 @@ describe('ChatController', () => {
 
   describe('chat controller 테스트', () => {
     context('createChatRoom을 생성하면,', () => {
+      const chatRoom = chatExamples.newChatRoom;
+
       it('success : 생성된 채팅방이 return 된다.', async () => {
         jest.spyOn(chatService, 'createChatRoom').mockResolvedValue(chatRoom);
 
@@ -81,7 +61,10 @@ describe('ChatController', () => {
     });
 
     context('getChatRooms를 실행하면,', () => {
-      const userId = 1;
+      const userId = 101;
+      const chatRooms = chatExamples.chatRooms.filter((chatRoom) =>
+        chatRoom.users.includes(userId),
+      );
 
       it('success: 유저에게 해당되는 채팅방 목록을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRooms').mockResolvedValue(chatRooms);
@@ -103,6 +86,7 @@ describe('ChatController', () => {
 
     context('getChatRoom을 실행하면,', () => {
       const channelId = 1;
+      const chatRoom = chatExamples.chatRooms.find((room) => room.channel_id === channelId);
 
       it('success: 해당 채널의 채팅방을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRoom').mockResolvedValue(chatRoom);
@@ -125,6 +109,7 @@ describe('ChatController', () => {
     context('getChatList를 실행하면,', () => {
       const channelId = 1;
       const page = 1;
+      const chatList = chatExamples.chatLists.find((list) => list.chat_list_id === channelId);
 
       it('success: 해당 채널의 채팅 리스트를 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatList').mockResolvedValue(chatList);
