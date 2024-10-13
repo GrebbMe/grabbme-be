@@ -1,3 +1,7 @@
+import { ChatList } from '@apps/chat/src/chat/entities/chat-list.entity';
+import { ChatRoom } from '@apps/chat/src/chat/entities/chat-room.entity';
+import { Chat } from '@apps/chat/src/chat/entities/chat.entity';
+
 export const publicDataExamples = {
   postCategory: [
     {
@@ -45,4 +49,95 @@ export const publicDataExamples = {
     { career_category_id: 1, content: '0년차' },
     { career_category_id: 2, content: '1~3년차' },
   ],
+} as const;
+
+export const chatExamples = {
+  lastChatRoom: {
+    channel_id: 1,
+    name: 'last',
+    users: [],
+    chat_lists: [],
+  } as ChatRoom,
+
+  newChatRoom: {
+    channel_id: 2,
+    name: 'test',
+    users: [],
+    chat_lists: [],
+  } as ChatRoom,
+
+  chatRooms: [
+    {
+      channel_id: 1,
+      name: '101번과 102번의 채팅방',
+      users: [101, 102],
+      chat_lists: [
+        {
+          chat_list_id: 1,
+          chats: [
+            {
+              chat_id: 1,
+              sender_id: 101,
+              type: 'text',
+              content: '102번에게 보낸 메시지',
+              created_at: new Date(),
+            },
+            {
+              chat_id: 2,
+              sender_id: 102,
+              type: 'text',
+              content: '101번에게 보낸 메시지',
+              created_at: new Date(),
+            },
+          ],
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      ],
+      last_chat: '101번에게 보낸 메시지',
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
+  ] as ChatRoom[],
+
+  chatLists: [
+    {
+      chat_list_id: 1,
+      chats: [
+        {
+          chat_id: 1,
+          sender_id: 101,
+          type: 'text',
+          content: '102번에게 보낸 메시지',
+          created_at: new Date(),
+        },
+        {
+          chat_id: 2,
+          sender_id: 102,
+          type: 'text',
+          content: '101번에게 보낸 메시지',
+          created_at: new Date(),
+        },
+      ],
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
+  ] as ChatList[],
+
+  chats: [
+    {
+      chat_id: 1,
+      sender_id: 101,
+      type: 'text',
+      content: '102번에게 보낸 메시지',
+      created_at: new Date(),
+    },
+    {
+      chat_id: 2,
+      sender_id: 102,
+      type: 'text',
+      content: '101번에게 보낸 메시지',
+      created_at: new Date(),
+    },
+  ] as Chat[],
 } as const;
