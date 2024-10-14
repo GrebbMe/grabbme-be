@@ -37,7 +37,7 @@ export class ChatController {
 
   @ApiOperation({ summary: '전체 채팅방 조회' })
   @ApiOkResponse({
-    description: '전체 게시글 조회',
+    description: '전체 채팅방 조회',
     example: [
       {
         channel_id: 1,
