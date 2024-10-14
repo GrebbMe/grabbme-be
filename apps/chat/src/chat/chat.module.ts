@@ -1,7 +1,6 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
-import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 import { ChatGateway } from './chat.gateway';
@@ -40,6 +39,6 @@ import { CHAT_SCHEMA, Chat } from './entities/chat.entity';
 
   controllers: [ChatController],
 
-  providers: [ChatService, ChatGateway, LoggingInterceptor, Logger],
+  providers: [ChatService, ChatGateway],
 })
 export class ChatModule {}
