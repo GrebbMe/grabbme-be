@@ -15,6 +15,7 @@ export class User {
   @Column('simple-array')
   public stack_category_id: number[];
 
+
   @Column('simple-array')
   public project_category_id: number[];
 

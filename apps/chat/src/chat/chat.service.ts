@@ -4,12 +4,14 @@ import { CHAT } from '@shared/constants/chat-constants';
 import { Model } from 'mongoose';
 import { ChatList } from './entities/chat-list.entity';
 import { ChatRoom } from './entities/chat-room.entity';
+import { Chat } from './entities/chat.entity';
 
 @Injectable()
 export class ChatService {
   public constructor(
     @InjectModel(ChatRoom.name) private chatRoomModel: Model<ChatRoom>,
     @InjectModel(ChatList.name) private chatListModel: Model<ChatList>,
+    @InjectModel(Chat.name) private chatModel: Model<Chat>,
   ) {}
 
   public async createChatRoom(chatRoomName: string) {
@@ -61,5 +63,58 @@ export class ChatService {
     if (!chatList) throw new NotFoundException('해당 채널에 대한 채팅 리스트가 없습니다.');
 
     return chatList;
+  }
+
+  public async saveMessage(chatRoomId: number, content: string, senderId: number) {
+    const chatRoom = await this.chatRoomModel
+      .findOne({ channel_id: chatRoomId })
+      .populate({
+        path: 'chat_lists',
+        populate: { path: 'chats', model: 'Chat' },
+      })
+      .exec();
+
+    if (!chatRoom) {
+      throw new NotFoundException('Chat Room not found');
+    }
+
+    let chatListId = chatRoom.chat_lists[chatRoom.chat_lists.length - 1].chat_list_id;
+    let chatList = await this.chatListModel.findOne({ chat_list_id: chatListId });
+
+    if (!chatList || chatList.chats.length >= CHAT.CHAT_LIMIT_IN_CHAT_LIST) {
+      const lastChatList = await this.chatListModel
+        .findOne()
+        .sort({ chat_list_id: CHAT.CHAT_LIST_SORT_DESC })
+        .exec();
+      const newChatListId = lastChatList ? lastChatList.chat_list_id + 1 : 1;
+      chatList = await this.chatListModel.create({
+        chat_list_id: newChatListId,
+        chats: [],
+      });
+
+      chatRoom.chat_lists.push(chatList);
+      await chatRoom.save();
+    } else {
+      chatList = await this.chatListModel.findById(chatList._id).exec();
+      if (!chatList) {
+        throw new NotFoundException('Chat List not found');
+      }
+    }
+
+    const lastChat = await this.chatModel.findOne().sort({ chat_id: CHAT.CHAT_SORT_DESC }).exec();
+    const newChatId = lastChat ? lastChat.chat_id + 1 : 1;
+
+    const newChat = await this.chatModel.create({
+      chat_id: newChatId,
+      sender_id: senderId,
+      type: 'text',
+      content: content,
+    });
+
+    chatList.chats.push(newChat);
+
+    await chatList.save();
+
+    return newChat;
   }
 }

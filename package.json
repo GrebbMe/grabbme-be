@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./apps/grabbme-be/test/jest-e2e.json",
     "prepare": "husky install",
     "postinstall": "husky install",
-    "swagger": "nest build && cp -r node_modules/swagger-ui-dist ./swagger-static"
+    "swagger": "cross-env NODE_ENV=generate-swagger nest start"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

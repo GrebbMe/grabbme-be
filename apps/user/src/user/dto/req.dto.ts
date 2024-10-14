@@ -44,3 +44,23 @@ export class CreateUserDto {
   @IsOptional({ always: true })
   public career_category_id: number;
 }
+
+export class UpdateUserDto {
+  @ApiProperty({ type: 'array', items: { type: 'number' } })
+  @IsArray()
+  @ArrayMaxSize(5)
+  @IsNumber({}, { each: true })
+  public stack_category_id?: number[];
+
+  @ApiProperty({ type: 'number' })
+  @IsNumber()
+  public position_category_id?: number;
+
+  @ApiProperty({ type: 'number' })
+  @IsNumber()
+  public project_category_id?: number;
+
+  @ApiProperty({ type: 'number' })
+  @IsNumber()
+  public career_category_id?: number;
+}

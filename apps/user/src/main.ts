@@ -17,6 +17,7 @@ async function bootstrap() {
   });
 
   app.useGlobalFilters(new MicroRpcExceptionFilter());
+
   await app.listen();
 
   console.info(`user-service Running On ${PORT} for TCP`);

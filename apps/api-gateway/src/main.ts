@@ -29,6 +29,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
+
   // root Endpoint 설정
   app.setGlobalPrefix('api');
 
