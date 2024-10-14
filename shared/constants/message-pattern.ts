@@ -45,6 +45,8 @@ export const MESSAGE = {
 
   USER: {
     CREATE_USER: { cmd: 'create-user' },
+    FIND_USER_BY_EMAIL: { cmd: 'find-user-by-email' },
+    LOGIN_OR_CREATE_USER: { cmd: 'login-or-create-user' },
     GET_USER: { cmd: 'get-user' },
     DELETE_USER: { cmd: 'delete-user' },
     UPDATE_USER: { cmd: 'update-user' },
