@@ -11,7 +11,7 @@ import {
 import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { BoardController } from './board.controller';
 import { BoardService } from './board.service';
-import { Board } from './entities/board.entity';
+import { Board, Participant, Team } from './entities';
 
 @Module({
   imports: [
@@ -22,6 +22,8 @@ import { Board } from './entities/board.entity';
       PostCategory,
       ProjectCategory,
       StackCategory,
+      Team,
+      Participant,
     ]),
     ClientsModule.register([
       {

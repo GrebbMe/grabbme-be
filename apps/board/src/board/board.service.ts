@@ -101,6 +101,24 @@ export class BoardService {
 
     const savedPost = await this.boardRepository.save(newPost);
 
+    if (postCategoryId === 1 && createBoardDto.teamsData) {
+      for (const teamData of createBoardDto.teamsData) {
+        const positionCategory = await this.positionCategoryRepository.findOne({
+          where: { position_category_id: teamData.position_category_id },
+        });
+
+        if (positionCategory) {
+          const newTeam = this.teamRepository.create({
+            board: savedPost,
+            position_category_id: positionCategory,
+            total_cnt: teamData.total_cnt,
+          });
+
+          await this.teamRepository.save(newTeam);
+        }
+      }
+    }
+
     return classToPlain(savedPost) as Board;
   }
 

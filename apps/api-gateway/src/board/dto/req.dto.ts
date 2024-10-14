@@ -9,7 +9,15 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+export class CreateTeamDto {
+  @IsNumber()
+  public position_category_id: number;
+
+  @IsNumber()
+  public total_cnt: number;
+}
 
 export class CreateBoardDto {
   @ApiProperty()
@@ -61,6 +69,12 @@ export class CreateBoardDto {
   @IsDate()
   @IsOptional()
   public expired_at?: Date;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateTeamDto)
+  @IsOptional()
+  public teamsData?: { position_category_id: number; total_cnt: number }[];
 }
 
 export class UpdateBoardDto extends PartialType(CreateBoardDto) {}
