@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { IoAdapter } from '@nestjs/platform-socket.io';
+import { MicroRpcExceptionFilter } from '@shared/filter/rpc-exception.filter';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -17,6 +18,7 @@ async function bootstrap() {
     },
   });
 
+  app.useGlobalFilters(new MicroRpcExceptionFilter());
   await app.startAllMicroservices();
   await app.listen(process.env.CHAT_GATEWAY_PORT);
 
