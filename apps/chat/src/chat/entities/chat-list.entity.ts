@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document, Types } from 'mongoose';
-import { Chat } from './chat.entity';
+import mongoose, { Document } from 'mongoose';
+import { CHAT_SCHEMA, Chat } from './chat.entity';
 
 @Schema({ collection: 'chat_list' })
 export class ChatList extends Document {
   @Prop({ required: true })
   public chat_list_id: number;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: Chat.name }] })
+  @Prop({ type: [{ type: [CHAT_SCHEMA], required: true }] })
   public chats: Chat[];
 
   @Prop({ default: Date.now })
