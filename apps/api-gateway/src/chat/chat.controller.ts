@@ -27,7 +27,7 @@ export class ChatController {
     description: '잘못된 요청',
   })
   @ApiBody({
-    description: '새로 생성된 채팅방 정보',
+    description: '새로 생성할 채팅방 정보',
     type: CreateChatRoomDto,
   })
   @Post('rooms')
@@ -47,35 +47,6 @@ export class ChatController {
         chat_lists: [
           {
             chat_list_id: 1,
-            chats: [],
-            created_at: '2024-10-03T00:00:12',
-            updated_at: '2024-10-04T00:00:12',
-          },
-          {
-            chat_list_id: 2,
-            chats: [],
-            created_at: '2024-10-03T00:00:12',
-            updated_at: '2024-10-04T00:00:12',
-          },
-        ],
-        last_chat: '마지막 채팅입니다.',
-        created_at: '2024-10-03T00:00:12',
-        updated_at: '2024-10-04T00:00:12',
-      },
-      {
-        channel_id: 2,
-        name: '채팅방 이름',
-        post_id: 3,
-        users: [3, 4],
-        chat_lists: [
-          {
-            chat_list_id: 3,
-            chats: [],
-            created_at: '2024-10-03T00:00:12',
-            updated_at: '2024-10-04T00:00:12',
-          },
-          {
-            chat_list_id: 4,
             chats: [],
             created_at: '2024-10-03T00:00:12',
             updated_at: '2024-10-04T00:00:12',
