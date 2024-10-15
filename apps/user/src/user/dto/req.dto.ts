@@ -58,7 +58,7 @@ export class UpdateUserDto {
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
-  public project_category_id?: number;
+  public project_category_id?: number[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()

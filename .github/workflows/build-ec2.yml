@@ -1,0 +1,30 @@
+name: Build Nest Script on EC2
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: excuting remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.AWS_SSH_HOST}}
+          username: ${{secrets.AWS_USERNAME}}
+          key: ${{secrets.AWS_SSH_KEY}}
+          port: ${{secrets.AWS_SSH_PORT}}
+          script_stop: true
+          script: |
+            cd grabbme-be
+            git pull
+            npm install
+            npm run build api-gateway
+            npm run build public-data
+            npm run build user
+            npm run build board
+            npm run build chat

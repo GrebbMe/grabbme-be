@@ -7,10 +7,11 @@ import {
   Query,
   UnauthorizedException,
   UseGuards,
+  Param,
+  Delete,
+  Patch,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
 import {
   ApiBadRequestResponse,
@@ -27,8 +28,6 @@ import { UserService } from './user.service';
 
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreateUserDto } from './dto/req.dto';
-
 import { CreateUserDto, UpdateUserDto } from './dto/req.dto';
 
 import { User } from './entities/user.entity';
