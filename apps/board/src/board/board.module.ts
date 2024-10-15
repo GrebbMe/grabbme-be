@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -8,6 +8,7 @@ import {
   ProjectCategory,
   StackCategory,
 } from '@publicData/entities';
+import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { BoardController } from './board.controller';
 import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
@@ -35,6 +36,6 @@ import { Board } from './entities/board.entity';
   ],
   exports: [BoardService],
   controllers: [BoardController],
-  providers: [BoardService],
+  providers: [BoardService, LoggingInterceptor, Logger],
 })
 export class BoardModule {}

@@ -1,26 +1,33 @@
-import { Controller } from '@nestjs/common';
+import { Controller, HttpStatus, UseInterceptors } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { SetResponse } from '@shared/decorator/set-response.decorator';
+import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
+import { TransformInterceptor } from '@shared/interceptor/transform.interceptor';
 import { MESSAGE } from 'shared/constants/message-pattern';
 import { BoardService } from './board.service';
 import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
 
+@UseInterceptors(LoggingInterceptor, TransformInterceptor)
 @Controller()
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
-  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST_BY_POST_CATEGORY_ID)
+  @SetResponse(MESSAGE.POST.GET_ALL_POST_BY_POST_CATEGORY_ID.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.GET_ALL_POST_BY_POST_CATEGORY_ID)
   public async getPostsByPostCategoryId(@Payload() payload: { postCategoryId: number }) {
     const { postCategoryId } = payload;
     return this.boardService.getPostsByPostCategoryId(postCategoryId);
   }
 
-  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ONE_POST)
+  @SetResponse(MESSAGE.POST.GET_ONE_POST.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.GET_ONE_POST)
   public async getPostById(@Payload() payload: { id: number }) {
     const { id } = payload;
     return this.boardService.getPostById(id);
   }
 
-  @MessagePattern(MESSAGE.POST_DATA.POST.CREATE_POST)
+  @SetResponse(MESSAGE.POST.CREATE_POST.cmd, HttpStatus.CREATED)
+  @MessagePattern(MESSAGE.POST.CREATE_POST)
   public async createPost(
     @Payload() payload: { postCategoryId: number; createBoardDto: CreateBoardDto },
   ) {
@@ -28,13 +35,15 @@ export class BoardController {
     return this.boardService.createPost(postCategoryId, createBoardDto);
   }
 
-  @MessagePattern(MESSAGE.POST_DATA.POST.UPDATE_POST)
+  @SetResponse(MESSAGE.POST.UPDATE_POST.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.UPDATE_POST)
   public async updatePost(@Payload() payload: { id: number; updateBoardDto: UpdateBoardDto }) {
     const { id, updateBoardDto } = payload;
     return this.boardService.updatePost(id, updateBoardDto);
   }
 
-  @MessagePattern(MESSAGE.POST_DATA.POST.DELETE_POST)
+  @SetResponse(MESSAGE.POST.DELETE_POST.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.DELETE_POST)
   public async deletePost(@Payload() payload: { id: number }) {
     const { id } = payload;
     return this.boardService.deletePost(id);
