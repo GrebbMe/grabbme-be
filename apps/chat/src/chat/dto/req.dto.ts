@@ -33,3 +33,25 @@ export class GetChatListDto {
   @Min(1)
   public readonly page?: number = 1;
 }
+
+export class GetChatRoomsDto {
+  @Type(() => Number)
+  @IsInt()
+  public readonly id: number;
+}
+
+export class GetChatRoomDto {
+  @Type(() => Number)
+  @IsInt()
+  public readonly id: number;
+}
+
+export class GetChatListDto {
+  @IsInt()
+  public readonly id: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  public readonly page?: number = 1;
+}

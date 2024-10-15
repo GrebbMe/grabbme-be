@@ -132,7 +132,6 @@ export class ChatService {
       chatList.chats.push(newChat);
       await chatList.save();
     }
-
     return newChat;
   }
 }

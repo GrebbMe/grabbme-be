@@ -2,16 +2,16 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MESSAGE } from 'shared/constants/message-pattern';
 import { BoardService } from './board.service';
-import { CreateBoardDto } from './dto/create-board.dto';
-import { UpdateBoardDto } from './dto/update-board.dto';
+import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
 
 @Controller()
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
-  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST)
-  public async getPosts() {
-    return this.boardService.getPosts();
+  @MessagePattern(MESSAGE.POST_DATA.POST.GET_ALL_POST_BY_POST_CATEGORY_ID)
+  public async getPostsByPostCategoryId(@Payload() payload: { postCategoryId: number }) {
+    const { postCategoryId } = payload;
+    return this.boardService.getPostsByPostCategoryId(postCategoryId);
   }
 
   @MessagePattern(MESSAGE.POST_DATA.POST.GET_ONE_POST)
@@ -21,9 +21,11 @@ export class BoardController {
   }
 
   @MessagePattern(MESSAGE.POST_DATA.POST.CREATE_POST)
-  public async createPost(@Payload() payload: CreateBoardDto) {
-    const data = { ...payload };
-    return this.boardService.createPost(data);
+  public async createPost(
+    @Payload() payload: { postCategoryId: number; createBoardDto: CreateBoardDto },
+  ) {
+    const { postCategoryId, createBoardDto } = payload;
+    return this.boardService.createPost(postCategoryId, createBoardDto);
   }
 
   @MessagePattern(MESSAGE.POST_DATA.POST.UPDATE_POST)
