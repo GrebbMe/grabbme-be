@@ -8,11 +8,11 @@ export class Team {
   @PrimaryGeneratedColumn()
   public team_id: number;
 
-  @Column({ type: 'varchar', length: 255, default: '그렙팀' })
+  @Column({ type: 'varchar', length: 255, default: 'position' })
   @IsOptional()
   public name?: string;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int' })
   public total_cnt: number;
 
   @Column({ type: 'int', default: 0 })
