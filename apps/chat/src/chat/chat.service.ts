@@ -24,7 +24,7 @@ export class ChatService {
       .exec();
 
     const chatContent = `${senderId}님이 ${receiverId}님에게 채팅을 신청하였습니다.`;
-    const newChatRoomId = await this.getNextId(this.chatRoomModel, 'channel_id');
+    const newChannelId = await this.getNextId(this.chatRoomModel, 'channel_id');
     const newChatId = await this.getNextId(this.chatModel, 'chat_id');
     const newChatListId = await this.getNextId(this.chatListModel, 'chat_list_id');
 
@@ -47,7 +47,7 @@ export class ChatService {
       });
 
       const createdChatRoom = await this.chatRoomModel.create({
-        channel_id: newChatRoomId,
+        channel_id: newChannelId,
         name: `${senderId}, ${receiverId}`,
         post_id: postId,
         last_chat: chatContent,
