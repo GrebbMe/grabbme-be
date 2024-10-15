@@ -14,7 +14,7 @@ export class ChatService {
     @InjectModel(Chat.name) private chatModel: Model<Chat>,
   ) {}
   public async createChatRoom(postId: number, senderId: number, receiverId: number) {
-    const existingChatroom = await this.chatRoomModel //게시물ID로 일단 찾음
+    const existingChatroom = await this.chatRoomModel
       .findOne({ post_id: postId })
       .populate({ path: 'users' })
       .populate({
@@ -31,7 +31,7 @@ export class ChatService {
     if (existingChatroom) {
       const isSenderInChatRoom = existingChatroom.users.includes(senderId);
       if (isSenderInChatRoom) {
-        return existingChatroom; // 사용자가 있다면 기존 방 반환
+        return existingChatroom;
       }
     } else {
       const newChat = await this.chatModel.create({
