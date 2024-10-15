@@ -3,7 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   ArrayMaxSize,
-  IsArray,
   IsDate,
   IsNotEmpty,
   IsNumber,
@@ -11,16 +10,29 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+
 export class CreateTeamDto {
+  @ApiProperty()
   @IsNumber()
   public position_category_id: number;
 
+  @ApiProperty()
   @IsNumber()
-  public total_cnt: number;
+  @IsOptional()
+  public total_cnt?: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  public apply_cnt?: number;
 }
 
 export class CreateBoardDto {
   @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  public user_id: number;
+
   @IsString()
   @IsNotEmpty()
   public title: string;
@@ -41,14 +53,12 @@ export class CreateBoardDto {
   public end_month?: string;
 
   @ApiProperty({ type: 'array', items: { type: 'number' } })
-  @IsArray()
   @ArrayMaxSize(3)
   @IsNumber({}, { each: true })
   @IsNotEmpty()
   public project_category_id: number[];
 
   @ApiProperty({ type: 'array', items: { type: 'number' } })
-  @IsArray()
   @ArrayMaxSize(5)
   @IsNumber({}, { each: true })
   @IsNotEmpty()
@@ -70,11 +80,24 @@ export class CreateBoardDto {
   @IsOptional()
   public expired_at?: Date;
 
-  @IsArray()
+  @ApiProperty({ type: 'array', items: { type: 'object' } })
   @ValidateNested({ each: true })
   @Type(() => CreateTeamDto)
-  @IsOptional()
-  public teamsData?: { position_category_id: number; total_cnt: number }[];
+  @IsNotEmpty({ each: true })
+  public teamsData: { position_category_id: number; total_cnt?: number; apply_cnt?: number }[];
 }
 
-export class UpdateBoardDto extends PartialType(CreateBoardDto) {}
+export class UpdateTeamDto extends CreateTeamDto {
+  @ApiProperty({ type: 'array', items: { type: 'object' } })
+  @ValidateNested({ each: true })
+  @Type(() => CreateTeamDto)
+  public teamsData: CreateTeamDto[];
+}
+
+export class UpdateBoardDto extends PartialType(CreateBoardDto) {
+  @ApiProperty({ type: 'array', items: { type: 'object' }, required: false })
+  @ValidateNested({ each: true })
+  @Type(() => UpdateTeamDto)
+  @IsOptional()
+  public teamsData?: UpdateTeamDto[];
+}

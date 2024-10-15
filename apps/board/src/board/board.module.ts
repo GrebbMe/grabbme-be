@@ -1,3 +1,4 @@
+import { User } from '@apps/user/src/user/entities/user.entity';
 import { Logger, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -24,6 +25,7 @@ import { Board, Participant, Team } from './entities';
       StackCategory,
       Team,
       Participant,
+      User,
     ]),
     ClientsModule.register([
       {

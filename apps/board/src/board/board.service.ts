@@ -1,3 +1,4 @@
+import { User } from '@apps/user/src/user/entities/user.entity';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CareerCategory, PositionCategory, PostCategory } from '@publicData/entities';
@@ -21,6 +22,8 @@ export class BoardService {
     private readonly positionCategoryRepository: Repository<PositionCategory>,
     @InjectRepository(Team)
     private readonly teamRepository: Repository<Team>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   @Transactional()
@@ -64,7 +67,7 @@ export class BoardService {
         'project_category_id',
         'stack_category_id',
       ],
-      relations: ['post_category_id', 'career_category_id', 'position_category_id'],
+      relations: ['post_category_id', 'career_category_id'],
     });
 
     if (!post) {
@@ -86,22 +89,20 @@ export class BoardService {
         })
       : null;
 
-    const positionCategory = createBoardDto.position_category_id
-      ? await this.positionCategoryRepository.findOne({
-          where: { position_category_id: createBoardDto.position_category_id },
-        })
-      : null;
+    const user = await this.userRepository.findOne({
+      where: { user_id: createBoardDto.user_id },
+    });
 
     const newPost = this.boardRepository.create({
       ...createBoardDto,
       post_category_id: postCategory,
       career_category_id: careerCategory,
-      position_category_id: positionCategory,
+      user_id: user,
     });
 
     const savedPost = await this.boardRepository.save(newPost);
 
-    if (postCategoryId === 1 && createBoardDto.teamsData) {
+    if (createBoardDto.teamsData) {
       for (const teamData of createBoardDto.teamsData) {
         const positionCategory = await this.positionCategoryRepository.findOne({
           where: { position_category_id: teamData.position_category_id },
@@ -111,7 +112,9 @@ export class BoardService {
           const newTeam = this.teamRepository.create({
             board: savedPost,
             position_category_id: positionCategory,
-            total_cnt: teamData.total_cnt,
+            name: positionCategory.kor_name,
+            total_cnt: postCategoryId === 2 ? 1 : teamData.total_cnt,
+            apply_cnt: postCategoryId === 2 ? 1 : teamData.apply_cnt,
           });
 
           await this.teamRepository.save(newTeam);
@@ -126,7 +129,7 @@ export class BoardService {
   public async updatePost(id: number, updateBoardDto: UpdateBoardDto): Promise<Board> {
     const post = await this.boardRepository.findOne({
       where: { post_id: id },
-      relations: ['career_category_id', 'position_category_id'],
+      relations: ['career_category_id'],
     });
 
     if (!post) {
@@ -171,11 +174,30 @@ export class BoardService {
       post.career_category_id = careerCategory || null;
     }
 
-    if (updateBoardDto.position_category_id) {
-      const positionCategory = await this.positionCategoryRepository.findOne({
-        where: { position_category_id: updateBoardDto.position_category_id },
-      });
-      post.position_category_id = positionCategory || null;
+    if (updateBoardDto.teamsData) {
+      for (const teamData of updateBoardDto.teamsData) {
+        const existingTeam = await this.teamRepository.findOne({
+          where: { team_id: teamData.team_id },
+        });
+
+        if (existingTeam) {
+          if (teamData.position_category_id) {
+            const newPositionCategory = await this.positionCategoryRepository.findOne({
+              where: { position_category_id: teamData.position_category_id },
+            });
+
+            if (newPositionCategory) {
+              existingTeam.position_category_id = newPositionCategory;
+              existingTeam.name = newPositionCategory.kor_name;
+            }
+          }
+
+          existingTeam.total_cnt = teamData.total_cnt;
+          existingTeam.apply_cnt = teamData.apply_cnt;
+
+          await this.teamRepository.save(existingTeam);
+        }
+      }
     }
 
     const updatedPost = await this.boardRepository.save(post);
@@ -185,6 +207,14 @@ export class BoardService {
 
   @Transactional()
   public async deletePost(id: number): Promise<boolean> {
+    const teamsToDelete = await this.teamRepository.find({
+      where: { board: { post_id: id } },
+    });
+
+    if (teamsToDelete.length > 0) {
+      await this.teamRepository.remove(teamsToDelete);
+    }
+
     const post = await this.boardRepository.findOne({
       where: { post_id: id },
     });
