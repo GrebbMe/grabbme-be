@@ -64,7 +64,7 @@ export class ChatService {
     if (chatRooms.length === 0) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
     return chatRooms;
   }
-  
+
   public async getChatRoom(channelId: number): Promise<ChatRoom> {
     const chatRoom = await this.chatRoomModel.findOne({ channel_id: channelId }).exec();
     if (!chatRoom) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
@@ -99,9 +99,9 @@ export class ChatService {
     return chatList;
   }
 
-  public async saveMessage(chatRoomId: number, content: string, senderId: number) {
+  public async saveMessage(channelId: number, content: string, senderId: number) {
     const chatRoom = await this.chatRoomModel
-      .findOne({ channel_id: chatRoomId })
+      .findOne({ channel_id: channelId })
       .populate({
         path: 'chat_lists',
         populate: { path: 'chats', model: 'Chat' },
