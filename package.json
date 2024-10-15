@@ -21,7 +21,8 @@
     "prepare": "husky install",
     "postinstall": "husky install",
     "swagger": "cross-env NODE_ENV=generate-swagger nest start",
-    "start:nodeservice": "concurrently \"node dist/apps/api-gateway/main.js\" \"node dist/apps/public-data/main.js\" \"node dist/apps/user/main.js\" \"node dist/apps/chat/main.js\" \"node dist/apps/board/main.js\""
+    "start:nodeservice": "concurrently \"node dist/apps/api-gateway/main.js\" \"node dist/apps/public-data/main.js\" \"node dist/apps/user/main.js\" \"node dist/apps/chat/main.js\" \"node dist/apps/board/main.js\"",
+    "build:nodeservice": "concurrently \"nest build api-gateway\" \"nest build public-data\" \"nest build user\" \"nest build chat\" \"nest build board\""
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
