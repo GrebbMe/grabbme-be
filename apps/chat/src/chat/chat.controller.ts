@@ -9,8 +9,8 @@ export class ChatController {
   public constructor(private readonly chatService: ChatService) {}
 
   @MessagePattern(MESSAGE.CHAT.CREATE_CHAT_ROOM)
-  public createChatRoom(@Payload() { name }: CreateChatRoomDto) {
-    return this.chatService.createChatRoom(name);
+  public createChatRoom(@Payload() { postId, senderId, receiverId }: CreateChatRoomDto) {
+    return this.chatService.createChatRoom(postId, senderId, receiverId);
   }
 
   @MessagePattern(MESSAGE.CHAT.GET_CHAT_ROOMS)
