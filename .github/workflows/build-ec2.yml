@@ -21,7 +21,8 @@ jobs:
           script_stop: true
           script: |
             cd grabbme-be
-            git pull
+            git switch dev
+            git pull origin dev
             npm install
             npm run build api-gateway
             npm run build public-data
