@@ -13,68 +13,79 @@ export class ChatService {
     @InjectModel(ChatList.name) private chatListModel: Model<ChatList>,
     @InjectModel(Chat.name) private chatModel: Model<Chat>,
   ) {}
-
   public async createChatRoom(postId: number, senderId: number, receiverId: number) {
-    const existingChatroom = await this.chatRoomModel
+    const existingChatroom = await this.chatRoomModel //게시물ID로 일단 찾음
       .findOne({ post_id: postId })
       .populate({ path: 'users' })
+      .populate({
+        path: 'chat_lists',
+        populate: { path: 'chats', model: 'Chat' },
+      })
       .exec();
+
+    const chatContent = `${senderId}님이 ${receiverId}님에게 채팅을 신청하였습니다.`;
+    const newChatRoomId = await this.getNextId(this.chatRoomModel, 'channel_id');
+    const newChatId = await this.getNextId(this.chatModel, 'chat_id');
+    const newChatListId = await this.getNextId(this.chatListModel, 'chat_list_id');
 
     if (existingChatroom) {
       const isSenderInChatRoom = existingChatroom.users.includes(senderId);
-      if (!isSenderInChatRoom) {
-        return existingChatroom;
-      } else {
-        return existingChatroom;
+      if (isSenderInChatRoom) {
+        return existingChatroom; // 사용자가 있다면 기존 방 반환
       }
     } else {
-      const lastChatRoom = await this.chatRoomModel
-        .findOne()
-        .sort({ channel_id: CHAT.CHAT_ROOM_SORT_DESC })
-        .exec();
+      const newChat = await this.chatModel.create({
+        chat_id: newChatId,
+        sender_id: senderId,
+        type: 'text',
+        content: chatContent,
+      });
 
-      const newChatRoomId = lastChatRoom ? lastChatRoom.channel_id + 1 : 1;
+      await this.chatListModel.create({
+        chat_list_id: newChatListId,
+        chats: [newChat],
+      });
+
       const createdChatRoom = await this.chatRoomModel.create({
         channel_id: newChatRoomId,
         name: `${senderId}, ${receiverId}`,
         post_id: postId,
-        last_chat: `${senderId}님이 ${receiverId}님에게 채팅을 신청하였습니다.`,
+        last_chat: chatContent,
         users: [senderId, receiverId],
-        chat_lists: [],
+        chat_lists: [newChatListId],
       });
 
       return createdChatRoom;
     }
   }
 
+  private async getNextId(model: Model<ChatList | ChatRoom | Chat>, key: string) {
+    const lastDocument = await model
+      .findOne()
+      .sort({ [key]: CHAT.CHAT_ROOM_SORT_DESC })
+      .exec();
+    return lastDocument ? lastDocument[key] + 1 : 1;
+  }
+
   public async getChatRooms(userId: number): Promise<ChatRoom[]> {
     const chatRooms = await this.chatRoomModel.find({ users: userId }).exec();
-
     if (chatRooms.length === 0) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
-
     return chatRooms;
   }
-
   public async getChatRoom(channelId: number): Promise<ChatRoom> {
     const chatRoom = await this.chatRoomModel.findOne({ channel_id: channelId }).exec();
-
     if (!chatRoom) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
-
     return chatRoom;
   }
-
   public async getChatList(channelId: number, page: number): Promise<ChatList> {
     const chatRoom = await this.chatRoomModel.findOne({ channel_id: channelId }).exec();
-
     if (!chatRoom) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
-
     const [chatList] = await this.chatListModel
       .find({ _id: { $in: chatRoom.chat_lists } })
       .sort({ created_at: CHAT.CHAT_LIST_SORT_DESC })
       .skip((page - 1) * CHAT.CHAT_LIST_PAGINATION_LIMIT)
       .limit(CHAT.CHAT_LIST_PAGINATION_LIMIT)
       .exec();
-
     if (!chatList) throw new NotFoundException('해당 채널에 대한 채팅 리스트가 없습니다.');
 
     return chatList;
@@ -93,33 +104,7 @@ export class ChatService {
       throw new NotFoundException('채팅방을 찾을 수 없습니다.');
     }
 
-    const chatListId = chatRoom.chat_lists[chatRoom.chat_lists.length - 1].chat_list_id;
-    let chatList = await this.chatListModel.findOne({ chat_list_id: chatListId });
-
-    if (!chatList || chatList.chats.length >= CHAT.CHAT_LIMIT_IN_CHAT_LIST) {
-      const lastChatList = await this.chatListModel
-        .findOne()
-        .sort({ chat_list_id: CHAT.CHAT_SORT_DESC })
-        .exec();
-      const newChatListId = lastChatList ? lastChatList.chat_list_id + 1 : 1;
-      chatList = await this.chatListModel.create({
-        chat_list_id: newChatListId,
-        chats: [],
-      });
-
-      chatRoom.chat_lists.push(chatList);
-      await chatRoom.save();
-    } else {
-      chatList = await this.chatListModel.findById(chatList._id).exec();
-
-      if (!chatList) {
-        throw new NotFoundException('채팅 리스트를 찾을 수 없습니다.');
-      }
-    }
-
-    const lastChat = await this.chatModel.findOne().sort({ chat_id: CHAT.CHAT_SORT_DESC }).exec();
-    const newChatId = lastChat ? lastChat.chat_id + 1 : 1;
-
+    const newChatId = await this.getNextId(this.chatModel, 'chat_id');
     const newChat = await this.chatModel.create({
       chat_id: newChatId,
       sender_id: senderId,
@@ -131,9 +116,22 @@ export class ChatService {
       throw new NotFoundException('생성된 채팅이 없습니다.');
     }
 
-    chatList.chats.push(newChat);
+    const chatListId = chatRoom.chat_lists[chatRoom.chat_lists.length - 1];
+    const chatList = await this.chatListModel.findOne({ chat_list_id: chatListId });
 
-    await chatList.save();
+    if (!chatList || chatList.chats.length >= CHAT.CHAT_LIMIT_IN_CHAT_LIST) {
+      const newChatListId = await this.getNextId(this.chatListModel, 'chat_list_id');
+      await this.chatListModel.create({
+        chat_list_id: newChatListId,
+        chats: [newChat],
+      });
+
+      chatRoom.chat_lists.push(newChatListId);
+      await chatRoom.save();
+    } else {
+      chatList.chats.push(newChat);
+      await chatList.save();
+    }
 
     return newChat;
   }
