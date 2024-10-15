@@ -22,6 +22,10 @@ export class ChatService {
     return this.chatClient.send(MESSAGE.CHAT.GET_CHAT_ROOM, { id });
   }
 
+  public deleteChatRoom(id: number) {
+    return this.chatClient.send(MESSAGE.CHAT.DELETE_CHAT_ROOM, { id });
+  }
+  
   public getChatList(id: number, page: number) {
     return this.chatClient.send(MESSAGE.CHAT.GET_CHAT_LIST, { id, page });
   }
