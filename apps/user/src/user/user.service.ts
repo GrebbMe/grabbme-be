@@ -4,9 +4,8 @@ import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/e
 import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { CreateUserDto } from './dto/req.dto';
-import { TempUser } from './entities/temp-user.entity';
 import { CreateUserDto, UpdateUserDto } from './dto/req.dto';
+import { TempUser } from './entities/temp-user.entity';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -162,17 +161,8 @@ export class UserService {
       user.position_category_id = positionCategory;
     }
 
-    if (updateUserDto.project_category_id) {
-      const projectCategory = await this.projectRepository.findOne({
-        where: { project_category_id: updateUserDto.project_category_id },
-      });
-      if (!projectCategory) {
-        throw new CustomRpcException(
-          HttpStatus.BAD_REQUEST,
-          'project_category_id가 존재하지 않습니다.',
-        );
-      }
-      user.project_category_id = projectCategory;
+    if (updateUserDto.project_category_id.length > 0) {
+      user.project_category_id = updateUserDto.project_category_id;
     }
 
     if (updateUserDto.career_category_id) {
@@ -188,7 +178,7 @@ export class UserService {
       user.career_category_id = careerCategory;
     }
 
-    if (updateUserDto.stack_category_id) {
+    if (updateUserDto.stack_category_id.length > 0) {
       user.stack_category_id = updateUserDto.stack_category_id;
     }
 
