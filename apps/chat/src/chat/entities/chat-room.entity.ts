@@ -17,7 +17,7 @@ export class ChatRoom extends Document {
   public users: number[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: ChatList.name }] })
-  public chat_lists: ChatList[];
+  public chat_lists: number[];
 
   @Prop()
   public last_chat: string;
