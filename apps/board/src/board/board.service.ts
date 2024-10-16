@@ -46,6 +46,7 @@ export class BoardService {
         'bookmarked_cnt',
         'stack_category_id',
         'career_category_id',
+        'chat_cnt',
       ],
       relations: ['post_category_id', 'career_category_id'],
     });
@@ -74,6 +75,7 @@ export class BoardService {
         'is_open',
         'project_category_id',
         'stack_category_id',
+        'chat_cnt',
       ],
       relations: ['post_category_id', 'career_category_id'],
     });
