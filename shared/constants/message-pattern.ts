@@ -39,6 +39,7 @@ export const MESSAGE = {
     GET_CHAT_ROOMS: { cmd: 'get-chat-rooms' },
     GET_CHAT_ROOM: { cmd: 'get-chat-room' },
     GET_CHAT_LIST: { cmd: 'get-chat-list' },
+    DELETE_CHAT_ROOM: { cmd: 'delete-chat-room' },
   },
 
   USER: {

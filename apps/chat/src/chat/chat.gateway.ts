@@ -23,7 +23,7 @@ export class ChatGateway {
   public async handleSendMessage(
     @MessageBody() messageData: { chatRoomId: string; content: string; senderId: number },
   ) {
-    const chatRoomId = parseInt(messageData.chatRoomId, 10);
+    const chatRoomId = Number(messageData.chatRoomId);
 
     const savedChat = await this.chatService.saveMessage(
       chatRoomId,
