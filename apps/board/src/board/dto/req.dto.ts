@@ -108,3 +108,26 @@ export class UpdateBoardDto extends PartialType(CreateBoardDto) {
   @IsOptional()
   public teamsData?: UpdateTeamDto[];
 }
+
+export class CreateParticipantDto {
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  public user_id: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  public position_category_id: number;
+}
+
+export class UpdateParticipantDto {
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  public participants_id: number;
+
+  @IsString()
+  @IsNotEmpty()
+  public status: string;
+}
