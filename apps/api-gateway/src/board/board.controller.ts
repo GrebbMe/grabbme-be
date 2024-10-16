@@ -6,7 +6,12 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { BoardService } from './board.service';
-import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
+import {
+  CreateBoardDto,
+  CreateParticipantDto,
+  UpdateBoardDto,
+  UpdateParticipantDto,
+} from './dto/req.dto';
 
 @Controller('board')
 export class BoardController {
@@ -16,18 +21,22 @@ export class BoardController {
   @ApiOperation({ summary: 'post_category_id 별 전체 게시글 전체 조회' })
   @ApiOkResponse({
     description: 'post_category_id 별 전체 게시글 전체 조회',
-    example: [
-      {
-        post_id: 22,
-        title: '프로젝트명 ex.금융앱 사이드 프로젝트 팀원 모집',
-        content: '프로젝트 소개 ex.저희는 이런 앱을 만들고자 합니다. (최소 200 ~ 500 이내)',
-        expired_at: '2024-10-12',
-        view_cnt: 0,
-        bookmarked_cnt: 0,
-        stack_category_id: ['4', '5'],
-        post_category_id: 1,
-      },
-    ],
+    example: {
+      status: 200,
+      data: [
+        {
+          post_id: 72,
+          title: '프로젝트명',
+          content: '프로젝트 소개',
+          expired_at: '2024-10-12',
+          view_cnt: 0,
+          bookmarked_cnt: 0,
+          stack_category_id: ['4', '5'],
+          post_category_id: 2,
+        },
+      ],
+      message: 'get-all-post-by-post-category-id',
+    },
   })
   public async getPostsByPostCategoryId(@Param('postCategoryId') postCategoryId: number) {
     return await this.boardService.getPostsByPostCategoryId(postCategoryId);
@@ -38,22 +47,27 @@ export class BoardController {
   @ApiOkResponse({
     description: '게시글 상세 조회',
     example: {
-      post_id: 6,
-      title: '프로젝트명',
-      content: '프로젝트 내용',
-      create_at: '2024-10-08',
-      expired_at: '2024-10-12',
-      view_cnt: 0,
-      bookmarked_cnt: 0,
-      is_open: true,
-      project_category_id: ['1'],
-      stack_category_id: ['1', '2'],
-      post_category_id: 2,
-      career_category_id: {
-        career_category_id: 1,
-        content: '0년차',
+      status: 200,
+      data: {
+        post_id: 89,
+        title: '게시글 제목',
+        content: '게시글 소개',
+        start_month: '2024-10',
+        end_month: '2024-11',
+        create_at: '2024-10-15',
+        expired_at: '2024-11-15',
+        view_cnt: 0,
+        bookmarked_cnt: 0,
+        is_open: true,
+        project_category_id: ['2', '3'],
+        stack_category_id: ['4', '5'],
+        post_category_id: 2,
+        career_category_id: {
+          career_category_id: 1,
+          content: '0년차',
+        },
       },
-      position_category_id: null,
+      message: 'get-one-post',
     },
   })
   public async getPostById(@Param('id') id: number) {
@@ -65,20 +79,29 @@ export class BoardController {
   @ApiCreatedResponse({
     description: '게시글 생성',
     example: {
-      title: '프로젝트명 ex.금융앱 사이드 프로젝트 팀원 모집',
-      content: '프로젝트 소개 ex.저희는 이런 앱을 만들고자 합니다. (최소 200 ~ 500 이내)',
-      expired_at: '2024-10-12',
-      project_category_id: [2, 4],
-      stack_category_id: [4, 5],
-      post_category_id: 1,
-      career_category_id: null,
-      position_category_id: null,
-      post_id: 31,
-      create_at: '2024-10-11',
-      update_at: '2024-10-11',
-      view_cnt: 0,
-      bookmarked_cnt: 0,
-      is_open: true,
+      status: 201,
+      data: {
+        title: '게시글 제목 ex.프론트엔드 개발자 OOO입니다.',
+        content: '자기 소개 ex.저는 이러한 경험이 있습니다.',
+        project_category_id: [2, 3],
+        stack_category_id: [4, 5],
+        post_category_id: 2,
+        career_category_id: {
+          career_category_id: 1,
+          content: '0년차',
+        },
+        user_id: 4,
+        start_month: null,
+        end_month: null,
+        expired_at: null,
+        post_id: 101,
+        create_at: '2024-10-15',
+        update_at: '2024-10-15',
+        view_cnt: 0,
+        bookmarked_cnt: 0,
+        is_open: true,
+      },
+      message: 'create-post',
     },
   })
   public async createPost(
@@ -94,22 +117,27 @@ export class BoardController {
   @ApiOkResponse({
     description: '게시글 수정',
     example: {
-      post_id: 2,
-      title: '프로젝트명',
-      content: '프로젝트 내용',
-      create_at: '2024-10-07',
-      update_at: '2024-10-11',
-      expired_at: '2024-10-23',
-      view_cnt: 0,
-      bookmarked_cnt: 0,
-      is_open: true,
-      project_category_id: [1, 3],
-      stack_category_id: [1, 2],
-      career_category_id: {
-        career_category_id: 1,
-        content: '0년차',
+      status: 200,
+      data: {
+        post_id: 74,
+        title: '새로운 프로젝트명',
+        content: '새로운 프로젝트 내용',
+        start_month: '2024-12',
+        end_month: '2024-12',
+        create_at: '2024-10-14',
+        update_at: '2024-10-15',
+        expired_at: '2024-10-18',
+        view_cnt: 0,
+        bookmarked_cnt: 0,
+        is_open: true,
+        project_category_id: [1, 3],
+        stack_category_id: [1, 2],
+        career_category_id: {
+          career_category_id: 1,
+          content: '0년차',
+        },
       },
-      position_category_id: null,
+      message: 'update-post',
     },
   })
   public async updatePost(@Param('id') id: number, @Body() updateBoardDto: UpdateBoardDto) {
@@ -121,8 +149,83 @@ export class BoardController {
   @ApiOperation({ summary: '게시글 삭제' })
   @ApiNoContentResponse({
     description: '게시글 삭제 완료',
+    example: {
+      status: 200,
+      data: true,
+      message: 'delete-post',
+    },
   })
   public async deletePost(@Param('id') id: number) {
     return await this.boardService.deletePost(id);
   }
+
+  @Post('/apply/:postId')
+  @ApiOperation({ summary: '게시글 신청' })
+  @ApiOkResponse({
+    description: '게시글 신청 완료',
+    example: {
+      status: 201,
+      data: {
+        user_id: 4,
+        nickname: 'nickname',
+        email: 'nickname@google.com',
+        post_id: 88,
+      },
+      message: 'create-participant',
+    },
+  })
+  public async createParticipant(
+    @Param('postId') postId: number,
+    @Body() createParticipantDto: CreateParticipantDto,
+  ) {
+    const payload = { postId, createParticipantDto };
+    return await this.boardService.createParticipant(payload);
+  }
+
+  @Patch('/apply/:postId')
+  @ApiOperation({ summary: '신청자 상태 변경' })
+  @ApiOkResponse({
+    description: '상태 변경 완료',
+    example: {
+      status: 200,
+      data: {
+        participants_id: 2,
+        status: 'accept',
+      },
+      message: 'update-participant-status',
+    },
+  })
+  public async updateParticipantStatus(
+    @Param('postId') postId: number,
+    @Body() updateParticipantDto: UpdateParticipantDto,
+  ) {
+    const payload = { postId, updateParticipantDto };
+    return await this.boardService.updateParticipantStatus(payload);
+  }
+
+  @Get('/apply-users/:postId')
+  @ApiOperation({ summary: '게시글 신청자 조회' })
+  @ApiOkResponse({
+    description: '게시글 신청자 조회',
+    example: {
+      status: 200,
+      data: [
+        {
+          user_id: 5,
+          nickname: 'nickname',
+          email: 'nickname@google.com',
+        },
+      ],
+      message: 'get-participants-by-post',
+    },
+  })
+  public async getApplyByParticipnat(@Param('postId') postId: number) {
+    return await this.boardService.getApplyByParticipnat(postId);
+  }
+
+  //내가 작성한 글 조회
+
+  //내가 신청한 글 조회
+
+  //게시글 신청 취소
 }

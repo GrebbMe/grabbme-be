@@ -1,4 +1,5 @@
-import { CareerCategory, PositionCategory, PostCategory } from '@publicData/entities';
+import { User } from '@apps/user/src/user/entities/user.entity';
+import { CareerCategory, PostCategory } from '@publicData/entities';
 import { Transform } from 'class-transformer';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -12,6 +13,12 @@ export class Board {
 
   @Column({ type: 'text' })
   public content: string;
+
+  @Column({ type: 'varchar', length: 7, nullable: true, default: null })
+  public start_month?: string;
+
+  @Column({ type: 'varchar', length: 7, nullable: true, default: null })
+  public end_month?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Transform(({ value }) => (value ? value.toISOString().split('T')[0] : null))
@@ -43,9 +50,10 @@ export class Board {
   @JoinColumn({ name: 'career_category_id' })
   public career_category_id?: CareerCategory;
 
-  @ManyToOne(() => PositionCategory, { nullable: true })
-  @JoinColumn({ name: 'position_category_id' })
-  public position_category_id?: PositionCategory;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  @Transform(({ obj }) => obj.user_id.user_id)
+  public user_id: User;
 
   @Column('simple-array')
   public project_category_id: number[];

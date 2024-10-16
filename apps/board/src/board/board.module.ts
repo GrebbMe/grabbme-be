@@ -1,3 +1,4 @@
+import { User } from '@apps/user/src/user/entities/user.entity';
 import { Logger, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,7 +12,7 @@ import {
 import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { BoardController } from './board.controller';
 import { BoardService } from './board.service';
-import { Board } from './entities/board.entity';
+import { Board, Participant, Team } from './entities';
 
 @Module({
   imports: [
@@ -22,6 +23,9 @@ import { Board } from './entities/board.entity';
       PostCategory,
       ProjectCategory,
       StackCategory,
+      Team,
+      Participant,
+      User,
     ]),
     ClientsModule.register([
       {

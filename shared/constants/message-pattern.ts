@@ -34,6 +34,13 @@ export const MESSAGE = {
     DELETE_POST: { cmd: 'delete-post' },
   },
 
+  PARTICIPANT: {
+    CREATE_PARTICIPANT: { cmd: 'create-participant' },
+    UPDATE_PARTICIPANT_STATUS: { cmd: 'update-participant-status' },
+    GET_PARTICIPANTS_BY_POST: { cmd: 'get-participants-by-post' },
+
+  },
+
   CHAT: {
     CREATE_CHAT_ROOM: { cmd: 'create-chat-room' },
     GET_CHAT_ROOMS: { cmd: 'get-chat-rooms' },
