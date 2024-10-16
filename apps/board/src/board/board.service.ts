@@ -33,8 +33,9 @@ export class BoardService {
         'view_cnt',
         'bookmarked_cnt',
         'stack_category_id',
+        'career_category_id',
       ],
-      relations: ['post_category_id'],
+      relations: ['post_category_id', 'career_category_id'],
     });
 
     if (posts.length === 0) {
