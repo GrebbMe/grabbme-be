@@ -31,6 +31,6 @@ export class ChatGateway {
       messageData.senderId,
     );
 
-    this.server.to(messageData.chatRoomId).emit('receiveMessage', savedChat);
+    this.server.to(messageData.chatRoomId).emit('sendMessage', savedChat);
   }
 }
