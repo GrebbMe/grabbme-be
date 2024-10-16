@@ -19,9 +19,25 @@ export class BoardController {
 
   @SetResponse(MESSAGE.POST.GET_ALL_POST_BY_POST_CATEGORY_ID.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.POST.GET_ALL_POST_BY_POST_CATEGORY_ID)
-  public async getPostsByPostCategoryId(@Payload() payload: { postCategoryId: number }) {
-    const { postCategoryId } = payload;
-    return this.boardService.getPostsByPostCategoryId(postCategoryId);
+  public async getPostsByPostCategoryId(
+    @Payload()
+    payload: {
+      postCategoryId: number;
+      search?: string;
+      stack?: number;
+      page: number;
+      limit: number;
+    },
+  ) {
+    const { postCategoryId, search, stack, page, limit } = payload;
+    console.log('Payload2:', payload);
+    return this.boardService.getPostsByPostCategoryId({
+      postCategoryId,
+      search,
+      stack,
+      page,
+      limit,
+    });
   }
 
   @SetResponse(MESSAGE.POST.GET_ONE_POST.cmd, HttpStatus.OK)

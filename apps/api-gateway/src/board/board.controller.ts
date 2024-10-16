@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Param, Body, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, Patch, Query } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -17,29 +17,20 @@ import {
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 
-  @Get('category/:postCategoryId')
-  @ApiOperation({ summary: 'post_category_id 별 전체 게시글 전체 조회' })
+  @Get('category/:postCategoryId/search')
+  @ApiOperation({ summary: 'post_category_id 별 조회, 검색 필터 조회' })
   @ApiOkResponse({
     description: 'post_category_id 별 전체 게시글 전체 조회',
-    example: {
-      status: 200,
-      data: [
-        {
-          post_id: 72,
-          title: '프로젝트명',
-          content: '프로젝트 소개',
-          expired_at: '2024-10-12',
-          view_cnt: 0,
-          bookmarked_cnt: 0,
-          stack_category_id: ['4', '5'],
-          post_category_id: 2,
-        },
-      ],
-      message: 'get-all-post-by-post-category-id',
-    },
   })
-  public async getPostsByPostCategoryId(@Param('postCategoryId') postCategoryId: number) {
-    return await this.boardService.getPostsByPostCategoryId(postCategoryId);
+  public async getPostsByPostCategoryId(
+    @Param('postCategoryId') postCategoryId: number,
+    @Query('search') search?: string,
+    @Query('stack') stack?: number,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 5,
+  ) {
+    const payload = { postCategoryId, search, stack, page, limit };
+    return await this.boardService.getPostsByPostCategoryId(payload);
   }
 
   @Get(':id')
@@ -222,10 +213,4 @@ export class BoardController {
   public async getApplyByParticipnat(@Param('postId') postId: number) {
     return await this.boardService.getApplyByParticipnat(postId);
   }
-
-  //내가 작성한 글 조회
-
-  //내가 신청한 글 조회
-
-  //게시글 신청 취소
 }

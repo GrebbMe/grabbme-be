@@ -32,13 +32,13 @@ export const MESSAGE = {
     CREATE_POST: { cmd: 'create-post' },
     UPDATE_POST: { cmd: 'update-post' },
     DELETE_POST: { cmd: 'delete-post' },
+    GET_SEARCH_POSTS: { cmd: 'get-search-posts' },
   },
 
   PARTICIPANT: {
     CREATE_PARTICIPANT: { cmd: 'create-participant' },
     UPDATE_PARTICIPANT_STATUS: { cmd: 'update-participant-status' },
     GET_PARTICIPANTS_BY_POST: { cmd: 'get-participants-by-post' },
-
   },
 
   CHAT: {

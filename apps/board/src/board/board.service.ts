@@ -34,27 +34,54 @@ export class BoardService {
   ) {}
 
   @Transactional()
-  public async getPostsByPostCategoryId(postCategoryId: number): Promise<Board[]> {
-    const posts = await this.boardRepository.find({
-      where: { post_category_id: { id: postCategoryId } },
-      select: [
-        'post_id',
-        'title',
-        'content',
-        'expired_at',
-        'view_cnt',
-        'bookmarked_cnt',
-        'stack_category_id',
-        'career_category_id',
-      ],
-      relations: ['post_category_id', 'career_category_id'],
-    });
+  public async getPostsByPostCategoryId(payload: {
+    postCategoryId: number;
+    search?: string;
+    stack?: number;
+    page: number;
+    limit: number;
+  }): Promise<{ totalPost: number; posts: Board[] }> {
+    const { postCategoryId, search, stack, page = 1, limit = 5 } = payload;
+    console.log('Payload3:', payload);
 
-    if (posts.length === 0) {
-      throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글이 존재하지 않습니다.');
+    const queryBuilder = this.boardRepository
+      .createQueryBuilder('board')
+      .select([
+        'board.post_id',
+        'board.title',
+        'board.content',
+        'board.expired_at',
+        'board.view_cnt',
+        'board.bookmarked_cnt',
+        'board.stack_category_id',
+        'board.career_category_id',
+      ])
+      .leftJoinAndSelect('board.post_category_id', 'postCategory')
+      .leftJoinAndSelect('board.career_category_id', 'careerCategory')
+      .where('board.post_category_id = :postCategoryId', { postCategoryId });
+
+    if (search) {
+      queryBuilder.andWhere('(board.title LIKE :search OR board.content LIKE :search)', {
+        search: `%${search}%`,
+      });
     }
 
-    return posts.map((post) => classToPlain(post) as Board);
+    if (stack) {
+      queryBuilder.andWhere('JSON_CONTAINS(board.stack_category_id, :stack)', {
+        stack: JSON.stringify([stack]),
+      });
+    }
+
+    const totalPost = await queryBuilder.getCount();
+
+    queryBuilder.skip((page - 1) * limit).take(limit);
+
+    const posts = await queryBuilder.getMany();
+
+    return {
+      totalPost,
+      posts,
+    };
   }
 
   @Transactional()
