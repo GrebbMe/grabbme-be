@@ -93,7 +93,7 @@ describe('ChatService', () => {
         mockFindOneSortExec(lastChatRoom);
         mockChatRoomModel.create.mockResolvedValue(newChatRoom);
 
-        const result = await chatService.createChatRoom(newChatRoom.name);
+        const result = await chatService.createChatRoom(3, 3, 1);
 
         expect(result).toEqual(newChatRoom);
         expect(mockChatRoomModel.findOne).toHaveBeenCalled();
@@ -111,7 +111,7 @@ describe('ChatService', () => {
             exec: jest.fn().mockRejectedValueOnce(mockError),
           }),
         });
-        await expect(chatService.createChatRoom(newChatRoom.name)).rejects.toThrow(mockError);
+        await expect(chatService.createChatRoom(3, 3, 1)).rejects.toThrow(mockError);
 
         expect(mockChatRoomModel.findOne).toHaveBeenCalled();
         expect(mockChatRoomModel.create).not.toHaveBeenCalled();
@@ -120,7 +120,7 @@ describe('ChatService', () => {
         mockError = new Error(InternalServerErrorException.name);
         mockFindOneSortExec(lastChatRoom);
         mockChatRoomModel.create.mockRejectedValue(mockError);
-        await expect(chatService.createChatRoom(newChatRoom.name)).rejects.toThrow(mockError);
+        await expect(chatService.createChatRoom(3, 3, 1)).rejects.toThrow(mockError);
 
         expect(mockChatRoomModel.findOne).toHaveBeenCalled();
         expect(mockChatRoomModel.create).toHaveBeenCalled();
@@ -187,7 +187,7 @@ describe('ChatService', () => {
         expect(mockChatRoomModel.findOne).toHaveBeenCalledWith({ channel_id: channelId });
         expect(mockChatListModel.find).toHaveBeenCalledWith({ _id: { $in: chatRoom.chat_lists } });
         expect(mockChatListModel.sort).toHaveBeenCalledWith({
-          created_at: CHAT.CHAT_LIST_SORT_DESC,
+          created_at: CHAT.SORT_DESC,
         });
         expect(mockChatListModel.skip).toHaveBeenCalledWith(
           (page - 1) * CHAT.CHAT_LIST_PAGINATION_LIMIT,
