@@ -23,7 +23,7 @@ export class ChatService {
       })
       .exec();
 
-    const chatContent = `${senderId}님이 ${receiverId}님에게 채팅을 신청하였습니다.`;
+    const chatContent = `${senderId}님이 ${receiverId}님에게 대화를 신청하였습니다.`;
     const newChannelId = await this.getNextId(this.chatRoomModel, 'channel_id');
     const newChatId = await this.getNextId(this.chatModel, 'chat_id');
     const newChatListId = await this.getNextId(this.chatListModel, 'chat_list_id');
@@ -90,7 +90,7 @@ export class ChatService {
     if (!chatRoom) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
     const [chatList] = await this.chatListModel
       .find({ _id: { $in: chatRoom.chat_lists } })
-      .sort({ created_at: CHAT.CHAT_LIST_SORT_DESC })
+      .sort({ created_at: CHAT.SORT_DESC })
       .skip((page - 1) * CHAT.CHAT_LIST_PAGINATION_LIMIT)
       .limit(CHAT.CHAT_LIST_PAGINATION_LIMIT)
       .exec();
@@ -124,7 +124,10 @@ export class ChatService {
       throw new NotFoundException('생성된 채팅이 없습니다.');
     }
 
-    const chatListId = chatRoom.chat_lists[chatRoom.chat_lists.length - 1];
+    chatRoom.last_chat = newChat.content;
+    chatRoom.updated_at = new Date();
+
+    const chatListId = chatRoom.chat_lists.at(-1);
     const chatList = await this.chatListModel.findOne({ chat_list_id: chatListId });
 
     if (!chatList || chatList.chats.length >= CHAT.CHAT_LIMIT_IN_CHAT_LIST) {
@@ -138,6 +141,7 @@ export class ChatService {
       await chatRoom.save();
     } else {
       chatList.chats.push(newChat);
+      await chatRoom.save();
       await chatList.save();
     }
     return newChat;
@@ -146,7 +150,7 @@ export class ChatService {
   private async getNextId(model: Model<ChatList | ChatRoom | Chat>, key: string) {
     const lastDocument = await model
       .findOne()
-      .sort({ [key]: CHAT.CHAT_ROOM_SORT_DESC })
+      .sort({ [key]: CHAT.SORT_DESC })
       .exec();
     return lastDocument ? lastDocument[key] + 1 : 1;
   }
