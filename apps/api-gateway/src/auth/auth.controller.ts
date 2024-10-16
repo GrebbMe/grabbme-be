@@ -37,14 +37,14 @@ export class AuthController {
       res.cookie('accessToken', loginUser.access_token, {
         httpOnly: true,
         path: '/',
-        sameSite: 'lax',
-        domain: 'grabbme.store',
+        sameSite: 'none',
+        secure: false,
       });
       res.cookie('refreshToken', loginUser.refresh_token, {
         httpOnly: true,
         path: '/',
-        sameSite: 'lax',
-        domain: 'grabbme.store',
+        sameSite: 'none',
+        secure: false,
       });
 
       return res.redirect(301, clientBaseUrl.toString());
