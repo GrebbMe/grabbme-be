@@ -1,9 +1,12 @@
 import { Controller, Get, Post, Delete, Param, Body, Patch } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
+  ApiBody,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
 } from '@nestjs/swagger';
 import { BoardService } from './board.service';
 import {
@@ -223,9 +226,60 @@ export class BoardController {
     return await this.boardService.getApplyByParticipnat(postId);
   }
 
-  //내가 작성한 글 조회
+  @Post('bookmark/:id')
+  @ApiOperation({ summary: '북마크 생성' })
+  @ApiParam({ name: 'id', description: '게시글 id' })
+  @ApiBody({ description: 'userId', type: 'number' })
+  @ApiCreatedResponse({
+    description: '북마크 생성',
+    example: {
+      status: 201,
+      data: {
+        bookmark_id: 2,
+        user_id: 4,
+        post_id: 88,
+      },
+      message: 'create-bookmark',
+    },
+  })
+  @ApiBadRequestResponse({
+    example: {
+      status: 400,
+      timestamp: '2024-10-15',
+      path: '/api/board/bookmark',
+      message: '이미 북마크한 게시글입니다.',
+    },
+  })
+  public async createBookmark(@Body() { userId }: { userId: number }, @Param('id') postId: number) {
+    return await this.boardService.createBookmark({ userId, postId });
+  }
 
-  //내가 신청한 글 조회
+  @ApiOperation({ summary: '북마크 삭제' })
+  @ApiParam({ name: 'id', description: '게시글 id' })
+  @ApiBody({ description: 'userId', type: 'number' })
+  @ApiOkResponse({
+    description: '북마크 삭제',
+    example: {
+      status: 200,
+      data: true,
+      message: 'delete-bookmark',
+    },
+  })
+  @ApiBadRequestResponse({
+    example: {
+      status: 400,
+      timestamp: '2024-10-15',
+      path: '/api/board/bookmark',
+      message: '존재하지 않는 북마크 입니다.',
+    },
+  })
+  @Delete('bookmark/:id')
+  public async deleteBookmark(@Body() { userId }: { userId: number }, @Param('id') postId: number) {
+    return await this.boardService.deleteBookmark({ userId, postId });
+  }
 
-  //게시글 신청 취소
+  @Get('bookmark/info/:email')
+  public async getBookmarkInfo(@Param('email') email: string) {
+    return await this.boardService.getBookmarksByUserEmail(email);
+  }
 }

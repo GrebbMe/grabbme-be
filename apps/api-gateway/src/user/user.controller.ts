@@ -6,7 +6,6 @@ import {
   Post,
   Query,
   UnauthorizedException,
-  UseGuards,
   Param,
   Delete,
   Patch,
@@ -27,7 +26,6 @@ import { firstValueFrom } from 'rxjs';
 import { UserService } from './user.service';
 
 import { AuthService } from '../auth/auth.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateUserDto, UpdateUserDto } from './dto/req.dto';
 
 import { User } from './entities/user.entity';
@@ -77,7 +75,6 @@ export class UserController {
   }
 
   @Get('/info')
-  @UseGuards(JwtAuthGuard)
   public async getUserInfoByEmail(@Query('email') email: string) {
     return await this.userService.findUserByEmail(email);
   }

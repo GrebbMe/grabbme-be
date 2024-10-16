@@ -12,7 +12,7 @@ import {
   UpdateBoardDto,
   UpdateParticipantDto,
 } from './dto/req.dto';
-import { Board, Participant, Team } from './entities';
+import { Board, Bookmark, Participant, Team } from './entities';
 
 @Injectable()
 export class BoardService {
@@ -31,6 +31,8 @@ export class BoardService {
     private readonly teamRepository: Repository<Team>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Bookmark)
+    private readonly bookmarkRepository: Repository<Bookmark>,
   ) {}
 
   @Transactional()
@@ -83,6 +85,9 @@ export class BoardService {
     if (!post) {
       throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글을 찾을 수 없습니다.');
     }
+
+    post.view_cnt += 1;
+    await this.boardRepository.save(post);
 
     return classToPlain(post) as Board;
   }
@@ -321,5 +326,73 @@ export class BoardService {
     }
 
     return participants.map((participant) => classToPlain(participant) as Participant);
+  }
+
+  @Transactional()
+  public async createBookmark({ userId, postId }: { userId: number; postId: number }) {
+    const bookmark = await this.bookmarkRepository.create({
+      user_id: userId,
+      post_id: postId,
+    });
+
+    const savedBookmark = await this.bookmarkRepository.save(bookmark);
+
+    await this.increasePostBookmarkedCnt(postId);
+
+    return classToPlain(savedBookmark) as Bookmark;
+  }
+
+  @Transactional()
+  public async deleteBookmark({ userId, postId }: { userId: number; postId: number }) {
+    const bookmark = await this.bookmarkRepository.findOneBy({
+      user_id: userId,
+      post_id: postId,
+    });
+
+    if (!bookmark) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '북마크를 찾을 수 없습니다.');
+    }
+
+    await this.decreasePostBookmarkedCnt(postId);
+
+    return await this.bookmarkRepository.remove(bookmark);
+  }
+
+  public async increasePostBookmarkedCnt(postId: number) {
+    const post = await this.boardRepository.findOneBy({ post_id: postId });
+
+    post.bookmarked_cnt += 1;
+
+    return await this.boardRepository.save(post);
+  }
+
+  public async decreasePostBookmarkedCnt(postId: number) {
+    const post = await this.boardRepository.findOneBy({ post_id: postId });
+
+    if (!post) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '북마크를 찾을 수 없습니다.');
+    }
+
+    post.bookmarked_cnt = Math.max(0, post.bookmarked_cnt - 1);
+
+    return await this.boardRepository.save(post);
+  }
+
+  public async getBookmarksByUserEmail(email: string) {
+    const user = await this.userRepository.findOneBy({ email });
+    console.log('user 아이디', user.user_id);
+    if (!user) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '사용자를 찾을 수 없습니다.');
+    }
+
+    const bookmarks = await this.bookmarkRepository.find({
+      where: { user_id: user.user_id },
+    });
+    console.log(bookmarks);
+    if (bookmarks.length === 0) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '북마크한 게시글이 없습니다.');
+    }
+
+    return bookmarks.map((bookmark) => classToPlain(bookmark) as Bookmark);
   }
 }

@@ -51,4 +51,16 @@ export class BoardService {
   public async getApplyByParticipnat(postId: number) {
     return await this.boardClient.send(MESSAGE.PARTICIPANT.GET_PARTICIPANTS_BY_POST, { postId });
   }
+
+  public async createBookmark({ userId, postId }: { userId: number; postId: number }) {
+    return await this.boardClient.send(MESSAGE.POST.CREATE_BOOKMARK, { userId, postId });
+  }
+
+  public async deleteBookmark({ userId, postId }: { userId: number; postId: number }) {
+    return await this.boardClient.send(MESSAGE.POST.DELETE_BOOKMARK, { userId, postId });
+  }
+
+  public async getBookmarksByUserEmail(email: string) {
+    return await this.boardClient.send(MESSAGE.POST.GET_BOOKMARKS_BY_EMAIL, { email });
+  }
 }

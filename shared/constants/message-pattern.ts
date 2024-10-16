@@ -32,13 +32,15 @@ export const MESSAGE = {
     CREATE_POST: { cmd: 'create-post' },
     UPDATE_POST: { cmd: 'update-post' },
     DELETE_POST: { cmd: 'delete-post' },
+    CREATE_BOOKMARK: { cmd: 'create-bookmark' },
+    DELETE_BOOKMARK: { cmd: 'delete-bookmark' },
+    GET_BOOKMARKS_BY_EMAIL: { cmd: 'get-bookmarks-by-email' },
   },
 
   PARTICIPANT: {
     CREATE_PARTICIPANT: { cmd: 'create-participant' },
     UPDATE_PARTICIPANT_STATUS: { cmd: 'update-participant-status' },
     GET_PARTICIPANTS_BY_POST: { cmd: 'get-participants-by-post' },
-
   },
 
   CHAT: {
