@@ -6,8 +6,13 @@ import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { classToPlain } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
-import { Board, Team } from './entities';
+import {
+  CreateParticipantDto,
+  CreateBoardDto,
+  UpdateBoardDto,
+  UpdateParticipantDto,
+} from './dto/req.dto';
+import { Board, Participant, Team } from './entities';
 
 @Injectable()
 export class BoardService {
@@ -18,6 +23,8 @@ export class BoardService {
     private readonly postCategoryRepository: Repository<PostCategory>,
     @InjectRepository(CareerCategory)
     private readonly careerCategoryRepository: Repository<CareerCategory>,
+    @InjectRepository(Participant)
+    private readonly participantRepository: Repository<Participant>,
     @InjectRepository(PositionCategory)
     private readonly positionCategoryRepository: Repository<PositionCategory>,
     @InjectRepository(Team)
@@ -83,6 +90,10 @@ export class BoardService {
       where: { id: postCategoryId },
     });
 
+    if (!postCategory) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '포스트 카테고리를 찾을 수 없습니다.');
+    }
+
     const careerCategory = createBoardDto.career_category_id
       ? await this.careerCategoryRepository.findOne({
           where: { career_category_id: createBoardDto.career_category_id },
@@ -92,6 +103,10 @@ export class BoardService {
     const user = await this.userRepository.findOne({
       where: { user_id: createBoardDto.user_id },
     });
+
+    if (!user) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '사용자를 찾을 수 없습니다.');
+    }
 
     const newPost = this.boardRepository.create({
       ...createBoardDto,
@@ -226,5 +241,82 @@ export class BoardService {
     await this.boardRepository.remove(post);
 
     return true;
+  }
+
+  @Transactional()
+  public async createParticipant(
+    postId: number,
+    createParticipantDto: CreateParticipantDto,
+  ): Promise<Participant> {
+    const post = await this.boardRepository.findOne({ where: { post_id: postId } });
+    if (!post) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글을 찾을 수 없습니다.');
+    }
+
+    const user = await this.userRepository.findOne({
+      where: { user_id: createParticipantDto.user_id },
+    });
+    if (!user) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '사용자를 찾을 수 없습니다.');
+    }
+
+    const positionCategory = await this.positionCategoryRepository.findOne({
+      where: { position_category_id: createParticipantDto.position_category_id },
+    });
+    if (!positionCategory) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '포지션 카테고리를 찾을 수 없습니다.');
+    }
+
+    const participant = this.participantRepository.create({
+      board: post,
+      user_id: user,
+      position_category_id: positionCategory,
+      status: 'pending',
+    });
+    const savedParticipant = await this.participantRepository.save(participant);
+
+    return classToPlain(savedParticipant) as Participant;
+  }
+
+  @Transactional()
+  public async updateParticipantStatus(
+    postId: number,
+    updateParticipantDto: UpdateParticipantDto,
+  ): Promise<UpdateParticipantDto> {
+    const post = await this.boardRepository.findOne({
+      where: { post_id: postId },
+    });
+
+    if (!post) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글을 찾을 수 없습니다.');
+    }
+
+    const participant = await this.participantRepository.findOne({
+      where: { participants_id: updateParticipantDto.participants_id },
+    });
+
+    if (!participant) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '참가자를 찾을 수 없습니다.');
+    }
+
+    participant.status = updateParticipantDto.status;
+
+    await this.participantRepository.save(participant);
+
+    return updateParticipantDto;
+  }
+
+  @Transactional()
+  public async getApplyByParticipant(postId: number): Promise<Participant[]> {
+    const participants = await this.participantRepository.find({
+      where: { board: { post_id: postId } },
+      relations: ['user_id', 'position_category_id'],
+    });
+
+    if (participants.length === 0) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, '해당 게시글에 참가자가 없습니다.');
+    }
+
+    return participants.map((participant) => classToPlain(participant) as Participant);
   }
 }

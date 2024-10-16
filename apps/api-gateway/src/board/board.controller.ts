@@ -6,7 +6,12 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { BoardService } from './board.service';
-import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
+import {
+  CreateBoardDto,
+  CreateParticipantDto,
+  UpdateBoardDto,
+  UpdateParticipantDto,
+} from './dto/req.dto';
 
 @Controller('board')
 export class BoardController {
@@ -152,5 +157,31 @@ export class BoardController {
   })
   public async deletePost(@Param('id') id: number) {
     return await this.boardService.deletePost(id);
+  }
+
+  @Post('/apply/:postId')
+  @ApiOperation({ summary: '참가자 게시글 신청' })
+  public async createParticipant(
+    @Param('postId') postId: number,
+    @Body() createParticipantDto: CreateParticipantDto,
+  ) {
+    const payload = { postId, createParticipantDto };
+    return await this.boardService.createParticipant(payload);
+  }
+
+  @Patch('/apply/:postId')
+  @ApiOperation({ summary: '작성자가 참가자 상태 변경' })
+  public async updateParticipantStatus(
+    @Param('postId') postId: number,
+    @Body() updateParticipantDto: UpdateParticipantDto,
+  ) {
+    const payload = { postId, updateParticipantDto };
+    return await this.boardService.updateParticipantStatus(payload);
+  }
+
+  @Get('/apply-users/:postId')
+  @ApiOperation({ summary: '작성한 게시글의 신청자 조회' })
+  public async getApplyByParticipnat(@Param('postId') postId: number) {
+    return await this.boardService.getApplyByParticipnat(postId);
   }
 }

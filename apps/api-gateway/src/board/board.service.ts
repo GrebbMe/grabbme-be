@@ -1,7 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { MESSAGE } from 'shared/constants/message-pattern';
-import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
+import {
+  CreateParticipantDto,
+  CreateBoardDto,
+  UpdateBoardDto,
+  UpdateParticipantDto,
+} from './dto/req.dto';
 
 @Injectable()
 export class BoardService {
@@ -27,5 +32,23 @@ export class BoardService {
 
   public async deletePost(id: number) {
     return await this.boardClient.send(MESSAGE.POST.DELETE_POST, { id });
+  }
+
+  public async createParticipant(payload: {
+    postId: number;
+    createParticipantDto: CreateParticipantDto;
+  }) {
+    return await this.boardClient.send(MESSAGE.PARTICIPANT.CREATE_PARTICIPANT, payload);
+  }
+
+  public async updateParticipantStatus(payload: {
+    postId: number;
+    updateParticipantDto: UpdateParticipantDto;
+  }) {
+    return await this.boardClient.send(MESSAGE.PARTICIPANT.UPDATE_PARTICIPANT_STATUS, payload);
+  }
+
+  public async getApplyByParticipnat(postId: number) {
+    return await this.boardClient.send(MESSAGE.PARTICIPANT.GET_PARTICIPANTS_BY_POST, { postId });
   }
 }

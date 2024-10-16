@@ -5,7 +5,12 @@ import { LoggingInterceptor } from '@shared/interceptor/message-logging.intercep
 import { TransformInterceptor } from '@shared/interceptor/transform.interceptor';
 import { MESSAGE } from 'shared/constants/message-pattern';
 import { BoardService } from './board.service';
-import { CreateBoardDto, UpdateBoardDto } from './dto/req.dto';
+import {
+  CreateParticipantDto,
+  CreateBoardDto,
+  UpdateBoardDto,
+  UpdateParticipantDto,
+} from './dto/req.dto';
 
 @UseInterceptors(LoggingInterceptor, TransformInterceptor)
 @Controller()
@@ -47,5 +52,30 @@ export class BoardController {
   public async deletePost(@Payload() payload: { id: number }) {
     const { id } = payload;
     return this.boardService.deletePost(id);
+  }
+
+  @SetResponse(MESSAGE.PARTICIPANT.CREATE_PARTICIPANT.cmd, HttpStatus.CREATED)
+  @MessagePattern(MESSAGE.PARTICIPANT.CREATE_PARTICIPANT)
+  public async createParticipant(
+    @Payload() payload: { postId: number; createParticipantDto: CreateParticipantDto },
+  ) {
+    const { postId, createParticipantDto } = payload;
+    return this.boardService.createParticipant(postId, createParticipantDto);
+  }
+
+  @SetResponse(MESSAGE.PARTICIPANT.UPDATE_PARTICIPANT_STATUS.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.PARTICIPANT.UPDATE_PARTICIPANT_STATUS)
+  public async updateParticipantStatus(
+    @Payload() payload: { postId: number; updateParticipantDto: UpdateParticipantDto },
+  ) {
+    const { postId, updateParticipantDto } = payload;
+    return this.boardService.updateParticipantStatus(postId, updateParticipantDto);
+  }
+
+  @SetResponse(MESSAGE.PARTICIPANT.GET_PARTICIPANTS_BY_POST.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.PARTICIPANT.GET_PARTICIPANTS_BY_POST)
+  public async getApplyByParticipant(@Payload() payload: { postId: number }) {
+    const { postId } = payload;
+    return this.boardService.getApplyByParticipant(postId);
   }
 }
