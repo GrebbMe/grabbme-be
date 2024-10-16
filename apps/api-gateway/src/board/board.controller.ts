@@ -160,7 +160,20 @@ export class BoardController {
   }
 
   @Post('/apply/:postId')
-  @ApiOperation({ summary: '참가자 게시글 신청' })
+  @ApiOperation({ summary: '게시글 신청' })
+  @ApiOkResponse({
+    description: '게시글 신청 완료',
+    example: {
+      status: 201,
+      data: {
+        user_id: 4,
+        nickname: 'nickname',
+        email: 'nickname@google.com',
+        post_id: 88,
+      },
+      message: 'create-participant',
+    },
+  })
   public async createParticipant(
     @Param('postId') postId: number,
     @Body() createParticipantDto: CreateParticipantDto,
@@ -170,7 +183,18 @@ export class BoardController {
   }
 
   @Patch('/apply/:postId')
-  @ApiOperation({ summary: '작성자가 참가자 상태 변경' })
+  @ApiOperation({ summary: '신청자 상태 변경' })
+  @ApiOkResponse({
+    description: '상태 변경 완료',
+    example: {
+      status: 200,
+      data: {
+        participants_id: 2,
+        status: 'accept',
+      },
+      message: 'update-participant-status',
+    },
+  })
   public async updateParticipantStatus(
     @Param('postId') postId: number,
     @Body() updateParticipantDto: UpdateParticipantDto,
@@ -180,8 +204,28 @@ export class BoardController {
   }
 
   @Get('/apply-users/:postId')
-  @ApiOperation({ summary: '작성한 게시글의 신청자 조회' })
+  @ApiOperation({ summary: '게시글 신청자 조회' })
+  @ApiOkResponse({
+    description: '게시글 신청자 조회',
+    example: {
+      status: 200,
+      data: [
+        {
+          user_id: 5,
+          nickname: 'nickname',
+          email: 'nickname@google.com',
+        },
+      ],
+      message: 'get-participants-by-post',
+    },
+  })
   public async getApplyByParticipnat(@Param('postId') postId: number) {
     return await this.boardService.getApplyByParticipnat(postId);
   }
+
+  //내가 작성한 글 조회
+
+  //내가 신청한 글 조회
+
+  //게시글 신청 취소
 }
