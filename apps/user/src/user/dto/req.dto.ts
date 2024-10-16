@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEmail, IsNotEmpty, IsNumber, IsString, ArrayMaxSize } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  ArrayMaxSize,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -16,18 +24,24 @@ export class CreateUserDto {
   @IsArray()
   @ArrayMaxSize(5)
   @IsNumber({}, { each: true })
+  @IsOptional({ always: true })
   public stack_category_id: number[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
+  @IsOptional({ always: true })
   public position_category_id: number;
 
-  @ApiProperty({ type: 'number' })
-  @IsNumber()
-  public project_category_id: number;
+  @ApiProperty({ type: 'array', items: { type: 'number' } })
+  @IsArray()
+  @ArrayMaxSize(3)
+  @IsNumber({}, { each: true })
+  @IsOptional({ always: true })
+  public project_category_id: number[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
+  @IsOptional({ always: true })
   public career_category_id: number;
 }
 
@@ -44,7 +58,7 @@ export class UpdateUserDto {
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
-  public project_category_id?: number;
+  public project_category_id?: number[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()

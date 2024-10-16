@@ -1,38 +1,39 @@
-import * as fs from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { GatewayRpcExceptionFilter } from './common/filter/gateway-rpc-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
   const configService = app.get(ConfigService);
   const httpAdapterHost = app.get(HttpAdapterHost);
+
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    preflightContinue: false,
+    credentials: true,
+  });
 
   // Swagger Setting
   const config = new DocumentBuilder()
     .setTitle('GrabbMe API Docs')
     .setDescription('GrabbMe Backend API Documents')
     .setVersion('1.0.0')
-    .addBearerAuth()
     .addServer('api')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  // swagger.json deploy를 위한 설정
-  if (process.env.NODE_ENV === 'generate-swagger') {
-    fs.writeFileSync('./swagger-static/swagger.json', JSON.stringify(document));
-    await app.close();
-    return;
-  }
-
   // root Endpoint 설정
   app.setGlobalPrefix('api');
+
+  // cookie 설정
+  app.use(cookieParser());
 
   // API 통신을 위한 validator
   app.useGlobalPipes(

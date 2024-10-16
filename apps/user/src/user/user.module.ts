@@ -5,11 +5,12 @@ import { CareerCategory, PositionCategory, ProjectCategory } from '@publicData/e
 import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { TempUser } from './entities/temp-user.entity';
 import { User } from './entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, CareerCategory, PositionCategory, ProjectCategory]),
+    TypeOrmModule.forFeature([User, CareerCategory, PositionCategory, ProjectCategory, TempUser]),
     ClientsModule.register([
       {
         name: 'USER_SERVICE',

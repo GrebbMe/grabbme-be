@@ -38,6 +38,7 @@ export const MESSAGE = {
     CREATE_PARTICIPANT: { cmd: 'create-participant' },
     UPDATE_PARTICIPANT_STATUS: { cmd: 'update-participant-status' },
     GET_PARTICIPANTS_BY_POST: { cmd: 'get-participants-by-post' },
+
   },
 
   CHAT: {
@@ -45,10 +46,13 @@ export const MESSAGE = {
     GET_CHAT_ROOMS: { cmd: 'get-chat-rooms' },
     GET_CHAT_ROOM: { cmd: 'get-chat-room' },
     GET_CHAT_LIST: { cmd: 'get-chat-list' },
+    DELETE_CHAT_ROOM: { cmd: 'delete-chat-room' },
   },
 
   USER: {
     CREATE_USER: { cmd: 'create-user' },
+    FIND_USER_BY_EMAIL: { cmd: 'find-user-by-email' },
+    LOGIN_OR_CREATE_USER: { cmd: 'login-or-create-user' },
     GET_USER: { cmd: 'get-user' },
     DELETE_USER: { cmd: 'delete-user' },
     UPDATE_USER: { cmd: 'update-user' },
