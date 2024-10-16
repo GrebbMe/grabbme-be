@@ -49,6 +49,10 @@ export class UserService {
         createUserDto.stack_category_id.length > 0 ? createUserDto.stack_category_id : [],
     });
 
+    const tempUserExist = await this.tempUserRepository.findOneBy({ email: createUserDto.email });
+    if (!tempUserExist) {
+      throw new CustomRpcException(HttpStatus.BAD_REQUEST, '임시 유저가 존재하지 않습니다.');
+    }
     const deleteTempUser = await this.deleteTempUser(createUserDto.email);
 
     if (deleteTempUser) {
