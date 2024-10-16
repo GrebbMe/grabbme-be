@@ -11,6 +11,8 @@ import {
   PositionCategory,
   ProjectCategory,
   StackCategory,
+  StackGraph,
+  ApplyGraph,
 } from './entities';
 
 @Module({
@@ -22,6 +24,8 @@ import {
       PostCategory,
       PositionCategory,
       ProjectCategory,
+      StackGraph,
+      ApplyGraph,
     ]),
 
     ClientsModule.register([

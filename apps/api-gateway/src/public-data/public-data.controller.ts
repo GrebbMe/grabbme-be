@@ -151,4 +151,85 @@ export class PublicDataController {
   public getCareerCategoryById(@Param() { id }: BasicReqDto) {
     return this.publicDataService.getCareerCategoryById(id);
   }
+
+  @Get('stack-graph')
+  @ApiOperation({ summary: 'stack graph 데이터 조회' })
+  @ApiOkResponse({
+    description: 'stack graph 데이터 조회',
+    example: [
+      {
+        stack_graph_id: 65,
+        stack_id: 65,
+        stack_name: 'Spring',
+        apply_cnt: 480,
+      },
+      {
+        stack_graph_id: 1,
+        stack_id: 1,
+        stack_name: 'React',
+        apply_cnt: 321,
+      },
+      {
+        stack_graph_id: 9,
+        stack_id: 9,
+        stack_name: 'Spring Boot',
+        apply_cnt: 321,
+      },
+      {
+        stack_graph_id: 48,
+        stack_id: 48,
+        stack_name: 'Python',
+        apply_cnt: 320,
+      },
+      {
+        stack_graph_id: 15,
+        stack_id: 15,
+        stack_name: 'Node.js',
+        apply_cnt: 280,
+      },
+      {
+        stack_graph_id: 52,
+        stack_id: 52,
+        stack_name: 'C++',
+        apply_cnt: 270,
+      },
+      {
+        stack_graph_id: 45,
+        stack_id: 45,
+        stack_name: 'TypeScript',
+        apply_cnt: 185,
+      },
+      {
+        stack_graph_id: 17,
+        stack_id: 17,
+        stack_name: 'PostgreSQL',
+        apply_cnt: 153,
+      },
+      {
+        stack_graph_id: 7,
+        stack_id: 7,
+        stack_name: 'NestJS',
+        apply_cnt: 127,
+      },
+      {
+        stack_graph_id: 58,
+        stack_id: 58,
+        stack_name: 'React Native',
+        apply_cnt: 119,
+      },
+    ],
+  })
+  public getStackGraph() {
+    return this.publicDataService.getStackGraphs();
+  }
+
+  @Get('apply-graph')
+  @ApiOperation({ summary: 'apply graph 데이터 조회' })
+  @ApiOkResponse({
+    description: 'apply graph 데이터 조회',
+    example: [],
+  })
+  public getApplyGraph() {
+    return this.publicDataService.getApplyGraphs();
+  }
 }

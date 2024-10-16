@@ -71,4 +71,16 @@ export class PublicDataController {
   public async getCareerCategoryById(@Payload() { id }: BasicReqDto) {
     return await this.publicDataService.findCareerCategoryById(id);
   }
+
+  @SetResponse(MESSAGE.PUBLIC_DATA.GRAPH.STACK_GRAPH.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.PUBLIC_DATA.GRAPH.STACK_GRAPH)
+  public async getStackGraph() {
+    return await this.publicDataService.getStackGraphs();
+  }
+
+  @SetResponse(MESSAGE.PUBLIC_DATA.GRAPH.APPLY_GRAPH.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.PUBLIC_DATA.GRAPH.APPLY_GRAPH)
+  public async getApplyGraph() {
+    return await this.publicDataService.getApplyGraphs();
+  }
 }

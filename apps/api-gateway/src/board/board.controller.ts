@@ -7,6 +7,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import { BoardService } from './board.service';
 import {
@@ -17,6 +18,7 @@ import {
 } from './dto/req.dto';
 
 @Controller('board')
+@ApiTags('Board')
 export class BoardController {
   public constructor(private readonly boardService: BoardService) {}
 

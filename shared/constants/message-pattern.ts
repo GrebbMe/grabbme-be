@@ -1,5 +1,9 @@
 export const MESSAGE = {
   PUBLIC_DATA: {
+    GRAPH: {
+      STACK_GRAPH: { cmd: 'get-stack-graph' },
+      APPLY_GRAPH: { cmd: 'get-apply-graph' },
+    },
     POST_CATEGORY: {
       GET_ALL_POST_CATEGORY: { cmd: 'get-all-post-category' },
       GET_ONE_POST_CATEGORY: { cmd: 'get-one-post-category' },

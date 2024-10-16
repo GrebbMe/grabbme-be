@@ -6,6 +6,8 @@ import {
   PostCategory,
   ProjectCategory,
   StackCategory,
+  StackGraph,
+  ApplyGraph,
 } from '@publicData/entities';
 import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { Repository } from 'typeorm';
@@ -24,6 +26,11 @@ export class PublicDataService {
     private stackCategoryRepository: Repository<StackCategory>,
     @InjectRepository(CareerCategory)
     private careerCategoryRepository: Repository<CareerCategory>,
+    @InjectRepository(StackGraph)
+    private stackGraphRepository: Repository<StackGraph>,
+
+    @InjectRepository(ApplyGraph)
+    private applyGraphRepository: Repository<ApplyGraph>,
   ) {}
 
   @Transactional()
@@ -140,5 +147,25 @@ export class PublicDataService {
     }
 
     return careerCategory;
+  }
+
+  @Transactional()
+  public async getStackGraphs() {
+    const stackGraphs = await this.stackGraphRepository.find({
+      order: { apply_cnt: 'DESC' },
+      take: 10,
+    });
+
+    return stackGraphs;
+  }
+
+  @Transactional()
+  public async getApplyGraphs() {
+    const applyGraphs = await this.applyGraphRepository.find({
+      order: { record_data: 'DESC' },
+      take: 30,
+    });
+
+    return applyGraphs.reverse();
   }
 }
