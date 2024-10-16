@@ -12,7 +12,7 @@ async function bootstrap() {
   const httpAdapterHost = app.get(HttpAdapterHost);
 
   app.enableCors({
-    origin: process.env.CLIENT_MAIN_URL,
+    origin: ['http://localhost', 'https://grabbme.com'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     credentials: true,
@@ -28,7 +28,6 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-
 
   // root Endpoint 설정
   app.setGlobalPrefix('api');
