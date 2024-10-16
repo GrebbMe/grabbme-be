@@ -60,7 +60,7 @@ export class BoardService {
         'project_category_id',
         'stack_category_id',
       ],
-      relations: ['post_category_id', 'career_category_id', 'position_category_id'],
+      relations: ['post_category_id', 'career_category_id'],
     });
 
     if (!post) {
