@@ -37,14 +37,12 @@ export class AuthController {
       res.cookie('accessToken', loginUser.access_token, {
         httpOnly: true,
         path: '/',
-        secure: false,
-        sameSite: 'none',
+        sameSite: 'lax',
       });
       res.cookie('refreshToken', loginUser.refresh_token, {
         httpOnly: true,
         path: '/',
-        secure: false,
-        sameSite: 'none',
+        sameSite: 'lax',
       });
 
       return res.redirect(301, clientBaseUrl.toString());

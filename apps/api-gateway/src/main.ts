@@ -12,7 +12,7 @@ async function bootstrap() {
   const httpAdapterHost = app.get(HttpAdapterHost);
 
   app.enableCors({
-    origin: ['http://localhost', 'https://grabbme.com'],
+    origin: 'http://localhost:5173',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     credentials: true,
