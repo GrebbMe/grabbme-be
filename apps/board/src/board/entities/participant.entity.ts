@@ -16,10 +16,10 @@ export class Participant {
   @JoinColumn({ name: 'post_id' })
   public board: Board;
 
-  @ManyToOne(() => PositionCategory)
+  @ManyToOne(() => PositionCategory, { nullable: true })
   @JoinColumn({ name: 'position_category_id' })
-  public positionCategory: PositionCategory;
+  public position_category_id: PositionCategory;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, default: 'pending' })
   public status: string;
 }
