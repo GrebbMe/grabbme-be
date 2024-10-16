@@ -32,6 +32,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
           response.cookie('accessToken', newAccessToken.access_token, {
             httpOnly: true,
             path: '/',
+            secure: false,
+            sameSite: 'none',
           });
 
           return true;

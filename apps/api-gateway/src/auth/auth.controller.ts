@@ -34,8 +34,18 @@ export class AuthController {
 
       return res.redirect(301, clientSignupUrl.toString());
     } else {
-      res.cookie('accessToken', loginUser.access_token, { httpOnly: true, path: '/' });
-      res.cookie('refreshToken', loginUser.refresh_token, { httpOnly: true, path: '/' });
+      res.cookie('accessToken', loginUser.access_token, {
+        httpOnly: true,
+        path: '/',
+        secure: false,
+        sameSite: 'none',
+      });
+      res.cookie('refreshToken', loginUser.refresh_token, {
+        httpOnly: true,
+        path: '/',
+        secure: false,
+        sameSite: 'none',
+      });
 
       return res.redirect(301, clientBaseUrl.toString());
     }
