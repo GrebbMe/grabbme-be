@@ -26,6 +26,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   ],
   providers: [
     AuthService,
+
     GithubStrategy,
     JwtStrategy,
     JwtRefreshStrategy,

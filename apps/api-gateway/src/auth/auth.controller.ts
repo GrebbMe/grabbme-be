@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from './auth.service';
+import { UserService } from '../user/user.service';
 import { GithubGuard } from './guards/github.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guard';
 import { JwtPayload } from './types/jwt.type';
@@ -12,6 +14,7 @@ export class AuthController {
   public constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
+    private readonly userService: UserService,
   ) {}
 
   @Get('github')
@@ -34,6 +37,8 @@ export class AuthController {
 
       return res.redirect(301, clientSignupUrl.toString());
     } else {
+      const user = await firstValueFrom(await this.userService.findUserByEmail(loginUser.email));
+      res.cookie('userId', user.userId);
       res.cookie('accessToken', loginUser.access_token, {
         httpOnly: true,
         path: '/',

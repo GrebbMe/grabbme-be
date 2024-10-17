@@ -11,6 +11,7 @@ type LoginReturn = Partial<GithubUser> & {
   access_token?: string;
   refresh_token?: string;
   isExist: boolean;
+  email: string;
 };
 
 @Injectable()
