@@ -8,7 +8,9 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 
 //TODO: CORS 설정.
-@WebSocketGateway(Number(process.env.CHAT_GATEWAY_PORT), { cors: { origin: '*' } })
+@WebSocketGateway(Number(process.env.CHAT_GATEWAY_PORT), {
+  cors: { origin: 'http://localhost:5173' },
+})
 export class ChatGateway {
   @WebSocketServer()
   public server: Server;
