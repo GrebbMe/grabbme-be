@@ -32,7 +32,8 @@ export const MESSAGE = {
 
   POST: {
     GET_ALL_POST_BY_POST_CATEGORY_ID: { cmd: 'get-all-post-by-post-category-id' },
-    GET_ONE_POST: { cmd: 'get-one-post' },
+    GET_ONE_POST_BY_GRABBZONE: { cmd: 'get-one-pos-by-grabbzone' },
+    GET_ONE_POST_BY_PROJECT: { cmd: 'get-one-post-by-project' },
     CREATE_POST: { cmd: 'create-post' },
     UPDATE_POST: { cmd: 'update-post' },
     DELETE_POST: { cmd: 'delete-post' },

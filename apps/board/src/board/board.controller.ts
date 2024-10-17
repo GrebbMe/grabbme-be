@@ -30,7 +30,6 @@ export class BoardController {
     },
   ) {
     const { postCategoryId, search, stack, page, limit } = payload;
-    console.log('Payload2:', payload);
     return this.boardService.getPostsByPostCategoryId({
       postCategoryId,
       search,
@@ -40,11 +39,18 @@ export class BoardController {
     });
   }
 
-  @SetResponse(MESSAGE.POST.GET_ONE_POST.cmd, HttpStatus.OK)
-  @MessagePattern(MESSAGE.POST.GET_ONE_POST)
-  public async getPostById(@Payload() payload: { id: number }) {
+  @SetResponse(MESSAGE.POST.GET_ONE_POST_BY_GRABBZONE.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.GET_ONE_POST_BY_GRABBZONE)
+  public async getGrabbzonePostById(@Payload() payload: { id: number }) {
     const { id } = payload;
-    return this.boardService.getPostById(id);
+    return this.boardService.getGrabbzonePostById(id);
+  }
+
+  @SetResponse(MESSAGE.POST.GET_ONE_POST_BY_PROJECT.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.GET_ONE_POST_BY_PROJECT)
+  public async getProjectPostById(@Payload() payload: { id: number }) {
+    const { id } = payload;
+    return this.boardService.getProjectPostById(id);
   }
 
   @SetResponse(MESSAGE.POST.CREATE_POST.cmd, HttpStatus.CREATED)

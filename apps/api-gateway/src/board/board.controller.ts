@@ -61,36 +61,68 @@ export class BoardController {
     return await this.boardService.getPostsByPostCategoryId(payload);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: '게시글 상세 조회' })
+  @Get('/grabbzone/:id')
+  @ApiOperation({ summary: '그렙존 게시글 상세 조회' })
   @ApiOkResponse({
-    description: '게시글 상세 조회',
+    description: '그렙존 게시글 상세 조회',
     example: {
       status: 200,
       data: {
-        post_id: 89,
-        title: '게시글 제목',
-        content: '게시글 소개',
-        start_month: '2024-10',
-        end_month: '2024-11',
-        create_at: '2024-10-15',
-        expired_at: '2024-11-15',
-        view_cnt: 0,
-        bookmarked_cnt: 0,
-        is_open: true,
-        project_category_id: ['2', '3'],
-        stack_category_id: ['4', '5'],
+        post_id: 82,
         post_category_id: 2,
-        career_category_id: {
-          career_category_id: 1,
-          content: '0년차',
-        },
+        title: '프로젝트명 ex.금융앱 사이드 프로젝트 팀원 모집',
+        content: '프로젝트 소개 ex.저희는 이런 앱을 만들고자 합니다. (최소 200 ~ 500 이내)',
+        start_month: null,
+        end_month: null,
+        create_at: '2024-10-14T19:00:33.000Z',
+        expired_at: '2024-10-12T00:00:00.000Z',
+        view_cnt: 2,
+        bookmarked_cnt: 0,
+        is_open: 1,
+        project_category_id: '2,4',
+        stack_category_id: '4,5',
+        chat_cnt: 2,
+        team_name: null,
+        career_content: null,
+        position_name: '',
       },
-      message: 'get-one-post',
+      message: 'get-one-pos-by-grabbzone',
     },
   })
-  public async getPostById(@Param('id') id: number) {
-    return await this.boardService.getPostById(id);
+  public async getGrabbzonePostById(@Param('id') id: number) {
+    return await this.boardService.getGrabbzonePostById(id);
+  }
+
+  @Get('/project/:id')
+  @ApiOperation({ summary: '프로젝트 게시글 상세 조회' })
+  @ApiOkResponse({
+    description: '프로젝트 게시글 상세 조회',
+    example: {
+      status: 200,
+      data: {
+        post_id: 83,
+        post_category_id: 1,
+        title: '프로젝트명 ex.금융앱 사이드 프로젝트 팀원 모집',
+        content: '프로젝트 소개 ex.저희는 이런 앱을 만들고자 합니다. (최소 200 ~ 500 이내)',
+        start_month: null,
+        end_month: null,
+        create_at: '2024-10-14T19:00:44.000Z',
+        expired_at: '2024-10-12T00:00:00.000Z',
+        view_cnt: 2,
+        bookmarked_cnt: 0,
+        is_open: 1,
+        project_category_id: '2,4',
+        stack_category_id: '4,5',
+        chat_cnt: 2,
+        team_name: null,
+        career_content: null,
+        position_name: '',
+      },
+      message: 'get-one-post-by-project',
+    },
+  })
+  public async getProjectPostById(@Param('id') id: number) {
+    return await this.boardService.getProjectPostById(id);
   }
 
   @Post('category/:postCategoryId')

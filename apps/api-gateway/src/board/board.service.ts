@@ -22,8 +22,12 @@ export class BoardService {
     return await this.boardClient.send(MESSAGE.POST.GET_ALL_POST_BY_POST_CATEGORY_ID, payload);
   }
 
-  public async getPostById(id: number) {
-    return await this.boardClient.send(MESSAGE.POST.GET_ONE_POST, { id });
+  public async getGrabbzonePostById(id: number) {
+    return await this.boardClient.send(MESSAGE.POST.GET_ONE_POST_BY_GRABBZONE, { id });
+  }
+
+  public async getProjectPostById(id: number) {
+    return await this.boardClient.send(MESSAGE.POST.GET_ONE_POST_BY_PROJECT, { id });
   }
 
   public async createPost(payload: { postCategoryId: number; createBoardDto: CreateBoardDto }) {
