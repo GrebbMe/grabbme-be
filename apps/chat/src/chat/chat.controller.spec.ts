@@ -73,7 +73,7 @@ describe('ChatController', () => {
       );
 
       it('success: 유저에게 해당되는 채팅방 목록을 반환한다.', async () => {
-        jest.spyOn(chatService, 'getChatRooms').mockResolvedValue(chatRooms);
+        //jest.spyOn(chatService, 'getChatRooms').mockResolvedValue(chatRooms);
 
         const result = await chatController.getChatRooms({ id: userId });
 
@@ -96,7 +96,7 @@ describe('ChatController', () => {
       const chatRoom = chatExamples.chatRooms.find((room) => room.channel_id === channelId);
 
       it('success: 해당 채널의 채팅방을 반환한다.', async () => {
-        jest.spyOn(chatService, 'getChatRoom').mockResolvedValue(chatRoom);
+        //jest.spyOn(chatService, 'getChatRoom').mockResolvedValue(chatRoom);
 
         const result = await chatController.getChatRoom({ channelId: channelId, userId: userId });
 

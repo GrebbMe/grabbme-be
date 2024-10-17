@@ -8,6 +8,7 @@ import { Board } from './entities/board.entity';
 import { ChatList } from './entities/chat-list.entity';
 import { ChatRoom } from './entities/chat-room.entity';
 import { Chat } from './entities/chat.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class ChatService {
@@ -17,6 +18,8 @@ export class ChatService {
     @InjectModel(Chat.name) private chatModel: Model<Chat>,
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
   public async createChatRoom(postId: number, senderId: number, receiverId: number) {
     const existingChatroom = await this.chatRoomModel
@@ -40,13 +43,44 @@ export class ChatService {
     }
   }
 
-  public async getChatRooms(userId: number): Promise<ChatRoom[]> {
+  public async getChatRooms(
+    userId: number,
+  ): Promise<Array<{ chatRoom: ChatRoom; me: User; other: User }>> {
     const chatRooms = await this.chatRoomModel.find({ users: userId }).exec();
-    if (chatRooms.length === 0) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
-    return chatRooms;
+
+    if (!chatRooms || chatRooms.length === 0)
+      throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
+
+    const updatedChatRooms = await Promise.all(
+      chatRooms.map(async (chatRoom) => {
+        let me: User | null = null;
+        let other: User | null = null;
+
+        await Promise.all(
+          chatRoom.users.map(async (id) => {
+            if (id === userId) {
+              me = await this.userRepository.findOne({ where: { user_id: id } });
+            } else {
+              other = await this.userRepository.findOne({ where: { user_id: id } });
+            }
+          }),
+        );
+
+        if (!me || !other) {
+          throw new Error('사용자 정보를 찾을 수 없습니다.');
+        }
+
+        return { chatRoom, me, other };
+      }),
+    );
+
+    return updatedChatRooms;
   }
 
-  public async getChatRoom(channelId: number, userId: number): Promise<ChatRoom> {
+  public async getChatRoom(
+    channelId: number,
+    userId: number,
+  ): Promise<{ chatRoom: ChatRoom; me: User; other: User }> {
     const chatRoom = await this.chatRoomModel.findOne({ channel_id: channelId }).exec();
     if (!chatRoom) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
 
@@ -70,7 +104,24 @@ export class ChatService {
       )
       .exec();
 
-    return chatRoom;
+    let me: User = null;
+    let other: User = null;
+
+    await Promise.all(
+      chatRoom.users.map(async (id) => {
+        if (id === userId) {
+          me = await this.userRepository.findOne({ where: { user_id: id } });
+        } else {
+          other = await this.userRepository.findOne({ where: { user_id: id } });
+        }
+      }),
+    );
+
+    if (!me || !other) {
+      throw new Error('사용자 정보를 찾을 수 없습니다.');
+    }
+
+    return { chatRoom, me, other };
   }
 
   public async deleteChatRoom(channelId: number): Promise<ChatRoom> {

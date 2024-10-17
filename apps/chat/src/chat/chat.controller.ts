@@ -21,7 +21,9 @@ export class ChatController {
   @SetResponse(MESSAGE.CHAT.GET_CHAT_ROOMS.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.CHAT.GET_CHAT_ROOMS)
   public async getChatRooms(@Payload() { id }: GetChatRoomsDto) {
-    return await this.chatService.getChatRooms(id);
+    const result = await this.chatService.getChatRooms(id);
+    console.log(result);
+    return result;
   }
 
   @SetResponse(MESSAGE.CHAT.GET_CHAT_ROOM.cmd, HttpStatus.OK)
