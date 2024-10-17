@@ -1,17 +1,17 @@
+import { User } from '@apps/user/src/user/entities/user.entity';
 import { Logger, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CareerCategory, PostCategory, PositionCategory } from '@publicData/entities';
 import { LoggingInterceptor } from '@shared/interceptor/message-logging.interceptor';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 import { ChatGateway } from './chat.gateway';
+import { Board } from './entities/board.entity';
 import { CHAT_LIST_SCHEMA, ChatList } from './entities/chat-list.entity';
 import { CHAT_ROOM_SCHEMA, ChatRoom } from './entities/chat-room.entity';
 import { CHAT_SCHEMA, Chat } from './entities/chat.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Board } from './entities/board.entity';
-import { User } from '@apps/user/src/user/entities/user.entity';
-import { CareerCategory, PostCategory, PositionCategory } from '@publicData/entities';
 
 @Module({
   imports: [
