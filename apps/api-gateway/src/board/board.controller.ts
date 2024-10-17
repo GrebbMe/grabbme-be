@@ -21,6 +21,29 @@ export class BoardController {
   @ApiOperation({ summary: 'post_category_id 별 조회, 검색 필터 조회' })
   @ApiOkResponse({
     description: 'post_category_id 별 전체 게시글 전체 조회',
+    example: {
+      status: 200,
+      data: {
+        totalPost: 6,
+        posts: [
+          {
+            post_id: 77,
+            title: '프로젝트명 ex.금융앱 사이드 프로젝트 팀원 모집',
+            content: '프로젝트 소개 ex.저희는 이런 앱을 만들고자 합니다. (최소 200 ~ 500 이내)',
+            expired_at: '2024-10-12T00:00:00.000Z',
+            view_cnt: 0,
+            bookmarked_cnt: 2,
+            stack_category_id: ['4', '5'],
+            post_category_id: {
+              id: 2,
+              post_category_name: '그랩존',
+            },
+            career_category_id: null,
+          },
+        ],
+      },
+      message: 'get-all-post-by-post-category-id',
+    },
   })
   public async getPostsByPostCategoryId(
     @Param('postCategoryId') postCategoryId: number,
