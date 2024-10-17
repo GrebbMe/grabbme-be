@@ -33,10 +33,10 @@ export class ChatService {
       if (isSenderInChatRoom) {
         return existingChatroom;
       } else {
-        await this.createNewChatRoom(postId, senderId, receiverId);
+        return await this.createNewChatRoom(postId, senderId, receiverId);
       }
     } else {
-      await this.createNewChatRoom(postId, senderId, receiverId);
+      return await this.createNewChatRoom(postId, senderId, receiverId);
     }
   }
 
