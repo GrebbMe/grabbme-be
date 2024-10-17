@@ -39,6 +39,8 @@ export const MESSAGE = {
     CREATE_BOOKMARK: { cmd: 'create-bookmark' },
     DELETE_BOOKMARK: { cmd: 'delete-bookmark' },
     GET_BOOKMARKS_BY_EMAIL: { cmd: 'get-bookmarks-by-email' },
+    GET_POPULAR_PROJECTS: { cmd: 'get-popular-projects' },
+    GET_CLOSING_PROJECTS: { cmd: 'get-closing-projects' },
   },
 
   PARTICIPANT: {

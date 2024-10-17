@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CareerCategory, PositionCategory, PostCategory } from '@publicData/entities';
 import { CustomRpcException } from '@shared/filter/custom-rpc-exception';
 import { classToPlain } from 'class-transformer';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import {
   CreateParticipantDto,
@@ -420,5 +420,43 @@ export class BoardService {
     }
 
     return bookmarks.map((bookmark) => classToPlain(bookmark) as Bookmark);
+  }
+
+  public async getPopularProjects() {
+    const popularProjects = await this.boardRepository.find({
+      order: { bookmarked_cnt: 'DESC', view_cnt: 'DESC', chat_cnt: 'DESC' },
+      take: 4,
+    });
+
+    return popularProjects.map((project) => classToPlain(project) as Board);
+  }
+
+  public async getClosingProjects() {
+    let expireExpectedProjects;
+    const currentDate = new Date();
+    const dueDate = new Date(currentDate.setDate(currentDate.getDate() + 7));
+    const closingProjects = await this.boardRepository.find({
+      where: {
+        expired_at: Between(currentDate, dueDate),
+        is_open: true,
+        post_category_id: { id: 1 } as PostCategory,
+      },
+      take: 4,
+    });
+    console.log('closingProjects:', closingProjects);
+    if (closingProjects.length === 0) {
+      expireExpectedProjects = await this.boardRepository.find({
+        order: { expired_at: 'ASC' },
+        where: {
+          is_open: true,
+          post_category_id: { id: 1 } as PostCategory,
+        },
+        take: 4,
+      });
+    }
+
+    return closingProjects.length > 0
+      ? closingProjects.map((project) => classToPlain(project) as Board)
+      : expireExpectedProjects.map((project) => classToPlain(project) as Board);
   }
 }

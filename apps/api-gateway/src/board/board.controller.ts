@@ -298,4 +298,14 @@ export class BoardController {
   public async getBookmarkInfo(@Param('email') email: string) {
     return await this.boardService.getBookmarksByUserEmail(email);
   }
+
+  @Get('/project-view/popular')
+  public async getPopularProject() {
+    return await this.boardService.getPopularProjects();
+  }
+
+  @Get('/project-view/closing')
+  public async getClosingProject() {
+    return await this.boardService.getClosingProjects();
+  }
 }

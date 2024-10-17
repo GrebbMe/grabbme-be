@@ -115,4 +115,16 @@ export class BoardController {
     const { email } = payload;
     return await this.boardService.getBookmarksByUserEmail(email);
   }
+
+  @SetResponse(MESSAGE.POST.GET_POPULAR_PROJECTS.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.GET_POPULAR_PROJECTS)
+  public async getPopularProjects() {
+    return await this.boardService.getPopularProjects();
+  }
+
+  @SetResponse(MESSAGE.POST.GET_CLOSING_PROJECTS.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.GET_CLOSING_PROJECTS)
+  public async getClosingProjects() {
+    return await this.boardService.getClosingProjects();
+  }
 }

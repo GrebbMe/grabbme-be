@@ -67,4 +67,12 @@ export class BoardService {
   public async getBookmarksByUserEmail(email: string) {
     return await this.boardClient.send(MESSAGE.POST.GET_BOOKMARKS_BY_EMAIL, { email });
   }
+
+  public async getPopularProjects() {
+    return await this.boardClient.send(MESSAGE.POST.GET_POPULAR_PROJECTS, {});
+  }
+
+  public async getClosingProjects() {
+    return await this.boardClient.send(MESSAGE.POST.GET_CLOSING_PROJECTS, {});
+  }
 }
