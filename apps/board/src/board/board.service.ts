@@ -68,9 +68,7 @@ export class BoardService {
     }
 
     if (stack) {
-      queryBuilder.andWhere('JSON_CONTAINS(board.stack_category_id, :stack)', {
-        stack: JSON.stringify([stack]),
-      });
+      queryBuilder.andWhere('FIND_IN_SET(:stack, board.stack_category_id) > 0', { stack });
     }
 
     const totalPost = await queryBuilder.getCount();
