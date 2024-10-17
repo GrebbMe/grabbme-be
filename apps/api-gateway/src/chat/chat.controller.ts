@@ -11,7 +11,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ChatService } from './chat.service';
-import { CreateChatRoomDto, GetChatListDto, GetChatRoomsDto } from './dto/req.dto';
+import { CreateChatRoomDto, GetChatListDto } from './dto/req.dto';
 import { ChatRoom } from './entities/chat-room.entity';
 
 @Controller('chat')
@@ -60,9 +60,9 @@ export class ChatController {
     ],
   })
   @Get('rooms')
-  public getChatRooms(@Body() { id }: GetChatRoomsDto) {
+  public getChatRooms(@Query('userId') userId: number) {
     //TODO: id값은 userId로 인증/인가 절차 구현시 삭제 예정
-    return this.chatService.getChatRooms(id);
+    return this.chatService.getChatRooms(userId);
   }
 
   @ApiOperation({ summary: '특정 채팅방 조회' })
