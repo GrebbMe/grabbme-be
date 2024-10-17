@@ -44,7 +44,6 @@ export class BoardService {
     limit: number;
   }): Promise<{ totalPost: number; posts: Board[] }> {
     const { postCategoryId, search, stack, page = 1, limit = 5 } = payload;
-    console.log('Payload3:', payload);
 
     const queryBuilder = this.boardRepository
       .createQueryBuilder('board')
@@ -87,35 +86,75 @@ export class BoardService {
   }
 
   @Transactional()
-  public async getPostById(id: number): Promise<Board> {
-    const post = await this.boardRepository.findOne({
-      where: { post_id: id },
-      select: [
-        'post_id',
-        'title',
-        'content',
-        'start_month',
-        'end_month',
-        'create_at',
-        'expired_at',
-        'view_cnt',
-        'bookmarked_cnt',
-        'is_open',
-        'project_category_id',
-        'stack_category_id',
-        'chat_cnt',
-      ],
-      relations: ['post_category_id', 'career_category_id'],
-    });
+  public async getPostByIdAndCategory(
+    id: number,
+    expectedCategoryId: number,
+    errorMessage: string,
+  ): Promise<Board> {
+    const rawData = await this.boardRepository
+      .createQueryBuilder('post')
+      .leftJoin('teams', 'team', 'team.post_id = post.post_id')
+      .leftJoin('career_category', 'career', 'career.career_category_id = post.career_category_id')
+      .where('post.post_id = :id', { id })
+      .select([
+        'post.post_id AS post_id',
+        'post.post_category_id AS post_category_id',
+        'post.title AS title',
+        'post.content AS content',
+        'post.start_month AS start_month',
+        'post.end_month AS end_month',
+        'post.create_at AS create_at',
+        'post.expired_at AS expired_at',
+        'post.view_cnt AS view_cnt',
+        'post.bookmarked_cnt AS bookmarked_cnt',
+        'post.is_open AS is_open',
+        'post.project_category_id AS project_category_id',
+        'post.stack_category_id AS stack_category_id',
+        'post.chat_cnt AS chat_cnt',
+        'team.name AS team_name',
+        'career.content AS career_content',
+      ])
+      .getRawMany();
 
-    if (!post) {
+    if (rawData.length === 0) {
       throw new CustomRpcException(HttpStatus.NOT_FOUND, '게시글을 찾을 수 없습니다.');
     }
 
-    post.view_cnt += 1;
-    await this.boardRepository.save(post);
+    const post = rawData[0];
 
-    return classToPlain(post) as Board;
+    if (post.post_category_id !== expectedCategoryId) {
+      throw new CustomRpcException(HttpStatus.NOT_FOUND, errorMessage);
+    }
+
+    post.view_cnt += 1;
+    await this.boardRepository
+      .createQueryBuilder()
+      .update('posts')
+      .set({ view_cnt: post.view_cnt })
+      .where('post_id = :id', { id })
+      .execute();
+
+    const teamName = rawData
+      .map((row) => row.team_name)
+      .filter((name) => name !== null)
+      .join(', ');
+
+    const response = {
+      ...post,
+      position_name: teamName,
+    };
+
+    return classToPlain(response) as Board;
+  }
+
+  @Transactional()
+  public async getProjectPostById(id: number): Promise<Board> {
+    return this.getPostByIdAndCategory(id, 1, '프로젝트 게시글이 아닙니다.');
+  }
+
+  @Transactional()
+  public async getGrabbzonePostById(id: number): Promise<Board> {
+    return this.getPostByIdAndCategory(id, 2, '그렙존 게시글이 아닙니다.');
   }
 
   @Transactional()
