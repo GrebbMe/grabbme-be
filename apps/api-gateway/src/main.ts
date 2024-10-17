@@ -12,7 +12,7 @@ async function bootstrap() {
   const httpAdapterHost = app.get(HttpAdapterHost);
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'https://grabbme.netlify.app'],
+    origin: ['http://localhost:5173', 'https://grabbme.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     credentials: true,
