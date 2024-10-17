@@ -151,13 +151,14 @@ describe('ChatService', () => {
     });
 
     context('getChatRoom을 실행하면,', () => {
+      const userId = 1;
       const channelId = 1;
       const chatRoom = chatExamples.chatRooms.find((room) => room.channel_id === channelId);
 
       it('success : 채널 ID에 맞는 채팅방을 반환한다.', async () => {
         mockFindOneExec(chatRoom);
 
-        const result = await chatService.getChatRoom(channelId);
+        const result = await chatService.getChatRoom(channelId, userId);
 
         expect(result).toEqual(chatRoom);
         expect(mockChatRoomModel.findOne).toHaveBeenCalledWith({ channel_id: channelId });
@@ -166,7 +167,7 @@ describe('ChatService', () => {
       it('error : 채널 ID로 채팅방을 찾을 수 없으면 NotFoundException을 반환한다.', async () => {
         mockFindOneExec(null);
 
-        await expect(chatService.getChatRoom(channelId)).rejects.toThrow(NotFoundException);
+        await expect(chatService.getChatRoom(channelId, userId)).rejects.toThrow(NotFoundException);
         expect(mockChatRoomModel.findOne).toHaveBeenCalledWith({ channel_id: channelId });
       });
     });

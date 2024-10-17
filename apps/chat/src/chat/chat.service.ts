@@ -185,6 +185,7 @@ export class ChatService {
     const createdChatRoom = await this.chatRoomModel.create({
       channel_id: newChannelId,
       name: `${senderId}, ${receiverId}`,
+      post_name: post.title,
       post_id: postId,
       last_chat: chatContent,
       users: [senderId, receiverId],
