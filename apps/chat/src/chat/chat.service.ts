@@ -45,7 +45,7 @@ export class ChatService {
 
   public async getChatRooms(
     userId: number,
-  ): Promise<Array<{ chatRoom: ChatRoom; me: User; other: User }>> {
+  ): Promise<Array<{ chatRoom: ChatRoom; me: User; other: User; isRead: boolean }>> {
     const chatRooms = await this.chatRoomModel.find({ users: userId }).exec();
 
     if (!chatRooms || chatRooms.length === 0)
@@ -56,6 +56,7 @@ export class ChatService {
         let me: User | null = null;
         let other: User | null = null;
 
+        // 사용자 찾기
         await Promise.all(
           chatRoom.users.map(async (id) => {
             if (id === userId) {
@@ -70,7 +71,24 @@ export class ChatService {
           throw new Error('사용자 정보를 찾을 수 없습니다.');
         }
 
-        return { chatRoom, me, other };
+        const chatLists = await this.chatListModel
+          .find({ chat_list_id: { $in: chatRoom.chat_lists } })
+          .exec();
+
+        const isRead = chatLists.every((chatList) => {
+          if (!chatList.chats) {
+            return true;
+          }
+
+          return chatList.chats.every((chat) => {
+            if (chat.sender_id !== userId && chat.read_cnt === 1) {
+              return false;
+            }
+            return true;
+          });
+        });
+
+        return { chatRoom, me, other, isRead };
       }),
     );
 
