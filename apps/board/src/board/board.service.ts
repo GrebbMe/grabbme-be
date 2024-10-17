@@ -468,15 +468,15 @@ export class BoardService {
     return popularProjects.map((project) => classToPlain(project) as Board);
   }
 
+  @Transactional()
   public async getClosingProjects() {
-    let expireExpectedProjects;
     const currentDate = new Date();
     const dueDate = new Date(new Date().setDate(new Date().getDate() + 7));
 
     console.log('currentDate', currentDate);
     console.log('dueDate', dueDate);
 
-    const closingProjects = await this.boardRepository.find({
+    let closingProjects = await this.boardRepository.find({
       where: {
         expired_at: Between(currentDate, dueDate),
         is_open: true,
@@ -486,7 +486,7 @@ export class BoardService {
     });
 
     if (closingProjects.length === 0) {
-      expireExpectedProjects = await this.boardRepository.find({
+      closingProjects = await this.boardRepository.find({
         order: { expired_at: 'ASC' },
         where: {
           is_open: true,
@@ -496,24 +496,39 @@ export class BoardService {
       });
     }
 
-    return closingProjects.length > 0
-      ? closingProjects.map(
-          (project) =>
-            classToPlain({
-              ...project,
-              due_day: Math.floor(
-                (project.expired_at.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
-              ),
-            }) as Board,
-        )
-      : expireExpectedProjects.map(
-          (project) =>
-            classToPlain({
-              ...project,
-              due_day: Math.floor(
-                (project.expired_at.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
-              ),
-            }) as Board,
-        );
+    const recentExpiredProjects = closingProjects.map(
+      (project) =>
+        classToPlain({
+          ...project,
+          due_day: Math.floor(
+            (project.expired_at.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+          ),
+        }) as Board,
+    );
+
+    console.log(recentExpiredProjects);
+
+    // const recentExpiredProjectWithTeams = recentExpiredProjects.map(async (project) => {
+    //   const teams = await this.teamRepository.find({
+    //     where: { board: { post_id: project.post_id } },
+    //   });
+
+    //   return { ...project, teams };
+    // });
+
+    const recentExpiredProjectWithTeams = await Promise.all(
+      recentExpiredProjects.map(async (project) => {
+        const teams = await this.teamRepository.find({
+          where: { board: { post_id: project.post_id } },
+        });
+        return classToPlain({
+          ...project,
+          teams: teams.map((team) => classToPlain(team) as Team),
+        }) as Board;
+      }),
+    );
+    console.log(recentExpiredProjectWithTeams);
+
+    return recentExpiredProjectWithTeams;
   }
 }
