@@ -331,11 +331,59 @@ export class BoardController {
     return await this.boardService.getBookmarksByUserEmail(email);
   }
 
+  @ApiOperation({ summary: '인기 프로젝트 조회' })
+  @ApiOkResponse({
+    description: '인기 프로젝트 조회',
+    example: {
+      status: 200,
+      data: [
+        {
+          post_id: 82,
+          title: '프로젝트명 ex.금융앱 사이드 프로젝트 팀원 모집',
+          content: '프로젝트 소개 ex.저희는 이런 앱을 만들고자 합니다. (최소 200 ~ 500 이내)',
+          expired_at: '2024-10-12T00:00:00.000Z',
+          view_cnt: 2,
+          bookmarked_cnt: 0,
+          stack_category_id: ['4', '5'],
+          post_category_id: {
+            id: 2,
+            post_category_name: '그랩존',
+          },
+          career_category_id: null,
+        },
+      ],
+      message: 'get-popular-projects',
+    },
+  })
   @Get('/project-view/popular')
   public async getPopularProject() {
     return await this.boardService.getPopularProjects();
   }
 
+  @ApiOperation({ summary: '마감임박 프로젝트 조회' })
+  @ApiOkResponse({
+    description: '마감임박 프로젝트 조회',
+    example: {
+      status: 200,
+      data: [
+        {
+          post_id: 82,
+          title: '프로젝트명 ex.금융앱 사이드 프로젝트 팀원 모집',
+          content: '프로젝트 소개 ex.저희는 이런 앱을 만들고자 합니다. (최소 200 ~ 500 이내)',
+          expired_at: '2024-10-12T00:00:00.000Z',
+          view_cnt: 2,
+          bookmarked_cnt: 0,
+          stack_category_id: ['4', '5'],
+          post_category_id: {
+            id: 2,
+            post_category_name: '그랩존',
+          },
+          career_category_id: null,
+        },
+      ],
+      message: 'get-closing-projects',
+    },
+  })
   @Get('/project-view/closing')
   public async getClosingProject() {
     return await this.boardService.getClosingProjects();
