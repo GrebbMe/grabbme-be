@@ -12,10 +12,14 @@ import {
 export class BoardService {
   public constructor(@Inject('BOARD_SERVICE') private readonly boardClient: ClientProxy) {}
 
-  public async getPostsByPostCategoryId(postCategoryId: number) {
-    return await this.boardClient.send(MESSAGE.POST.GET_ALL_POST_BY_POST_CATEGORY_ID, {
-      postCategoryId,
-    });
+  public async getPostsByPostCategoryId(payload: {
+    postCategoryId: number;
+    search?: string;
+    stack?: number;
+    page: number;
+    limit: number;
+  }) {
+    return await this.boardClient.send(MESSAGE.POST.GET_ALL_POST_BY_POST_CATEGORY_ID, payload);
   }
 
   public async getPostById(id: number) {
