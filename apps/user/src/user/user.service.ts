@@ -108,7 +108,10 @@ export class UserService {
   }
 
   public async deleteTempUser(email: string) {
-    const tempUser = await this.tempUserRepository.findOneBy({ email });
+    const tempUser = await this.tempUserRepository.findOne({
+      where: { email },
+      relations: ['position_category_id', 'career_category_id'],
+    });
 
     return this.tempUserRepository.delete(tempUser);
   }
@@ -122,6 +125,7 @@ export class UserService {
   public async getUser(id: number): Promise<User> {
     const user: User = await this.userRepository.findOne({
       where: { user_id: id },
+      relations: ['position_category_id', 'career_category_id'],
     });
 
     if (!user) {

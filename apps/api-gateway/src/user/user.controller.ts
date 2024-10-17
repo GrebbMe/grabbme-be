@@ -16,8 +16,10 @@ import {
   ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -75,12 +77,14 @@ export class UserController {
   }
 
   @Get('/info')
+  @ApiQuery({ example: '사용자 이메일', name: 'email' })
+  @ApiOkResponse({ description: '사용자 정보 조회', type: User })
   public async getUserInfoByEmail(@Query('email') email: string) {
     return await this.userService.findUserByEmail(email);
   }
 
   @ApiOperation({ summary: '사용자 조회' })
-  @ApiResponse({ description: '사용자가 조회되었습니다.' })
+  @ApiResponse({ description: '사용자가 조회되었습니다.', type: User })
   @ApiBadRequestResponse({
     description: '잘못된 요청',
   })
