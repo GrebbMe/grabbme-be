@@ -8,6 +8,10 @@ import { ChatGateway } from './chat.gateway';
 import { CHAT_LIST_SCHEMA, ChatList } from './entities/chat-list.entity';
 import { CHAT_ROOM_SCHEMA, ChatRoom } from './entities/chat-room.entity';
 import { CHAT_SCHEMA, Chat } from './entities/chat.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Board } from './entities/board.entity';
+import { User } from '@apps/user/src/user/entities/user.entity';
+import { CareerCategory, PostCategory, PositionCategory } from '@publicData/entities';
 
 @Module({
   imports: [
@@ -21,6 +25,7 @@ import { CHAT_SCHEMA, Chat } from './entities/chat.entity';
         },
       },
     ]),
+    TypeOrmModule.forFeature([Board, PostCategory, CareerCategory, User, PositionCategory]),
     MongooseModule.forFeature([
       {
         name: ChatRoom.name,

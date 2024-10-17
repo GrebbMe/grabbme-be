@@ -5,6 +5,9 @@ import { Model } from 'mongoose';
 import { ChatList } from './entities/chat-list.entity';
 import { ChatRoom } from './entities/chat-room.entity';
 import { Chat } from './entities/chat.entity';
+import { Board } from './entities/board.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ChatService {
@@ -12,6 +15,8 @@ export class ChatService {
     @InjectModel(ChatRoom.name) private chatRoomModel: Model<ChatRoom>,
     @InjectModel(ChatList.name) private chatListModel: Model<ChatList>,
     @InjectModel(Chat.name) private chatModel: Model<Chat>,
+    @InjectRepository(Board)
+    private readonly boardRepository: Repository<Board>,
   ) {}
   public async createChatRoom(postId: number, senderId: number, receiverId: number) {
     const existingChatroom = await this.chatRoomModel
@@ -23,39 +28,15 @@ export class ChatService {
       })
       .exec();
 
-    const chatContent = `${senderId}님이 ${receiverId}님에게 대화를 신청하였습니다.`;
-    const newChannelId = await this.getNextId(this.chatRoomModel, 'channel_id');
-    const newChatId = await this.getNextId(this.chatModel, 'chat_id');
-    const newChatListId = await this.getNextId(this.chatListModel, 'chat_list_id');
-
     if (existingChatroom) {
       const isSenderInChatRoom = existingChatroom.users.includes(senderId);
       if (isSenderInChatRoom) {
         return existingChatroom;
+      } else {
+        await this.createNewChatRoom(postId, senderId, receiverId);
       }
     } else {
-      const newChat = await this.chatModel.create({
-        chat_id: newChatId,
-        sender_id: senderId,
-        type: 'text',
-        content: chatContent,
-      });
-
-      await this.chatListModel.create({
-        chat_list_id: newChatListId,
-        chats: [newChat],
-      });
-
-      const createdChatRoom = await this.chatRoomModel.create({
-        channel_id: newChannelId,
-        name: `${senderId}, ${receiverId}`,
-        post_id: postId,
-        last_chat: chatContent,
-        users: [senderId, receiverId],
-        chat_lists: [newChatListId],
-      });
-
-      return createdChatRoom;
+      await this.createNewChatRoom(postId, senderId, receiverId);
     }
   }
 
@@ -153,5 +134,40 @@ export class ChatService {
       .sort({ [key]: CHAT.SORT_DESC })
       .exec();
     return lastDocument ? lastDocument[key] + 1 : 1;
+  }
+
+  private async createNewChatRoom(postId: number, senderId: number, receiverId: number) {
+    const chatContent = `${senderId}님이 ${receiverId}님에게 대화를 신청하였습니다.`;
+    const newChannelId = await this.getNextId(this.chatRoomModel, 'channel_id');
+    const newChatId = await this.getNextId(this.chatModel, 'chat_id');
+    const newChatListId = await this.getNextId(this.chatListModel, 'chat_list_id');
+
+    const newChat = await this.chatModel.create({
+      chat_id: newChatId,
+      sender_id: senderId,
+      type: 'text',
+      content: chatContent,
+    });
+
+    const post = await this.boardRepository.findOne({ where: { post_id: postId } });
+    post.chat_cnt += 1;
+
+    await this.boardRepository.save(post);
+
+    await this.chatListModel.create({
+      chat_list_id: newChatListId,
+      chats: [newChat],
+    });
+
+    const createdChatRoom = await this.chatRoomModel.create({
+      channel_id: newChannelId,
+      name: `${senderId}, ${receiverId}`,
+      post_id: postId,
+      last_chat: chatContent,
+      users: [senderId, receiverId],
+      chat_lists: [newChatListId],
+    });
+
+    return createdChatRoom;
   }
 }
