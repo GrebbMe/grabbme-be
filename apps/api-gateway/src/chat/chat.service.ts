@@ -18,14 +18,14 @@ export class ChatService {
     return this.chatClient.send(MESSAGE.CHAT.GET_CHAT_ROOMS, { id });
   }
 
-  public getChatRoom(id: number) {
-    return this.chatClient.send(MESSAGE.CHAT.GET_CHAT_ROOM, { id });
+  public getChatRoom(channelId: number, userId: number) {
+    return this.chatClient.send(MESSAGE.CHAT.GET_CHAT_ROOM, { channelId, userId });
   }
 
   public deleteChatRoom(id: number) {
     return this.chatClient.send(MESSAGE.CHAT.DELETE_CHAT_ROOM, { id });
   }
-  
+
   public getChatList(id: number, page: number) {
     return this.chatClient.send(MESSAGE.CHAT.GET_CHAT_LIST, { id, page });
   }

@@ -2,4 +2,7 @@ export const CHAT = {
   SORT_DESC: -1,
   CHAT_LIST_PAGINATION_LIMIT: 1,
   CHAT_LIMIT_IN_CHAT_LIST: 100,
+  CHAT_ROOM_LIMIT: 2,
+  READ_CHAT: 0,
+  NOT_READ_CHAT: 1,
 } as const;

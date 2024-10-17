@@ -17,6 +17,9 @@ export class Chat extends Document {
 
   @Prop({ default: Date.now })
   public created_at: Date;
+
+  @Prop({ required: true })
+  public read_cnt: number;
 }
 
 export const CHAT_SCHEMA: mongoose.Schema = SchemaFactory.createForClass(Chat);

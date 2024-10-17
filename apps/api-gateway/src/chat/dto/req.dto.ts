@@ -21,7 +21,11 @@ export class GetChatRoomsDto {
 export class GetChatRoomDto {
   @Type(() => Number)
   @IsInt()
-  public readonly id: number;
+  public readonly channelId: number;
+
+  @Type(() => Number)
+  @IsInt()
+  public readonly userId: number;
 }
 
 export class GetChatListDto {

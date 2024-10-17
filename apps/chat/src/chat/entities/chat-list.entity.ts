@@ -7,7 +7,7 @@ export class ChatList extends Document {
   @Prop({ required: true })
   public chat_list_id: number;
 
-  @Prop({ type: [{ type: [CHAT_SCHEMA], required: true }] })
+  @Prop({ type: [CHAT_SCHEMA], required: true })
   public chats: Chat[];
 
   @Prop({ default: Date.now })

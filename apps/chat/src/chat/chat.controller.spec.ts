@@ -91,13 +91,14 @@ describe('ChatController', () => {
     });
 
     context('getChatRoom을 실행하면,', () => {
+      const userId = 1;
       const channelId = 1;
       const chatRoom = chatExamples.chatRooms.find((room) => room.channel_id === channelId);
 
       it('success: 해당 채널의 채팅방을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRoom').mockResolvedValue(chatRoom);
 
-        const result = await chatController.getChatRoom({ id: channelId });
+        const result = await chatController.getChatRoom({ channelId: channelId, userId: userId });
 
         expect(result).toEqual(chatRoom);
         expect(chatService.getChatRoom).toHaveBeenCalledWith(channelId);
@@ -106,9 +107,9 @@ describe('ChatController', () => {
       it('error: 채팅방이 없을 경우 NotFoundException을 반환한다.', async () => {
         jest.spyOn(chatService, 'getChatRoom').mockRejectedValue(new NotFoundException());
 
-        await expect(chatController.getChatRoom({ id: channelId })).rejects.toThrow(
-          NotFoundException,
-        );
+        await expect(
+          chatController.getChatRoom({ channelId: channelId, userId: userId }),
+        ).rejects.toThrow(NotFoundException);
       });
     });
 

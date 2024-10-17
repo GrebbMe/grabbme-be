@@ -46,9 +46,30 @@ export class ChatService {
     return chatRooms;
   }
 
-  public async getChatRoom(channelId: number): Promise<ChatRoom> {
+  public async getChatRoom(channelId: number, userId: number): Promise<ChatRoom> {
     const chatRoom = await this.chatRoomModel.findOne({ channel_id: channelId }).exec();
     if (!chatRoom) throw new NotFoundException('해당 채널에 대한 채팅방이 없습니다.');
+
+    const chatLists = await this.chatListModel.find({ chat_list_id: { $in: chatRoom.chat_lists } });
+    const chatIds = chatLists.flatMap((chatList) => chatList.chats.map((chat) => chat.chat_id));
+
+    for (const chatList of chatLists) {
+      for (const chat of chatList.chats) {
+        if (chat.chat_id && chat.sender_id !== userId) {
+          chat.read_cnt = 0;
+        }
+      }
+
+      await chatList.save();
+    }
+
+    await this.chatModel
+      .updateMany(
+        { chat_id: { $in: chatIds }, sender_id: { $ne: userId } },
+        { $set: { read_cnt: 0 } },
+      )
+      .exec();
+
     return chatRoom;
   }
 
@@ -58,7 +79,7 @@ export class ChatService {
       throw new NotFoundException('해당 채팅방이 없습니다.');
     }
     const chatLists = await this.chatListModel.find({ chat_list_id: { $in: chatRoom.chat_lists } });
-    const chatIds = chatLists.flatMap((chatList) => chatList.chats.map((chat) => chat[0].chat_id));
+    const chatIds = chatLists.flatMap((chatList) => chatList.chats.map((chat) => chat.chat_id));
     const chatListsIds = chatLists.map((chatList) => chatList.chat_list_id);
     await this.chatModel.deleteMany({ chat_id: { $in: chatIds } });
     await this.chatListModel.deleteMany({ chat_list_id: { $in: chatListsIds } });
@@ -80,7 +101,7 @@ export class ChatService {
     return chatList;
   }
 
-  public async saveMessage(channelId: number, content: string, senderId: number) {
+  public async saveMessage(channelId: number, content: string, senderId: number, readCnt: number) {
     const chatRoom = await this.chatRoomModel
       .findOne({ channel_id: channelId })
       .populate({
@@ -99,6 +120,7 @@ export class ChatService {
       sender_id: senderId,
       type: 'text',
       content: content,
+      read_cnt: readCnt,
     });
 
     if (!newChat) {
@@ -147,6 +169,7 @@ export class ChatService {
       sender_id: senderId,
       type: 'text',
       content: chatContent,
+      read_cnt: CHAT.NOT_READ_CHAT,
     });
 
     const post = await this.boardRepository.findOne({ where: { post_id: postId } });

@@ -11,7 +11,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ChatService } from './chat.service';
-import { CreateChatRoomDto, GetChatListDto, GetChatRoomDto, GetChatRoomsDto } from './dto/req.dto';
+import { CreateChatRoomDto, GetChatListDto, GetChatRoomsDto } from './dto/req.dto';
 import { ChatRoom } from './entities/chat-room.entity';
 
 @Controller('chat')
@@ -75,18 +75,17 @@ export class ChatController {
     name: 'id',
     required: true,
   })
-  @Get('rooms/:id')
-  public getChatRoom(@Param() { id }: GetChatRoomDto) {
-    return this.chatService.getChatRoom(id);
+  @Get('rooms/:channelId')
+  public getChatRoom(@Param('channelId') channelId: number, @Query('userId') userId: number) {
+    return this.chatService.getChatRoom(channelId, userId);
   }
-
   @ApiOperation({ summary: '채팅방 삭제' })
   @ApiNoContentResponse({
     description: '채팅방 삭제 완료',
   })
   @Delete('rooms/:id')
   public async deleteChatRoom(@Param('id') id: number) {
-    return await this.chatService.deleteChatRoom(id);
+    return this.chatService.deleteChatRoom(id);
   }
 
   @ApiOperation({ summary: '특정 채팅 리스트 조회' })

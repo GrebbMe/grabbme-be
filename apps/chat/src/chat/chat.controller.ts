@@ -26,13 +26,13 @@ export class ChatController {
 
   @SetResponse(MESSAGE.CHAT.GET_CHAT_ROOM.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.CHAT.GET_CHAT_ROOM)
-  public async getChatRoom(@Payload() { id }: GetChatRoomDto) {
-    return await this.chatService.getChatRoom(id);
+  public async getChatRoom(@Payload() { channelId, userId }: GetChatRoomDto) {
+    return await this.chatService.getChatRoom(channelId, userId);
   }
 
   @SetResponse(MESSAGE.CHAT.GET_CHAT_LIST.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.CHAT.DELETE_CHAT_ROOM)
-  public async deleteChatRoom(@Payload() { id }: GetChatRoomDto) {
+  public async deleteChatRoom(@Payload() { id }: GetChatListDto) {
     return await this.chatService.deleteChatRoom(id);
   }
 
