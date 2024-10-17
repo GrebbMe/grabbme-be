@@ -78,8 +78,8 @@ export class PublicDataService {
     );
   }
 
-  public async getStackGraphs() {
-    return await this.publicDataClient.send(MESSAGE.PUBLIC_DATA.GRAPH.STACK_GRAPH, {});
+  public async getStackGraphs({ year, month }: { year: number; month: number }) {
+    return await this.publicDataClient.send(MESSAGE.PUBLIC_DATA.GRAPH.STACK_GRAPH, { year, month });
   }
 
   public async getApplyGraphs() {

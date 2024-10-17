@@ -74,8 +74,8 @@ export class PublicDataController {
 
   @SetResponse(MESSAGE.PUBLIC_DATA.GRAPH.STACK_GRAPH.cmd, HttpStatus.OK)
   @MessagePattern(MESSAGE.PUBLIC_DATA.GRAPH.STACK_GRAPH)
-  public async getStackGraph() {
-    return await this.publicDataService.getStackGraphs();
+  public async getStackGraph(@Payload() { year, month }: { year: number; month: number }) {
+    return await this.publicDataService.getStackGraphs({ year, month });
   }
 
   @SetResponse(MESSAGE.PUBLIC_DATA.GRAPH.APPLY_GRAPH.cmd, HttpStatus.OK)

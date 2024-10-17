@@ -150,9 +150,13 @@ export class PublicDataService {
   }
 
   @Transactional()
-  public async getStackGraphs() {
+  public async getStackGraphs({ year, month }: { year: number; month: number }) {
     const stackGraphs = await this.stackGraphRepository.find({
       order: { apply_cnt: 'DESC' },
+      where: {
+        record_year: year ? year : new Date().getFullYear(),
+        record_month: month ? month : new Date().getMonth() + 1,
+      },
       take: 10,
     });
 

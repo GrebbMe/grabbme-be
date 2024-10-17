@@ -1,10 +1,11 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiTags,
   ApiParam,
   ApiOperation,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { PublicDataService } from './public-data.service';
 import { BasicReqDto } from './dto/req.dto';
@@ -154,6 +155,8 @@ export class PublicDataController {
 
   @Get('stack-graph')
   @ApiOperation({ summary: 'stack graph 데이터 조회' })
+  @ApiQuery({ description: '년', name: 'year', required: true, type: Number })
+  @ApiQuery({ description: '월', name: 'month', required: true, type: Number })
   @ApiOkResponse({
     description: 'stack graph 데이터 조회',
     example: [
@@ -219,8 +222,8 @@ export class PublicDataController {
       },
     ],
   })
-  public getStackGraph() {
-    return this.publicDataService.getStackGraphs();
+  public getStackGraph(@Query() { year, month }: { year: number; month: number }) {
+    return this.publicDataService.getStackGraphs({ year, month });
   }
 
   @Get('apply-graph')
