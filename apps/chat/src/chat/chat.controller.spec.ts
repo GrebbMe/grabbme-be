@@ -46,7 +46,11 @@ describe('ChatController', () => {
       it('success : 생성된 채팅방이 return 된다.', async () => {
         jest.spyOn(chatService, 'createChatRoom').mockResolvedValue(chatRoom);
 
-        const result = await chatController.createChatRoom({ name: chatRoom.name });
+        const result = await chatController.createChatRoom({
+          postId: 77,
+          senderId: 3,
+          receiverId: 1,
+        });
 
         expect(result).toEqual(chatRoom);
         expect(chatService.createChatRoom).toHaveBeenCalledWith(chatRoom.name);
@@ -55,7 +59,9 @@ describe('ChatController', () => {
         mockError = new Error(BadRequestException.name);
         jest.spyOn(chatService, 'createChatRoom').mockRejectedValue(mockError);
 
-        await expect(chatController.createChatRoom({ name: undefined })).rejects.toThrow(mockError);
+        await expect(
+          chatController.createChatRoom({ postId: 77, senderId: 3, receiverId: 1 }),
+        ).rejects.toThrow(mockError);
         expect(chatService.createChatRoom).rejects.toThrow(mockError);
       });
     });
