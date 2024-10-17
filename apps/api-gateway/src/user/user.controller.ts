@@ -67,6 +67,7 @@ export class UserController {
       const clientResponse = {
         accessToken,
         refreshToken,
+        user_id: createdUser.data.user_id,
         url: this.configService.get<string>('network.CLIENT_MAIN_URL'),
       };
 
