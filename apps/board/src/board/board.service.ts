@@ -473,7 +473,11 @@ export class BoardService {
   public async getClosingProjects() {
     let expireExpectedProjects;
     const currentDate = new Date();
-    const dueDate = new Date(currentDate.setDate(currentDate.getDate() + 7));
+    const dueDate = new Date(new Date().setDate(new Date().getDate() + 7));
+
+    console.log('currentDate', currentDate);
+    console.log('dueDate', dueDate);
+
     const closingProjects = await this.boardRepository.find({
       where: {
         expired_at: Between(currentDate, dueDate),
@@ -482,7 +486,7 @@ export class BoardService {
       },
       take: 4,
     });
-    console.log('closingProjects:', closingProjects);
+
     if (closingProjects.length === 0) {
       expireExpectedProjects = await this.boardRepository.find({
         order: { expired_at: 'ASC' },
@@ -495,7 +499,23 @@ export class BoardService {
     }
 
     return closingProjects.length > 0
-      ? closingProjects.map((project) => classToPlain(project) as Board)
-      : expireExpectedProjects.map((project) => classToPlain(project) as Board);
+      ? closingProjects.map(
+          (project) =>
+            classToPlain({
+              ...project,
+              due_day: Math.floor(
+                (project.expired_at.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+              ),
+            }) as Board,
+        )
+      : expireExpectedProjects.map(
+          (project) =>
+            classToPlain({
+              ...project,
+              due_day: Math.floor(
+                (project.expired_at.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+              ),
+            }) as Board,
+        );
   }
 }
