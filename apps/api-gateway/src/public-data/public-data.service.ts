@@ -77,4 +77,12 @@ export class PublicDataService {
       { id },
     );
   }
+
+  public async getStackGraphs() {
+    return await this.publicDataClient.send(MESSAGE.PUBLIC_DATA.GRAPH.STACK_GRAPH, {});
+  }
+
+  public async getApplyGraphs() {
+    return await this.publicDataClient.send(MESSAGE.PUBLIC_DATA.GRAPH.APPLY_GRAPH, {});
+  }
 }

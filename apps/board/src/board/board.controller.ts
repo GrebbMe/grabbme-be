@@ -94,4 +94,25 @@ export class BoardController {
     const { postId } = payload;
     return this.boardService.getApplyByParticipant(postId);
   }
+
+  @SetResponse(MESSAGE.POST.CREATE_BOOKMARK.cmd, HttpStatus.CREATED)
+  @MessagePattern(MESSAGE.POST.CREATE_BOOKMARK)
+  public async createBookmark(@Payload() payload: { userId: number; postId: number }) {
+    const { userId, postId } = payload;
+    return await this.boardService.createBookmark({ userId, postId });
+  }
+
+  @SetResponse(MESSAGE.POST.DELETE_BOOKMARK.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.DELETE_BOOKMARK)
+  public async deleteBookmark(@Payload() payload: { userId: number; postId: number }) {
+    const { userId, postId } = payload;
+    return await this.boardService.deleteBookmark({ userId, postId });
+  }
+
+  @SetResponse(MESSAGE.POST.GET_BOOKMARKS_BY_EMAIL.cmd, HttpStatus.OK)
+  @MessagePattern(MESSAGE.POST.GET_BOOKMARKS_BY_EMAIL)
+  public async getBookmarksByUserEmail(@Payload() payload: { email: string }) {
+    const { email } = payload;
+    return await this.boardService.getBookmarksByUserEmail(email);
+  }
 }

@@ -60,4 +60,7 @@ export class Board {
 
   @Column('simple-array')
   public stack_category_id: number[];
+
+  @Column('int', { default: 0 })
+  public chat_cnt: number;
 }

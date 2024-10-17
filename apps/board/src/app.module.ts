@@ -1,3 +1,4 @@
+import { User } from '@apps/user/src/user/entities/user.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
@@ -23,7 +24,7 @@ import mysqlConfig from './config/mysql.config';
           username: configService.get('mysql.username'),
           password: configService.get('mysql.password'),
           autoLoadEntities: true,
-          entities: [`${__dirname}/**/*.entity.{ts,js}`],
+          entities: [`${__dirname}/**/*.entity.{ts,js}`, User],
           logging: true,
           synchronize: process.env.NODE_ENV === 'development',
         };

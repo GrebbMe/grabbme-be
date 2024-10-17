@@ -88,7 +88,7 @@ export class ChatController {
   public async deleteChatRoom(@Param('id') id: number) {
     return await this.chatService.deleteChatRoom(id);
   }
-  
+
   @ApiOperation({ summary: '특정 채팅 리스트 조회' })
   @ApiResponse({ description: '특정 채팅 리스트가 조회되었습니다.' })
   @ApiBadRequestResponse({

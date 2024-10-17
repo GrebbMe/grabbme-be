@@ -1,5 +1,9 @@
 export const MESSAGE = {
   PUBLIC_DATA: {
+    GRAPH: {
+      STACK_GRAPH: { cmd: 'get-stack-graph' },
+      APPLY_GRAPH: { cmd: 'get-apply-graph' },
+    },
     POST_CATEGORY: {
       GET_ALL_POST_CATEGORY: { cmd: 'get-all-post-category' },
       GET_ONE_POST_CATEGORY: { cmd: 'get-one-post-category' },
@@ -32,7 +36,9 @@ export const MESSAGE = {
     CREATE_POST: { cmd: 'create-post' },
     UPDATE_POST: { cmd: 'update-post' },
     DELETE_POST: { cmd: 'delete-post' },
-    GET_SEARCH_POSTS: { cmd: 'get-search-posts' },
+    CREATE_BOOKMARK: { cmd: 'create-bookmark' },
+    DELETE_BOOKMARK: { cmd: 'delete-bookmark' },
+    GET_BOOKMARKS_BY_EMAIL: { cmd: 'get-bookmarks-by-email' },
   },
 
   PARTICIPANT: {
