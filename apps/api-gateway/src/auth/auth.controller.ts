@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -10,6 +11,7 @@ import { JwtPayload } from './types/jwt.type';
 import { GithubUser } from './types/user.type';
 
 @Controller('auth')
+@ApiTags('Auth API')
 export class AuthController {
   public constructor(
     private readonly authService: AuthService,
@@ -17,10 +19,12 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
+  @ApiOperation({ summary: 'Github 연동 로그인' })
   @Get('github')
   @UseGuards(GithubGuard)
   private async githubLogin() {}
 
+  @ApiOperation({ summary: 'Github 연동 로그인 콜백' })
   @Get('github/callback')
   @UseGuards(GithubGuard)
   private async githubLoginCallback(
@@ -38,7 +42,7 @@ export class AuthController {
       return res.redirect(301, clientSignupUrl.toString());
     } else {
       const user = await firstValueFrom(await this.userService.findUserByEmail(loginUser.email));
-      res.cookie('userId', user.userId);
+      res.cookie('userId', user.user_id);
       res.cookie('accessToken', loginUser.access_token, {
         httpOnly: true,
         path: '/',
